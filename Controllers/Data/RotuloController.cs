@@ -1,0 +1,62 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Generico_Front.Models;
+
+namespace Generico_Front.Controllers.Data;
+public class RotuloController : IBaseController<Rotulo>
+{
+    private static RotuloController instance;
+    private Cliente c;
+
+    private RotuloController()
+    {
+        c = Cliente.GetInstance();
+    }
+
+    public static RotuloController GetInstance()
+    {
+        if (instance == null)
+        {
+            instance = new RotuloController();
+        }
+        return instance;
+    }
+
+
+    public List<Rotulo> GetAll()
+    {
+        string result = c.GetAsync("Rotulos").Result;
+        List<Rotulo> rotulo = JsonSerializer.Deserialize<List<Rotulo>>(result);
+        return rotulo;
+    }
+    public Rotulo GetById(int id)
+    {
+        string result = c.GetAsync($"Rotulos/{id}").Result;
+        Rotulo rotulo = JsonSerializer.Deserialize<Rotulo>(result);
+        return rotulo;
+    }
+    public Rotulo Post(Rotulo Rotulo)
+    {
+        string json = JsonSerializer.Serialize(Rotulo);
+        string result = c.PostAsync($"Rotulos", json).Result;
+        Rotulo rotuloResult = JsonSerializer.Deserialize<Rotulo>(result);
+        return rotuloResult;
+    }
+    public Rotulo Put(Rotulo Rotulo)
+    {
+        string json = JsonSerializer.Serialize(Rotulo);
+        string result = c.PutAsync($"Rotulos/{Rotulo.id}", json).Result;
+        Rotulo rotuloResult = JsonSerializer.Deserialize<Rotulo>(result);
+        return rotuloResult;
+    }
+    public Rotulo Delete(Rotulo Rotulo)
+    {
+        string result = c.DeleteAsync($"Rotulos/{Rotulo.id}").Result;
+        Rotulo rotuloResult = JsonSerializer.Deserialize<Rotulo>(result);
+        return rotuloResult;
+    }
+}

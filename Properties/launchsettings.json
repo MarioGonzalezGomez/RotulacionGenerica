@@ -1,0 +1,10 @@
+﻿{
+    "profiles": {
+      "Generico_Front (Package)": {
+        "commandName": "MsixPackage"
+      },
+      "Generico_Front (Unpackaged)": {
+        "commandName": "Project"
+      }
+    }
+}

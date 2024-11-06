@@ -29,7 +29,7 @@ public partial class RotulosViewModel : ObservableRecipient
         var listaRotulos = dataController.GetAll();
         Rotulos.Clear();
 
-        // Agrega cada usuario a la colección (esto actualizará la vista)
+        // Agrega cada rotulo a la colección (esto actualizará la vista)
         foreach (var rotulo in listaRotulos)
         {
             Rotulos.Add(rotulo);
@@ -49,5 +49,28 @@ public partial class RotulosViewModel : ObservableRecipient
             dataController.Put(rotulo);
         }
         await CargarRotulos(); // Recargar la lista después de guardar
+    }
+
+    public void RemoverNoCoincidentes(IEnumerable<Rotulo> filteredData)
+    {
+        for (int i = Rotulos.Count - 1; i >= 0; i--)
+        {
+            var item = Rotulos[i];
+            if (!filteredData.Contains(item))
+            {
+                Rotulos.Remove(item);
+            }
+        }
+    }
+
+    public void RecuperarLista(IEnumerable<Rotulo> filteredData)
+    {
+        foreach (var item in filteredData)
+        {
+            if (!Rotulos.Contains(item))
+            {
+                Rotulos.Add(item);
+            }
+        }
     }
 }

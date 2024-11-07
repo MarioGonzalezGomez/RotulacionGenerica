@@ -8,16 +8,23 @@ namespace Generico_Front.ViewModels;
 public partial class RotulosViewModel : ObservableRecipient
 {
     private readonly Controllers.Data.RotuloController dataController;
+    private readonly Controllers.Data.TipoController tipoController;
     private readonly Controllers.Graphics.RotuloController graphicController;
 
     public RotulosViewModel()
     {
         dataController = Controllers.Data.RotuloController.GetInstance();
+        tipoController = Controllers.Data.TipoController.GetInstance();
         graphicController = Controllers.Graphics.RotuloController.GetInstance();
+        Tipos = new ObservableCollection<Tipo>();
         Rotulos = new ObservableCollection<Rotulo>();
     }
 
     public ObservableCollection<Rotulo> Rotulos
+    {
+        get;
+    }
+    public ObservableCollection<Tipo> Tipos
     {
         get;
     }
@@ -51,6 +58,36 @@ public partial class RotulosViewModel : ObservableRecipient
         await CargarRotulos(); // Recargar la lista después de guardar
     }
 
+
+    //OPCIONES PARA OBTENER TIPOS
+    [RelayCommand]
+    public async Task CargarTipos()
+    {
+        var listaTipos = tipoController.GetAll();
+        Tipos.Clear();
+
+        foreach (var tipo in listaTipos)
+        {
+            Tipos.Add(tipo);
+        }
+    }
+
+
+    [RelayCommand]
+    public async Task GuardarTipo(Tipo tipo)
+    {
+        if (tipo.id == 0)
+        {
+            tipoController.Post(tipo);
+        }
+        else
+        {
+            tipoController.Put(tipo);
+        }
+        await CargarTipos();
+    }
+
+    //OPCIONES PARA EL FILTRADO
     public void RemoverNoCoincidentes(IEnumerable<Rotulo> filteredData)
     {
         for (int i = Rotulos.Count - 1; i >= 0; i--)

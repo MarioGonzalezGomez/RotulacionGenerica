@@ -30,33 +30,33 @@ public class PropiedadesController : IBaseController<Propiedades>
 
     public List<Propiedades> GetAll()
     {
-        string result = c.GetAsync("Propiedades").Result;
+        string result = c.GetAsync("api/Propiedades").Result;
         List<Propiedades> propiedades = JsonSerializer.Deserialize<List<Propiedades>>(result);
         return propiedades;
     }
     public Propiedades GetById(int id)
     {
-        string result = c.GetAsync($"Propiedades/{id}").Result;
+        string result = c.GetAsync($"api/Propiedades/{id}").Result;
         Propiedades propiedades = JsonSerializer.Deserialize<Propiedades>(result);
         return propiedades;
     }
     public Propiedades Post(Propiedades propiedades)
     {
         string json = JsonSerializer.Serialize(propiedades);
-        string result = c.PostAsync($"Propiedades", json).Result;
+        string result = c.PostAsync($"api/Propiedades", json).Result;
         Propiedades propiedadesResult = JsonSerializer.Deserialize<Propiedades>(result);
         return propiedadesResult;
     }
     public Propiedades Put(Propiedades propiedades)
     {
         string json = JsonSerializer.Serialize(propiedades);
-        string result = c.PutAsync($"Propiedades/{propiedades.id}", json).Result;
+        string result = c.PutAsync($"api/Propiedades/{propiedades.id}", json).Result;
         Propiedades propiedadesResult = JsonSerializer.Deserialize<Propiedades>(result);
         return propiedadesResult;
     }
     public Propiedades Delete(Propiedades propiedades)
     {
-        string result = c.DeleteAsync($"Propiedades/{propiedades.id}").Result;
+        string result = c.DeleteAsync($"api/Propiedades/{propiedades.id}").Result;
         Propiedades propiedadesResult = JsonSerializer.Deserialize<Propiedades>(result);
         return propiedadesResult;
     }

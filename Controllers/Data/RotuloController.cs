@@ -29,33 +29,33 @@ public class RotuloController : IBaseController<Rotulo>
 
     public List<Rotulo> GetAll()
     {
-        string result = c.GetAsync("Rotulos").Result;
+        string result = c.GetAsync("api/Rotulos").Result;
         List<Rotulo> rotulo = JsonSerializer.Deserialize<List<Rotulo>>(result);
         return rotulo;
     }
     public Rotulo GetById(int id)
     {
-        string result = c.GetAsync($"Rotulos/{id}").Result;
+        string result = c.GetAsync($"api/Rotulos/{id}").Result;
         Rotulo rotulo = JsonSerializer.Deserialize<Rotulo>(result);
         return rotulo;
     }
     public Rotulo Post(Rotulo Rotulo)
     {
         string json = JsonSerializer.Serialize(Rotulo);
-        string result = c.PostAsync($"Rotulos", json).Result;
+        string result = c.PostAsync($"api/Rotulos", json).Result;
         Rotulo rotuloResult = JsonSerializer.Deserialize<Rotulo>(result);
         return rotuloResult;
     }
     public Rotulo Put(Rotulo Rotulo)
     {
         string json = JsonSerializer.Serialize(Rotulo);
-        string result = c.PutAsync($"Rotulos/{Rotulo.id}", json).Result;
+        string result = c.PutAsync($"api/Rotulos/{Rotulo.id}", json).Result;
         Rotulo rotuloResult = JsonSerializer.Deserialize<Rotulo>(result);
         return rotuloResult;
     }
     public Rotulo Delete(Rotulo Rotulo)
     {
-        string result = c.DeleteAsync($"Rotulos/{Rotulo.id}").Result;
+        string result = c.DeleteAsync($"api/Rotulos/{Rotulo.id}").Result;
         Rotulo rotuloResult = JsonSerializer.Deserialize<Rotulo>(result);
         return rotuloResult;
     }

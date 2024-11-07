@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:Models="using:Generico_Front.Models" 
-    xmlns:viewmodels="using:Generico_Front.ViewModels"
+    xmlns:viewmodels="using:Generico_Front.ViewModels" xmlns:muxc="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     mc:Ignorable="d">
 
     <Page.DataContext>
@@ -103,7 +103,7 @@
             </Button>
             <Button Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="50" MaxHeight="100"  Margin="10,0,0,0">
                 <Button.Content>
-                    <FontIcon Glyph="&#xE71A;" FontFamily="Segoe MDL2 Assets" FontSize="35" Foreground="Red"/>
+                    <FontIcon Glyph="&#xE71A;" FontFamily="Segoe MDL2 Assets" FontSize="35" Foreground="#FFB22222"/>
                 </Button.Content>
             </Button>
         </Grid>
@@ -118,16 +118,125 @@
            PanePlacement="Right" >
 
             <SplitView.Pane>
-                <Grid>
-                    <TextBox PlaceholderText="Input 1"/>
-                    <TextBox PlaceholderText="Input 2"/>
-                    <Button Content="Cerrar" Click="CerrarPanelAjustes"/>
+                <Grid Margin="10,0,5,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1.5*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="0.8*"/>
+                    </Grid.RowDefinitions>
+                    <Button  HorizontalAlignment="Right" VerticalAlignment="Top"
+                    Margin="10" Click="CerrarPanelAjustes">
+                        <SymbolIcon Symbol="Forward"/>
+                    </Button>
+                    <Grid Grid.Row="0" Margin="3,0,3,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.ColumnSpan="2" Grid.Row="0" Margin="0,0,0,15" HorizontalAlignment="Center" VerticalAlignment="Bottom" Style="{ThemeResource BaseTextBlockStyle}">Editar tipo de Rótulo</TextBlock>
+                        <ComboBox x:Name="cmbAccionesConTipos" Grid.ColumnSpan="2" Grid.Row="1"  SelectionChanged="cmbAccionesConTipos_SelectionChanged" Width="300">
+                            <x:String>Crear desde cero</x:String>
+                            <x:String>Crear desde otro tipo</x:String>
+                            <x:String>Modificar tipo</x:String>
+                        </ComboBox>
+                        <ComboBox x:Name="cmbTipos" Grid.ColumnSpan="2" Grid.Row="2" Width="300" SelectionChanged="cmbTipos_SelectionChanged"/>
+                        <StackPanel  Grid.Column="0" Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Líneas" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="cmbNumLineas" Width="75">
+                                <x:String>1</x:String>
+                                <x:String>2</x:String>
+                                <x:String>3</x:String>
+                                <x:String>4</x:String>
+                                <x:String>5</x:String>
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel  Grid.Column="0" Grid.Row="4" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Escala" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBox x:Name="txtEscala" PlaceholderText="0.0" />
+                        </StackPanel>
+                        <StackPanel  Grid.Column="1" Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Posición X" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBox x:Name="txtPosX" PlaceholderText="0.0"/>
+                        </StackPanel>
+                        <StackPanel  Grid.Column="1" Grid.Row="4" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Posición Y" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBox x:Name="txtPosY" PlaceholderText="0.0"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Grid.Row="1" Margin="3,25,3,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <ToggleSwitch x:Name="tggPorLineas" Grid.Column="0" Grid.Row="0" Header="Edicción por líneas" OffContent="Off" OnContent="On" IsOn="False" Toggled="tggPorLineas_Toggled"/>
+                        <StackPanel x:Name="stckLineas"  Visibility="Collapsed" Grid.Column="0" Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Línea " Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="cmbLineaAEditar" Width="75"/>
+                        </StackPanel>
+                        <StackPanel x:Name="stckEscala" Visibility="Collapsed" Grid.Column="0" Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Escala" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBox x:Name="txtEscalaLinea" PlaceholderText="0.0" />
+                        </StackPanel>
+                        <StackPanel x:Name="stckPosX"  Visibility="Collapsed" Grid.Column="1" Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Posición X" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBox x:Name="txtPosXLinea" PlaceholderText="0.0"/>
+                        </StackPanel>
+                        <StackPanel x:Name="stckPosY" Visibility="Collapsed" Grid.Column="1" Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Posición Y" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBox x:Name="txtPosYLinea" PlaceholderText="0.0"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Grid.Row="2" Margin="3,0,3,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                    </Grid>
+
+                    <Button Grid.RowSpan="3" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10" Click="btnDeleteList_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <SymbolIcon Symbol="Delete" Foreground="#FFB22222" />
+                            <TextBlock Text="Vaciar lista" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="btnSaveAjustes" Grid.RowSpan="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" Click="btnSaveAjustes_Click">
+                        <SymbolIcon Symbol="Save" Foreground="DodgerBlue" />
+                    </Button>
+                    
+                    <muxc:TeachingTip x:Name="TipGuardarAjustes"
+                      Title="Guardado con éxito"
+                      CloseButtonContent="Salir"
+                      Target="{x:Bind btnSaveAjustes}"
+                      Closed="TipGuardarAjustes_Closed"
+                      IsLightDismissEnabled="True">
+                        <muxc:TeachingTip.IconSource>
+                            <SymbolIconSource Symbol="Accept"  Foreground="Green"/>
+                        </muxc:TeachingTip.IconSource>
+                    </muxc:TeachingTip>
+                    
                 </Grid>
+                
             </SplitView.Pane>
         </SplitView>
-
     </Grid>
-
 </Page>
     
 

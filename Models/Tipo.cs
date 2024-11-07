@@ -11,4 +11,8 @@ public class Tipo
     public string descripcion { get; set; }
     public int numLineas { get; set; }
     public Propiedades propiedades { get; set; }
+
+    public override string? ToString() {
+    return this.descripcion;
+    }
 }

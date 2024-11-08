@@ -47,8 +47,80 @@ public sealed partial class RotulosPage : Page
     //ACCIONES EN EDICIÓN
     private void BtnAddRotulo_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-
+       // ViewModel.CargarRotulos();
+        ViewModel.CargarTipos();
     }
+
+    private void tggEditor_Toggled(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        if (tggEditor.IsOn)
+        {
+            linkAjustes.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+            stckEditior1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+            stckEditior2.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+            stckEditior3.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+        }
+        else
+        {
+            linkAjustes.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+            stckEditior1.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+            stckEditior2.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+            stckEditior3.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+        }
+    }
+
+    private void cmbTiposEditor_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (cmbTipos.SelectedIndex != -1)
+        {
+            Tipo seleccionado = (Tipo)cmbTipos.SelectedValue;
+            switch (seleccionado.numLineas)
+            {
+                case 1:
+                    txtLinea1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+                    txtLinea2.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+                    txtLinea3.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+                    txtLinea4.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+                    break;
+                case 2:
+                    txtLinea1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+                    txtLinea2.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+                    txtLinea3.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+                    txtLinea4.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+                    break;
+                case 3:
+                    txtLinea1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+                    txtLinea2.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+                    txtLinea3.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+                    txtLinea4.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+                    break;
+                case 4:
+                    txtLinea1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+                    txtLinea2.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+                    txtLinea3.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+                    txtLinea4.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+                    break;
+                default: break;
+            }
+        }
+    }
+
+
+    private void btnEliminarRotulo_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        //TODO: Accion de eliminar el rótulo
+    }
+
+    private void btnModificarRotulo_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        //TODO: Accion de modificar el rótulo
+    }
+
+    private void btnGuardarRotulo_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        //TODO: Accion de añadir nuevo rótulo
+    }
+
 
     //ACCIONES EN AJUSTES ADICIONALES
     private void AbrirPanelAjustes(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
@@ -121,4 +193,5 @@ public sealed partial class RotulosPage : Page
     {
         TipGuardarAjustes.IsOpen = false;
     }
+
 }

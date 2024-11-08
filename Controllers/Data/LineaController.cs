@@ -28,7 +28,7 @@ public class LineaController : IBaseController<Linea>
     }
 
 
-    public List<Linea> GetAll()
+    public List<Linea> GetAllAsync()
     {
         string result = c.GetAsync("api/Lineas").Result;
         List<Linea> linea = JsonSerializer.Deserialize<List<Linea>>(result);

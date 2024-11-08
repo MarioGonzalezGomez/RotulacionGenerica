@@ -33,7 +33,7 @@ public partial class RotulosViewModel : ObservableRecipient
     [RelayCommand]
     public async Task CargarRotulos()
     {
-        var listaRotulos = dataController.GetAll();
+        var listaRotulos = dataController.GetAllAsync();
         Rotulos.Clear();
 
         // Agrega cada rotulo a la colección (esto actualizará la vista)
@@ -63,7 +63,7 @@ public partial class RotulosViewModel : ObservableRecipient
     [RelayCommand]
     public async Task CargarTipos()
     {
-        var listaTipos = tipoController.GetAll();
+        var listaTipos = tipoController.GetAllAsync();
         Tipos.Clear();
 
         foreach (var tipo in listaTipos)

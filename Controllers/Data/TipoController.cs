@@ -27,11 +27,17 @@ public class TipoController : IBaseController<Tipo>
     }
 
 
-    public List<Tipo> GetAll()
+    public List<Tipo> GetAllAsync()
     {
-        string result = c.GetAsync("api/Tipos").Result;
+        string result = Mierda().Result;
         List<Tipo> tipo = JsonSerializer.Deserialize<List<Tipo>>(result);
         return tipo;
+    }
+
+    private async Task<string> Mierda()
+    {
+      var x =  await c.GetAsync("api/Tipos");
+        return x;
     }
     public Tipo GetById(int id)
     {

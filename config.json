@@ -1,8 +1,8 @@
 ﻿{
-    "ApiOptions": {
-      "BaseUri": "localhost",
-      "Port": "44302"
-    },
+  "ApiOptions": {
+    "BaseUri": "localhost",
+    "Port": "7045"
+  },
     "BrainStormOptions": {
       "Ip": "127.0.0.1",
       "Database": "DBS",

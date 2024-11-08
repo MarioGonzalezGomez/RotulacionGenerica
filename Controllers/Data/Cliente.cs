@@ -25,6 +25,7 @@ class Cliente
         // Configuración de las cabeceras generales
         _httpClient.DefaultRequestHeaders.Accept.Clear();
         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        _httpClient.Timeout = TimeSpan.FromSeconds(2);
     }
 
     public static Cliente GetInstance()
@@ -41,9 +42,9 @@ class Cliente
     {
         try
         {
-            HttpResponseMessage response = await _httpClient.GetAsync(endpoint);
+            HttpResponseMessage response = await _httpClient.GetAsync(endpoint).ConfigureAwait(false);
             response.EnsureSuccessStatusCode(); // Lanza una excepción si el código de respuesta no es exitoso (4xx, 5xx)
-            return await response.Content.ReadAsStringAsync(); // Retorna el contenido de la respuesta como string
+            return await response.Content.ReadAsStringAsync().ConfigureAwait(false); // Retorna el contenido de la respuesta como string
         }
         catch (Exception ex)
         {

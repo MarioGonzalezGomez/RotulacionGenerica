@@ -28,7 +28,7 @@ public class PropiedadesController : IBaseController<Propiedades>
     }
 
 
-    public List<Propiedades> GetAll()
+    public List<Propiedades> GetAllAsync()
     {
         string result = c.GetAsync("api/Propiedades").Result;
         List<Propiedades> propiedades = JsonSerializer.Deserialize<List<Propiedades>>(result);

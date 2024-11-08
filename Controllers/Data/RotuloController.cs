@@ -27,7 +27,7 @@ public class RotuloController : IBaseController<Rotulo>
     }
 
 
-    public List<Rotulo> GetAll()
+    public List<Rotulo> GetAllAsync()
     {
         string result = c.GetAsync("api/Rotulos").Result;
         List<Rotulo> rotulo = JsonSerializer.Deserialize<List<Rotulo>>(result);

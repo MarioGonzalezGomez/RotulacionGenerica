@@ -15,25 +15,48 @@
     <Page.Resources>
         <DataTemplate x:Key="RotulosListViewTemplate" x:DataType="Models:Rotulo">
             <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
                 <Ellipse x:Name="Ellipse"
-                    Grid.RowSpan="2"
-                    Width ="32"
-                    Height="32"
-                    Margin="6"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
-                    Fill="{ThemeResource SystemControlBackgroundBaseMediumBrush}"/>
+                 Grid.RowSpan="2"
+                 Width="32"
+                 Height="32"
+                 Margin="6,0,0,0"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Center"
+                 Fill="{ThemeResource SystemControlBackgroundBaseMediumBrush}" />
+
                 <TextBlock Grid.Column="1"
-                    Text="{x:Bind lineas[0].texto}"
-                    x:Phase="1"
-                    Style="{ThemeResource BaseTextBlockStyle}"
-                    Margin="12,6,0,0"/>
-                <TextBlock  Grid.Column="1"
-                    Grid.Row="1"
-                    Text="{x:Bind lineas[1].texto}"
-                    x:Phase="2"
-                    Style="{ThemeResource BodyTextBlockStyle}"
-                    Margin="12,0,0,6"/>
+                   Grid.RowSpan="2"
+                   Text="{x:Bind posicion}"
+                   x:Phase="1"
+                   Style="{ThemeResource BaseTextBlockStyle}"
+                   VerticalAlignment="Center"
+                   FontSize="20"
+                   Margin="15,0,0,0"/>
+                
+                <TextBlock Grid.Column="2"
+                   Grid.Row="0"
+                   Text="{x:Bind lineas[0].texto}"
+                   x:Phase="2"
+                   Style="{ThemeResource BaseTextBlockStyle}"
+                   FontSize="16"
+                   Margin="15,15,0,0"/>
+                <TextBlock Grid.Column="2"
+                   Grid.Row="1"
+                   Text="{x:Bind}"
+                   x:Phase="2"
+                   Style="{ThemeResource BaseTextBlockStyle}"
+                   FontSize="12"
+                   Margin="35,0,0,0"/>
             </Grid>
         </DataTemplate>
     </Page.Resources>
@@ -62,6 +85,8 @@
         VerticalAlignment="Stretch"
         SelectionMode="Single"
         CanDragItems="True"
+        DragItemsCompleted="LVRotulos_DragItemsCompleted"
+        SelectionChanged="LVRotulos_SelectionChanged"
         CanReorderItems="True"
         AllowDrop="True"/>
 
@@ -78,7 +103,7 @@
             <TextBlock  Grid.Row="0" Style="{ThemeResource BaseTextBlockStyle}">Filtrar por...</TextBlock>
             <TextBox x:Name="FiltradoPorNombre"  Grid.Row="1" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Nombre" TextChanged="FiltradoPorNombre_TextChanged"/>
             <TextBox x:Name="FiltradoPorCargo"  Grid.Row="2" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Cargo" TextChanged="FiltradoPorCargo_TextChanged"/>
-            <NumberBox x:Name="FiltradoPorPosicion"  Grid.Row="3" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Posicion" ValueChanged="FiltradoPorPosicion_ValueChanged"/>
+            <TextBox x:Name="FiltradoPorPosicion"  Grid.Row="3" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Posicion" TextChanged="FiltradoPorPosicion_TextChanged"/>
         </Grid>
 
         <Grid Grid.Column="1" Grid.Row="1" Margin="10,10,0,0">

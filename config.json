@@ -1,7 +1,7 @@
 ﻿{
   "ApiOptions": {
     "BaseUri": "localhost",
-    "Port": "7045"
+    "Port": "44302"
   },
     "BrainStormOptions": {
       "Ip": "127.0.0.1",

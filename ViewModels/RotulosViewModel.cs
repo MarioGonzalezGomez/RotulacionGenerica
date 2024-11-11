@@ -18,8 +18,9 @@ public partial class RotulosViewModel : ObservableRecipient
         graphicController = Controllers.Graphics.RotuloController.GetInstance();
         Tipos = new ObservableCollection<Tipo>();
         Rotulos = new ObservableCollection<Rotulo>();
+        allRotulos = new List<Rotulo>();
     }
-
+    public List<Rotulo> allRotulos;
     public ObservableCollection<Rotulo> Rotulos
     {
         get;
@@ -31,7 +32,7 @@ public partial class RotulosViewModel : ObservableRecipient
 
     // Comando para cargar la lista de rotulos
     [RelayCommand]
-    public async Task CargarRotulos()
+    public Task CargarRotulos()
     {
         var listaRotulos = dataController.GetAllAsync();
         Rotulos.Clear();
@@ -40,7 +41,10 @@ public partial class RotulosViewModel : ObservableRecipient
         foreach (var rotulo in listaRotulos)
         {
             Rotulos.Add(rotulo);
+            allRotulos.Add(rotulo);
         }
+
+        return Task.CompletedTask;
     }
 
     // Comando para agregar un nuevo rotulo
@@ -61,7 +65,7 @@ public partial class RotulosViewModel : ObservableRecipient
 
     //OPCIONES PARA OBTENER TIPOS
     [RelayCommand]
-    public async Task CargarTipos()
+    public Task CargarTipos()
     {
         var listaTipos = tipoController.GetAllAsync();
         Tipos.Clear();
@@ -70,8 +74,9 @@ public partial class RotulosViewModel : ObservableRecipient
         {
             Tipos.Add(tipo);
         }
-    }
 
+        return Task.CompletedTask;
+    }
 
     [RelayCommand]
     public async Task GuardarTipo(Tipo tipo)
@@ -106,8 +111,23 @@ public partial class RotulosViewModel : ObservableRecipient
         {
             if (!Rotulos.Contains(item))
             {
-                Rotulos.Add(item);
+                Rotulos.Insert(item.posicion - 1, item);
             }
         }
+    }
+
+    public void ActualizarPosiciones(List<Rotulo> ordenados)
+    {
+        //TODO: Cambio de posiciones tras Drag and Drop
+
+       // for (int i = 0; i < ordenados.Count; i++)
+       // {
+       //     ordenados[i].posicion = i + 1;
+       // }
+       //
+       // for (int i = 0; i < Rotulos.Count; i++)
+       // {
+       //     Rotulos[i].posicion = ordenados[i].posicion;
+       // }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,4 +26,13 @@ public class Rotulo
         get; set;
     }
 
+    public override string? ToString()
+    {
+        string text = "";
+        for (int i = 1; i < lineas.Count; i++)
+        {
+            text += lineas[i].texto + "\n";
+        }
+        return text;
+    }
 }

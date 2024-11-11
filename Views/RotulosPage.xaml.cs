@@ -1,4 +1,5 @@
-﻿using Generico_Front.Controllers.Data;
+﻿using System.Text.Json;
+using Generico_Front.Controllers.Data;
 using Generico_Front.Models;
 using Generico_Front.ViewModels;
 
@@ -18,28 +19,69 @@ public sealed partial class RotulosPage : Page
     {
         ViewModel = App.GetService<RotulosViewModel>();
         InitializeComponent();
+        IniciarListas();
+    }
+
+    //ACCIONES EN LAS LISTAS
+    private void IniciarListas()
+    {
+        ViewModel.CargarRotulos();
         LVRotulos.ItemsSource = ViewModel.Rotulos;
+        ViewModel.CargarTipos();
+        cmbTiposEditor.ItemsSource = ViewModel.Tipos;
         cmbAccionesConTipos.SelectedIndex = 0;
+    }
+
+    private void LVRotulos_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
+    {
+        var ordenado = sender.Items.Cast<Rotulo>().ToList();
+        ViewModel.ActualizarPosiciones(ordenado);
+    }
+
+    private void LVRotulos_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        Rotulo seleccionado = (Rotulo)LVRotulos.SelectedItem;
+        if (tggEditor.IsOn)
+        {
+            var textBoxes = new[] { txtLinea1, txtLinea2, txtLinea3, txtLinea4 };
+
+            for (int i = 0; i < textBoxes.Length; i++)
+            {
+                textBoxes[i].Text = i < seleccionado.lineas.Count ? seleccionado.lineas[i].texto : string.Empty;
+            }
+
+            //TODO:Revisar este cambio
+            cmbTiposEditor.SelectedIndex = ViewModel.Tipos.IndexOf(seleccionado.tipo);
+            txtorden.Text = seleccionado.posicion.ToString();
+        }
     }
 
     //OPCIONES DE FILTRADO
     private void FiltradoPorNombre_TextChanged(object sender, TextChangedEventArgs e)
     {
-        var filtrada = ViewModel.Rotulos.Where(r => r.lineas[0].texto.Contains(FiltradoPorNombre.Text));
+        var filtrada = ViewModel.allRotulos.Where(r => r.lineas[0].texto.Contains(FiltradoPorNombre.Text));
         ViewModel.RemoverNoCoincidentes(filtrada);
         ViewModel.RecuperarLista(filtrada);
     }
 
     private void FiltradoPorCargo_TextChanged(object sender, TextChangedEventArgs e)
     {
-        var filtrada = ViewModel.Rotulos.Where(r => r.lineas[1].texto.Contains(FiltradoPorNombre.Text));
+        var filtrada = ViewModel.allRotulos.Where(r => r.ToString().Contains(FiltradoPorCargo.Text));
         ViewModel.RemoverNoCoincidentes(filtrada);
         ViewModel.RecuperarLista(filtrada);
     }
 
-    private void FiltradoPorPosicion_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
+    private void FiltradoPorPosicion_TextChanged(object sender, TextChangedEventArgs e)
     {
-        var filtrada = ViewModel.Rotulos.Where(r => r.posicion > FiltradoPorPosicion.Value);
+        IEnumerable<Rotulo> filtrada;
+        if (int.TryParse(FiltradoPorPosicion.Text, out int value))
+        {
+            filtrada = ViewModel.allRotulos.Where(r => r.posicion >= value);
+        }
+        else
+        {
+            filtrada = ViewModel.allRotulos;
+        }
         ViewModel.RemoverNoCoincidentes(filtrada);
         ViewModel.RecuperarLista(filtrada);
     }
@@ -47,8 +89,7 @@ public sealed partial class RotulosPage : Page
     //ACCIONES EN EDICIÓN
     private void BtnAddRotulo_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-       // ViewModel.CargarRotulos();
-        ViewModel.CargarTipos();
+
     }
 
     private void tggEditor_Toggled(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
@@ -71,9 +112,9 @@ public sealed partial class RotulosPage : Page
 
     private void cmbTiposEditor_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (cmbTipos.SelectedIndex != -1)
+        if (cmbTiposEditor.SelectedIndex != -1)
         {
-            Tipo seleccionado = (Tipo)cmbTipos.SelectedValue;
+            Tipo seleccionado = (Tipo)cmbTiposEditor.SelectedValue;
             switch (seleccionado.numLineas)
             {
                 case 1:

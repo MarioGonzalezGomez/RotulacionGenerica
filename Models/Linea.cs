@@ -20,5 +20,10 @@ namespace Generico_Front.Models
         {
             get; set;
         }
+
+        public override string? ToString()
+        {
+            return texto;
+        }
     }
 }

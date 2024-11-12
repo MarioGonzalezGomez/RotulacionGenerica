@@ -59,7 +59,7 @@ public partial class RotulosViewModel : ObservableRecipient
         {
             dataController.Put(rotulo);
         }
-        await CargarRotulos(); // Recargar la lista después de guardar
+        await CargarRotulos();
     }
 
 

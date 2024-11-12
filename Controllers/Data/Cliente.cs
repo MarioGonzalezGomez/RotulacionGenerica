@@ -59,9 +59,9 @@ class Cliente
         try
         {
             HttpContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await _httpClient.PostAsync(endpoint, content);
+            HttpResponseMessage response = await _httpClient.PostAsync(endpoint, content).ConfigureAwait(false); ;
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsStringAsync();
+            return await response.Content.ReadAsStringAsync().ConfigureAwait(false); ;
         }
         catch (Exception ex)
         {
@@ -76,9 +76,9 @@ class Cliente
         try
         {
             HttpContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await _httpClient.PutAsync(endpoint, content);
+            HttpResponseMessage response = await _httpClient.PutAsync(endpoint, content).ConfigureAwait(false); ;
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsStringAsync();
+            return await response.Content.ReadAsStringAsync().ConfigureAwait(false); ;
         }
         catch (Exception ex)
         {
@@ -92,9 +92,9 @@ class Cliente
     {
         try
         {
-            HttpResponseMessage response = await _httpClient.DeleteAsync(endpoint);
+            HttpResponseMessage response = await _httpClient.DeleteAsync(endpoint).ConfigureAwait(false); ;
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsStringAsync();
+            return await response.Content.ReadAsStringAsync().ConfigureAwait(false); ;
         }
         catch (Exception ex)
         {

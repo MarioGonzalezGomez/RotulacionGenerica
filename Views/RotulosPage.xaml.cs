@@ -29,6 +29,7 @@ public sealed partial class RotulosPage : Page
         LVRotulos.ItemsSource = ViewModel.Rotulos;
         ViewModel.CargarTipos();
         cmbTiposEditor.ItemsSource = ViewModel.Tipos;
+        cmbAccionesConTipos.ItemsSource = ViewModel.Tipos;
         cmbAccionesConTipos.SelectedIndex = 0;
     }
 
@@ -40,9 +41,9 @@ public sealed partial class RotulosPage : Page
 
     private void LVRotulos_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        Rotulo seleccionado = (Rotulo)LVRotulos.SelectedItem;
-        if (tggEditor.IsOn)
+        if (LVRotulos.SelectedIndex != -1)
         {
+            Rotulo seleccionado = (Rotulo)LVRotulos.SelectedItem;
             var textBoxes = new[] { txtLinea1, txtLinea2, txtLinea3, txtLinea4 };
 
             for (int i = 0; i < textBoxes.Length; i++)
@@ -50,8 +51,8 @@ public sealed partial class RotulosPage : Page
                 textBoxes[i].Text = i < seleccionado.lineas.Count ? seleccionado.lineas[i].texto : string.Empty;
             }
 
-            //TODO:Revisar este cambio
-            cmbTiposEditor.SelectedIndex = ViewModel.Tipos.IndexOf(seleccionado.tipo);
+            Tipo tipo = ViewModel.Tipos.FirstOrDefault(t => t.id == seleccionado.tipo.id);
+            cmbTiposEditor.SelectedIndex = ViewModel.Tipos.IndexOf(tipo);
             txtorden.Text = seleccionado.posicion.ToString();
         }
     }
@@ -89,21 +90,23 @@ public sealed partial class RotulosPage : Page
     //ACCIONES EN EDICIÓN
     private void BtnAddRotulo_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-
+        if (!tggEditor.IsOn) { tggEditor.IsOn = true; }
+        var maxPosicion = ViewModel.Rotulos.Max(r => r.posicion);
+        txtorden.Text = $"{maxPosicion + 1}";
     }
 
     private void tggEditor_Toggled(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
         if (tggEditor.IsOn)
         {
-            linkAjustes.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+            //linkAjustes.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
             stckEditior1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
             stckEditior2.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
             stckEditior3.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
         }
         else
         {
-            linkAjustes.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+            //linkAjustes.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
             stckEditior1.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
             stckEditior2.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
             stckEditior3.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
@@ -154,16 +157,67 @@ public sealed partial class RotulosPage : Page
 
     private void btnModificarRotulo_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-        //TODO: Accion de modificar el rótulo
+        if (LVRotulos.SelectedItem != null)
+        {
+            Rotulo actual = LVRotulos.SelectedItem as Rotulo;
+            Rotulo modificado = new Rotulo();
+            var textLineas = new[] { txtLinea1, txtLinea2, txtLinea3, txtLinea4 };
+            modificado.id = actual.id;
+            modificado.posicion = int.Parse(txtorden.Text);
+            modificado.tipo = cmbTiposEditor.SelectedValue as Tipo;
+            modificado.lineas = actual.lineas;
+
+            for (int i = 0; i < modificado.lineas.Count; i++)
+            {
+                modificado.lineas[i].texto = textLineas[i].Text;
+            }
+            ModificarRotulo(modificado);
+        }
+    }
+    private async void ModificarRotulo(Rotulo modificado)
+    {
+        await ViewModel.GuardarRotulo(modificado);
     }
 
     private void btnGuardarRotulo_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-        //TODO: Accion de añadir nuevo rótulo
+        if (!string.IsNullOrEmpty(txtLinea1.Text))
+        {
+            Rotulo nuevoRotulo = new Rotulo();
+            var textLineas = new[] { txtLinea1, txtLinea2, txtLinea3, txtLinea4 };
+            var maxPosicion = ViewModel.Rotulos.Max(r => r.posicion);
+            List<Linea> lineas = new List<Linea>();
+            nuevoRotulo.id = 0;
+            nuevoRotulo.posicion = maxPosicion + 1;
+            nuevoRotulo.tipo = cmbTiposEditor.SelectedValue as Tipo;
+
+            for (int i = 0; i < textLineas.Length; i++)
+            {
+                if (!string.IsNullOrEmpty(textLineas[i].Text))
+                {
+                    Linea linea = new Linea();
+                    linea.texto = textLineas[i].Text;
+                    lineas.Add(linea);
+                }
+            }
+            nuevoRotulo.lineas = lineas;
+            GuardarRotuloNuevo(nuevoRotulo);
+            TipGuardarAjustes.IsOpen = true;
+        }
+    }
+    private async void GuardarRotuloNuevo(Rotulo nuevo)
+    {
+        await ViewModel.GuardarRotulo(nuevo);
+    }
+
+    private void TipAddNuevoRotulo_Closed(TeachingTip sender, TeachingTipClosedEventArgs args)
+    {
+        TipGuardarAjustes.IsOpen = false;
     }
 
 
     //ACCIONES EN AJUSTES ADICIONALES
+    //TODO: Ajustes adicionales. Hacer si se va a utilizar.
     private void AbrirPanelAjustes(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
         SplitView.IsPaneOpen = true;

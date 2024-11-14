@@ -61,6 +61,7 @@ class Cliente
             HttpContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _httpClient.PostAsync(endpoint, content).ConfigureAwait(false); ;
             response.EnsureSuccessStatusCode();
+            var x = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             return await response.Content.ReadAsStringAsync().ConfigureAwait(false); ;
         }
         catch (Exception ex)

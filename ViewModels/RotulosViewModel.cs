@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Generico_Front.Controllers.Graphics.BrainStorm;
 using Generico_Front.Models;
 
 namespace Generico_Front.ViewModels;
@@ -9,13 +10,13 @@ public partial class RotulosViewModel : ObservableRecipient
 {
     private readonly Controllers.Data.RotuloController dataController;
     private readonly Controllers.Data.TipoController tipoController;
-    private readonly Controllers.Graphics.RotuloController graphicController;
+    private readonly RotuloController graphicController;
 
     public RotulosViewModel()
     {
         dataController = Controllers.Data.RotuloController.GetInstance();
         tipoController = Controllers.Data.TipoController.GetInstance();
-        graphicController = Controllers.Graphics.RotuloController.GetInstance();
+        graphicController = RotuloController.GetInstance();
         Tipos = new ObservableCollection<Tipo>();
         Rotulos = new ObservableCollection<Rotulo>();
         allRotulos = new List<Rotulo>();

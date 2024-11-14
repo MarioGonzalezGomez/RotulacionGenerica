@@ -16,10 +16,6 @@ namespace Generico_Front.Models
         {
             get; set;
         }
-        public Propiedades propiedades
-        {
-            get; set;
-        }
 
         public override string? ToString()
         {

@@ -55,7 +55,6 @@ public class RotuloController : IBaseController<Rotulo>
     public Rotulo Delete(Rotulo Rotulo)
     {
         string result = c.DeleteAsync($"api/Rotulos/{Rotulo.id}").Result;
-        Rotulo rotuloResult = JsonSerializer.Deserialize<Rotulo>(result);
-        return rotuloResult;
+        return Rotulo;
     }
 }

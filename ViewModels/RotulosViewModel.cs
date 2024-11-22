@@ -63,6 +63,14 @@ public partial class RotulosViewModel : ObservableRecipient
         await CargarRotulos();
     }
 
+    [RelayCommand]
+    public async Task EliminarRotulo(Rotulo rotulo)
+    {
+
+        dataController.Delete(rotulo);
+
+        await CargarRotulos();
+    }
 
     //OPCIONES PARA OBTENER TIPOS
     [RelayCommand]
@@ -117,18 +125,14 @@ public partial class RotulosViewModel : ObservableRecipient
         }
     }
 
-    public void ActualizarPosiciones(List<Rotulo> ordenados)
+    public async void ActualizarPosiciones(List<Rotulo> ordenados)
     {
-        //TODO: Cambio de posiciones tras Drag and Drop
 
-       // for (int i = 0; i < ordenados.Count; i++)
-       // {
-       //     ordenados[i].posicion = i + 1;
-       // }
-       //
-       // for (int i = 0; i < Rotulos.Count; i++)
-       // {
-       //     Rotulos[i].posicion = ordenados[i].posicion;
-       // }
+        for (int i = 0; i < ordenados.Count; i++)
+        {
+            ordenados[i].posicion = i + 1;
+            dataController.Put(ordenados[i]);
+        }
+        await CargarRotulos();
     }
 }

@@ -1,8 +1,9 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
 using Generico_Front.Controllers.Data;
 using Generico_Front.Models;
 using Generico_Front.ViewModels;
-
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Windows.ApplicationModel.Contacts;
 
@@ -54,6 +55,33 @@ public sealed partial class RotulosPage : Page
             Tipo tipo = ViewModel.Tipos.FirstOrDefault(t => t.id == seleccionado.tipo.id);
             cmbTiposEditor.SelectedIndex = ViewModel.Tipos.IndexOf(tipo);
             txtorden.Text = seleccionado.posicion.ToString();
+        }
+    }
+
+    private void LVRotulos_RightTapped(object sender, Microsoft.UI.Xaml.Input.RightTappedRoutedEventArgs e)
+    {
+        var clickedItem = ((FrameworkElement)e.OriginalSource).DataContext;
+
+        if (clickedItem != null)
+        {
+            LVRotulos.SelectedItem = clickedItem;
+        }
+    }
+
+    private void MenuFlyoutEditar_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        if (!tggEditor.IsOn)
+        {
+            tggEditor.IsOn = true;
+        }
+    }
+
+    private void MenuFlyoutBorrar_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        if (LVRotulos.SelectedItem != null)
+        {
+            Rotulo actual = LVRotulos.SelectedItem as Rotulo;
+            EliminarRotulo(actual);
         }
     }
 
@@ -152,7 +180,15 @@ public sealed partial class RotulosPage : Page
 
     private void btnEliminarRotulo_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-        //TODO: Accion de eliminar el rótulo
+        if (LVRotulos.SelectedItem != null)
+        {
+            Rotulo actual = LVRotulos.SelectedItem as Rotulo;
+            EliminarRotulo(actual);
+        }
+    }
+    private async void EliminarRotulo(Rotulo aEliminar)
+    {
+        await ViewModel.EliminarRotulo(aEliminar);
     }
 
     private void btnModificarRotulo_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
@@ -164,7 +200,10 @@ public sealed partial class RotulosPage : Page
             var textLineas = new[] { txtLinea1, txtLinea2, txtLinea3, txtLinea4 };
             modificado.id = actual.id;
             modificado.posicion = int.Parse(txtorden.Text);
-            modificado.tipo = cmbTiposEditor.SelectedValue as Tipo;
+            modificado.tipo = new Tipo();
+            modificado.tipo.id = (cmbTiposEditor.SelectedValue as Tipo).id;
+            modificado.tipo.descripcion = (cmbTiposEditor.SelectedValue as Tipo).descripcion;
+            modificado.tipo.numLineas = (cmbTiposEditor.SelectedValue as Tipo).numLineas;
             modificado.lineas = actual.lineas;
 
             for (int i = 0; i < modificado.lineas.Count; i++)
@@ -189,13 +228,16 @@ public sealed partial class RotulosPage : Page
             List<Linea> lineas = new List<Linea>();
             nuevoRotulo.id = 0;
             nuevoRotulo.posicion = maxPosicion + 1;
-            nuevoRotulo.tipo = cmbTiposEditor.SelectedValue as Tipo;
+            nuevoRotulo.tipo = new Tipo();
+            nuevoRotulo.tipo.id = (cmbTiposEditor.SelectedValue as Tipo).id;
+            nuevoRotulo.tipo.descripcion = (cmbTiposEditor.SelectedValue as Tipo).descripcion;
 
             for (int i = 0; i < textLineas.Length; i++)
             {
                 if (!string.IsNullOrEmpty(textLineas[i].Text))
                 {
                     Linea linea = new Linea();
+                    linea.id = 0;
                     linea.texto = textLineas[i].Text;
                     lineas.Add(linea);
                 }
@@ -212,6 +254,7 @@ public sealed partial class RotulosPage : Page
 
     private void TipAddNuevoRotulo_Closed(TeachingTip sender, TeachingTipClosedEventArgs args)
     {
+        //TODO: Solucionar que salga donde debe este cartel
         TipGuardarAjustes.IsOpen = false;
     }
 
@@ -288,5 +331,4 @@ public sealed partial class RotulosPage : Page
     {
         TipGuardarAjustes.IsOpen = false;
     }
-
 }

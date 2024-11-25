@@ -213,15 +213,16 @@
                             <x:String>Modificar tipo</x:String>
                         </ComboBox>
                         <ComboBox x:Name="cmbTipos" Grid.ColumnSpan="2" Grid.Row="2" Width="300" SelectionChanged="cmbTipos_SelectionChanged"/>
-                        <StackPanel  Grid.Column="0" Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Líneas" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <ComboBox x:Name="cmbNumLineas" Width="75">
+                        <StackPanel  Grid.ColumnSpan="2" Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Número de líneas" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="cmbNumLineas" Width="65">
                                 <x:String>1</x:String>
                                 <x:String>2</x:String>
                                 <x:String>3</x:String>
                                 <x:String>4</x:String>
                             </ComboBox>
                         </StackPanel>
+                        <!--
                         <StackPanel  Grid.Column="0" Grid.Row="4" Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="Escala" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBox x:Name="txtEscala" PlaceholderText="0.0" />
@@ -234,8 +235,9 @@
                             <TextBlock Text="Posición Y" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBox x:Name="txtPosY" PlaceholderText="0.0"/>
                         </StackPanel>
+                        -->
                     </Grid>
-
+<!-- Edicion por lineas deshabilitado
                     <Grid Grid.Row="1" Margin="3,25,3,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -264,7 +266,7 @@
                             <TextBox x:Name="txtPosYLinea" PlaceholderText="0.0"/>
                         </StackPanel>
                     </Grid>
-
+-->
                     <Grid Grid.Row="2" Margin="3,0,3,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>

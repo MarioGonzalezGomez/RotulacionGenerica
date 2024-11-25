@@ -8,26 +8,25 @@ using Generico_Front.Graphics.Builders;
 using Generico_Front.Graphics.Conexion;
 
 namespace Generico_Front.Controllers.Graphics.BrainStorm;
-public class RotuloController
+public class CrawlController
 {
-    private static RotuloController instance;
+    private static CrawlController instance;
     private BSBuilder builder;
     private BSConexion conexion;
 
-    private RotuloController()
+    private CrawlController()
     {
         builder = BSBuilder.GetInstance();
         conexion = BSConexion.GetInstance();
     }
 
-    public static RotuloController GetInstance()
+    public static CrawlController GetInstance()
     {
         if (instance == null)
         {
-            instance = new RotuloController();
+            instance = new CrawlController();
         }
         return instance;
     }
 
-   
 }

@@ -30,7 +30,15 @@ public class TipoController : IBaseController<Tipo>
     public List<Tipo> GetAllAsync()
     {
         string result = c.GetAsync("api/Tipos").Result;
-        List<Tipo> tipo = JsonSerializer.Deserialize<List<Tipo>>(result);
+        List<Tipo> tipo;
+        if (!string.IsNullOrEmpty(result))
+        {
+            tipo = JsonSerializer.Deserialize<List<Tipo>>(result);
+        }
+        else
+        {
+            tipo = new List<Tipo>();
+        }
         return tipo;
     }
 

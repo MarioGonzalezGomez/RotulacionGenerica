@@ -8,26 +8,40 @@ using Generico_Front.Graphics.Builders;
 using Generico_Front.Graphics.Conexion;
 
 namespace Generico_Front.Controllers.Graphics.BrainStorm;
-public class RotuloController
+//Clase para signals generales o especiales que afecten a varios tipos de rotulo
+public class BSController
 {
-    private static RotuloController instance;
+    private static BSController instance;
     private BSBuilder builder;
     private BSConexion conexion;
 
-    private RotuloController()
+    private BSController()
     {
         builder = BSBuilder.GetInstance();
         conexion = BSConexion.GetInstance();
     }
 
-    public static RotuloController GetInstance()
+    public static BSController GetInstance()
     {
         if (instance == null)
         {
-            instance = new RotuloController();
+            instance = new BSController();
         }
         return instance;
     }
 
-   
+    //ESPECIALES
+    public void Reset()
+    {
+        conexion.EnviarMensaje(builder.Reset());
+    }
+
+    public void ConectarBrainStorm()
+    {
+        if (conexion.activo)
+        {
+            conexion.CerrarConexion();
+        }
+        conexion.AbrirConexion();
+    }
 }

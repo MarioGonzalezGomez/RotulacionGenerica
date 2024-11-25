@@ -10,13 +10,13 @@ public partial class RotulosViewModel : ObservableRecipient
 {
     private readonly Controllers.Data.RotuloController dataController;
     private readonly Controllers.Data.TipoController tipoController;
-    private readonly RotuloController graphicController;
+    private readonly BSController graphicController;
 
     public RotulosViewModel()
     {
         dataController = Controllers.Data.RotuloController.GetInstance();
         tipoController = Controllers.Data.TipoController.GetInstance();
-        graphicController = RotuloController.GetInstance();
+        graphicController = BSController.GetInstance();
         Tipos = new ObservableCollection<Tipo>();
         Rotulos = new ObservableCollection<Rotulo>();
         allRotulos = new List<Rotulo>();

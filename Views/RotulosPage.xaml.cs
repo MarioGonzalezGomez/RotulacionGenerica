@@ -119,22 +119,29 @@ public sealed partial class RotulosPage : Page
     private void BtnAddRotulo_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
         if (!tggEditor.IsOn) { tggEditor.IsOn = true; }
-        var maxPosicion = ViewModel.Rotulos.Max(r => r.posicion);
-        txtorden.Text = $"{maxPosicion + 1}";
+        if (ViewModel.Rotulos.Count > 0)
+        {
+            var maxPosicion = ViewModel.Rotulos.Max(r => r.posicion);
+            txtorden.Text = $"{maxPosicion + 1}";
+        }
+        else
+        {
+            txtorden.Text = "1";
+        }
     }
 
     private void tggEditor_Toggled(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
         if (tggEditor.IsOn)
         {
-            //linkAjustes.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+            linkAjustes.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
             stckEditior1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
             stckEditior2.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
             stckEditior3.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
         }
         else
         {
-            //linkAjustes.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+            linkAjustes.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
             stckEditior1.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
             stckEditior2.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
             stckEditior3.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
@@ -282,23 +289,23 @@ public sealed partial class RotulosPage : Page
         //No olvidar poner el num de lineas en la parte de edicion por linea
     }
 
-    private void tggPorLineas_Toggled(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-    {
-        if (tggPorLineas.IsOn)
-        {
-            stckLineas.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-            stckEscala.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-            stckPosX.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-            stckPosY.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-        }
-        else
-        {
-            stckLineas.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-            stckEscala.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-            stckPosX.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-            stckPosY.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-        }
-    }
+    // private void tggPorLineas_Toggled(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    // {
+    //     if (tggPorLineas.IsOn)
+    //     {
+    //         stckLineas.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+    //         stckEscala.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+    //         stckPosX.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+    //         stckPosY.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+    //     }
+    //     else
+    //     {
+    //         stckLineas.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+    //         stckEscala.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+    //         stckPosX.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+    //         stckPosY.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+    //     }
+    // }
 
     private async void btnDeleteList_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {

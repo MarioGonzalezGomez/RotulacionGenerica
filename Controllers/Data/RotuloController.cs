@@ -30,7 +30,15 @@ public class RotuloController : IBaseController<Rotulo>
     public List<Rotulo> GetAllAsync()
     {
         string result = c.GetAsync("api/Rotulos").Result;
-        List<Rotulo> rotulo = JsonSerializer.Deserialize<List<Rotulo>>(result);
+        List<Rotulo> rotulo;
+        if (!string.IsNullOrEmpty(result))
+        {
+            rotulo = JsonSerializer.Deserialize<List<Rotulo>>(result);
+        }
+        else
+        {
+            rotulo = new List<Rotulo>();
+        }
         return rotulo;
     }
     public Rotulo GetById(int id)

@@ -5,8 +5,11 @@ using Generico_Front.Models;
 using Generico_Front.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Shapes;
 using Windows.ApplicationModel.Contacts;
+using Windows.ApplicationModel.DataTransfer;
 
 namespace Generico_Front.Views;
 
@@ -24,11 +27,14 @@ public sealed partial class CrawlsPage : Page
         IniciarListas();
     }
 
+    private bool playLista = false;
+
     //ACCIONES EN LAS LISTAS
     private void IniciarListas()
     {
         ViewModel.CargarCrawls();
         LVCrawls.ItemsSource = ViewModel.Crawls;
+        LVCrawlsEmision.ItemsSource = ViewModel.CrawlsEmision;
     }
 
 
@@ -59,24 +65,54 @@ public sealed partial class CrawlsPage : Page
         }
     }
 
-    private void AddToList_Click(object sender, RoutedEventArgs e)
+    private void LVCrawls_PointerPressed(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
+    {
+        iconPlay.Glyph = "\uE768";
+        listViewBorder.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
+        playLista = false;
+    }
+
+    private void LVCrawls_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
     {
 
+        if (e.Items.Count > 0 && e.Items[0] is Crawl selected)
+        {
+            var jsonData = JsonSerializer.Serialize(selected);
+            e.Data.SetData("StandardDataFormats.Text", jsonData);
+            e.Data.RequestedOperation = DataPackageOperation.Move;
+        }
     }
-    private void MenuFlyoutEditar_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+
+    private void MenuFlyoutAddToList_Click(object sender, RoutedEventArgs e)
+    {
+
+        if (LVCrawls.SelectedItem != null)
+        {
+            var seleccionado = LVCrawls.SelectedItem as Crawl;
+            if (!ViewModel.CrawlsEmision.Contains(seleccionado))
+            {
+                ViewModel.CrawlsEmision.Add(seleccionado);
+            }
+        }
+
+    }
+    private void MenuFlyoutEditar_Click(object sender, RoutedEventArgs e)
     {
         if (!tggEditor.IsOn)
         {
             tggEditor.IsOn = true;
         }
     }
-
-    private void MenuFlyoutBorrar_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void MenuFlyoutBorrar_Click(object sender, RoutedEventArgs e)
     {
         if (LVCrawls.SelectedItem != null)
         {
             Crawl actual = LVCrawls.SelectedItem as Crawl;
             EliminarCrawl(actual);
+            if (ViewModel.CrawlsEmision.Contains(actual))
+            {
+                ViewModel.CrawlsEmision.Remove(actual);
+            }
         }
     }
 
@@ -84,12 +120,50 @@ public sealed partial class CrawlsPage : Page
     //LISTA EMISION
     private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
     {
+        var clickedItem = ((FrameworkElement)e.OriginalSource).DataContext;
+        if (clickedItem != null && clickedItem is Crawl selection)
+        {
+           // Crawl actual = LVCrawlsEmision.SelectedItem as Crawl;
+            ViewModel.CrawlsEmision.Remove(selection);
+        }
+    }
+
+    private void LVCrawlsEmision_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
+    {
 
     }
 
+    private void LVCrawlsEmision_PointerPressed(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
+    {
+        iconPlay.Glyph = "\uEC57";
+        listViewBorder.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.Green);
+        playLista = true;
+    }
+
+    private void LVCrawlsEmision_DragOver(object sender, DragEventArgs e)
+    {
+        e.AcceptedOperation = DataPackageOperation.Move;
+    }
+    private async void LVCrawlsEmision_Drop(object sender, DragEventArgs e)
+    {
+        if (e.DataView.Contains(StandardDataFormats.Text))
+        {
+            var deferral = e.GetDeferral();
+
+            // Recupera el objeto arrastrado
+            var jsonData = await e.DataView.GetTextAsync(StandardDataFormats.Text);
+            var droppedCrawl = JsonSerializer.Deserialize<Crawl>(jsonData);
+
+            if (droppedCrawl != null && !ViewModel.CrawlsEmision.Contains(droppedCrawl))
+            {
+                ViewModel.CrawlsEmision.Add(droppedCrawl);
+            }
+            deferral.Complete();
+        }
+    }
 
     //OPCIONES DE FILTRADO
-    private void FiltradoPorNombre_TextChanged(object sender, TextChangedEventArgs e)
+    private void FiltradoPorTexto_TextChanged(object sender, TextChangedEventArgs e)
     {
         var filtrada = ViewModel.allCrawls.Where(r => r.linea.texto.Contains(FiltradoPorTexto.Text));
         ViewModel.RemoverNoCoincidentes(filtrada);
@@ -131,16 +205,33 @@ public sealed partial class CrawlsPage : Page
     {
         if (tggEditor.IsOn)
         {
+            stckEditior0.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
             stckEditior1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+            txtContenido.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
             stckEditior2.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-            stckEditior3.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
         }
         else
         {
+            stckEditior0.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
             stckEditior1.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+            txtContenido.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
             stckEditior2.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-            stckEditior3.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
         }
+    }
+
+    private void sliderCrawlVel_DragLeave(object sender, DragEventArgs e)
+    {
+
+    }
+
+    private void chboxEsTitulo_Checked(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void chboxEsTitulo_Unchecked(object sender, RoutedEventArgs e)
+    {
+
     }
 
     private void btnEliminarCrawl_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
@@ -164,16 +255,16 @@ public sealed partial class CrawlsPage : Page
             Crawl modificado = new Crawl();
             modificado.id = actual.id;
             modificado.posicion = int.Parse(txtorden.Text);
-           // modificado.tipo = new Tipo();
-           // modificado.tipo.id = (cmbTiposEditor.SelectedValue as Tipo).id;
-           // modificado.tipo.descripcion = (cmbTiposEditor.SelectedValue as Tipo).descripcion;
-           // modificado.tipo.numLineas = (cmbTiposEditor.SelectedValue as Tipo).numLineas;
-           // modificado.lineas = actual.lineas;
-           //
-           // for (int i = 0; i < modificado.lineas.Count; i++)
-           // {
-           //     modificado.lineas[i].texto = textLineas[i].Text;
-           // }
+            // modificado.tipo = new Tipo();
+            // modificado.tipo.id = (cmbTiposEditor.SelectedValue as Tipo).id;
+            // modificado.tipo.descripcion = (cmbTiposEditor.SelectedValue as Tipo).descripcion;
+            // modificado.tipo.numLineas = (cmbTiposEditor.SelectedValue as Tipo).numLineas;
+            // modificado.lineas = actual.lineas;
+            //
+            // for (int i = 0; i < modificado.lineas.Count; i++)
+            // {
+            //     modificado.lineas[i].texto = textLineas[i].Text;
+            // }
             ModificarCrawl(modificado);
         }
     }
@@ -196,7 +287,7 @@ public sealed partial class CrawlsPage : Page
             nuevoCrawl.linea = linea;
             GuardarCrawlNuevo(nuevoCrawl);
 
-           // TipGuardarAjustes.IsOpen = true;
+            // TipGuardarAjustes.IsOpen = true;
         }
     }
     private async void GuardarCrawlNuevo(Crawl nuevo)
@@ -231,8 +322,18 @@ public sealed partial class CrawlsPage : Page
 
     private void TipGuardarAjustes_Closed(TeachingTip sender, TeachingTipClosedEventArgs args)
     {
-     //   TipGuardarAjustes.IsOpen = false;
+        //   TipGuardarAjustes.IsOpen = false;
     }
 
+    //ACCIONES GRAPHICS (PLAY y STOP)
+    private void btnPlay_Click(object sender, RoutedEventArgs e)
+    {
+        if (playLista) { } else { }
+    }
+
+    private void btnStop_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
 
 }

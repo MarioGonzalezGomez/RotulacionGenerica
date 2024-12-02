@@ -15,8 +15,8 @@ public partial class CrawlsViewModel : ObservableRecipient
     {
         dataController = Controllers.Data.CrawlController.GetInstance();
         graphicController = CrawlController.GetInstance();
-        Tipos = new ObservableCollection<Tipo>();
         Crawls = new ObservableCollection<Crawl>();
+        CrawlsEmision = new ObservableCollection<Crawl>();
         allCrawls = new List<Crawl>();
     }
     public List<Crawl> allCrawls;
@@ -24,10 +24,11 @@ public partial class CrawlsViewModel : ObservableRecipient
     {
         get;
     }
-    public ObservableCollection<Tipo> Tipos
+    public ObservableCollection<Crawl> CrawlsEmision
     {
         get;
     }
+
 
     // Comando para cargar la lista de crawls
     [RelayCommand]

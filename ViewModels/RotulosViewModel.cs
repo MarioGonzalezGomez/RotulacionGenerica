@@ -120,7 +120,12 @@ public partial class RotulosViewModel : ObservableRecipient
         {
             if (!Rotulos.Contains(item))
             {
-                Rotulos.Insert(item.posicion - 1, item);
+                try
+                {
+                    Rotulos.Insert(item.posicion - 1, item);
+                }
+                catch (ArgumentOutOfRangeException) { }
+
             }
         }
     }

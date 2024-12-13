@@ -88,14 +88,16 @@ public sealed partial class RotulosPage : Page
     //OPCIONES DE FILTRADO
     private void FiltradoPorNombre_TextChanged(object sender, TextChangedEventArgs e)
     {
-        var filtrada = ViewModel.allRotulos.Where(r => r.lineas[0].texto.Contains(FiltradoPorNombre.Text));
+        var filtrada = ViewModel.allRotulos
+    .Where(r => r.lineas[0].texto.IndexOf(FiltradoPorNombre.Text, StringComparison.OrdinalIgnoreCase) >= 0);
         ViewModel.RemoverNoCoincidentes(filtrada);
         ViewModel.RecuperarLista(filtrada);
     }
 
     private void FiltradoPorCargo_TextChanged(object sender, TextChangedEventArgs e)
     {
-        var filtrada = ViewModel.allRotulos.Where(r => r.ToString().Contains(FiltradoPorCargo.Text));
+        var filtrada = ViewModel.allRotulos
+    .Where(r => r.ToString().IndexOf(FiltradoPorCargo.Text, StringComparison.OrdinalIgnoreCase) >= 0);
         ViewModel.RemoverNoCoincidentes(filtrada);
         ViewModel.RecuperarLista(filtrada);
     }

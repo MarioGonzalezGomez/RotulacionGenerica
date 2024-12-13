@@ -19,6 +19,7 @@ public partial class CrawlsViewModel : ObservableRecipient
         CrawlsEmision = new ObservableCollection<Crawl>();
         allCrawls = new List<Crawl>();
     }
+    public Crawl propiedadesListaEmision;
     public List<Crawl> allCrawls;
     public ObservableCollection<Crawl> Crawls
     {
@@ -36,12 +37,20 @@ public partial class CrawlsViewModel : ObservableRecipient
     {
         var listaCrawls = dataController.GetAllAsync();
         Crawls.Clear();
+        allCrawls.Clear();
 
         // Agrega cada crawl a la colección (esto actualizará la vista)
         foreach (var crawl in listaCrawls)
         {
-            Crawls.Add(crawl);
-            allCrawls.Add(crawl);
+            if (crawl.posicion != 0)
+            {
+                Crawls.Add(crawl);
+                allCrawls.Add(crawl);
+            }
+            else
+            {
+                propiedadesListaEmision = crawl;
+            }
         }
 
         return Task.CompletedTask;
@@ -91,7 +100,11 @@ public partial class CrawlsViewModel : ObservableRecipient
         {
             if (!Crawls.Contains(item))
             {
-                Crawls.Insert(item.posicion - 1, item);
+                try
+                {
+                    Crawls.Insert(item.posicion - 1, item);
+                }
+                catch (ArgumentOutOfRangeException) { }
             }
         }
     }

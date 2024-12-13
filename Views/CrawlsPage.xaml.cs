@@ -28,6 +28,7 @@ public sealed partial class CrawlsPage : Page
     }
 
     private bool playLista = false;
+    Crawl seleccionado = null;
 
     //ACCIONES EN LAS LISTAS
     private void IniciarListas()
@@ -49,9 +50,24 @@ public sealed partial class CrawlsPage : Page
     {
         if (LVCrawls.SelectedIndex != -1)
         {
-            Crawl seleccionado = (Crawl)LVCrawls.SelectedItem;
+            seleccionado = (Crawl)LVCrawls.SelectedItem;
             txtContenido.Text = seleccionado.linea.texto;
             txtorden.Text = seleccionado.posicion.ToString();
+            chboxEsTitulo.IsChecked = seleccionado.esTitulo;
+            sliderCrawlVel.Value = seleccionado.velocidad;
+            if (playLista)
+            {
+                iconPlay.Glyph = "\uE768";
+                listViewBorder.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
+                playLista = false;
+            }
+            if (tggEditor.IsOn)
+            {
+                stckEditior1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+                txtContenido.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+                btnEliminarCrawl.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+                btnGuardarCrawl.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+            }
         }
     }
 
@@ -70,6 +86,14 @@ public sealed partial class CrawlsPage : Page
         iconPlay.Glyph = "\uE768";
         listViewBorder.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
         playLista = false;
+
+        if (tggEditor.IsOn)
+        {
+            stckEditior1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+            txtContenido.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+            btnEliminarCrawl.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+            btnGuardarCrawl.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+        }
     }
 
     private void LVCrawls_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
@@ -78,7 +102,7 @@ public sealed partial class CrawlsPage : Page
         if (e.Items.Count > 0 && e.Items[0] is Crawl selected)
         {
             var jsonData = JsonSerializer.Serialize(selected);
-            e.Data.SetData("StandardDataFormats.Text", jsonData);
+            e.Data.SetData(StandardDataFormats.Text, jsonData);
             e.Data.RequestedOperation = DataPackageOperation.Move;
         }
     }
@@ -123,7 +147,7 @@ public sealed partial class CrawlsPage : Page
         var clickedItem = ((FrameworkElement)e.OriginalSource).DataContext;
         if (clickedItem != null && clickedItem is Crawl selection)
         {
-           // Crawl actual = LVCrawlsEmision.SelectedItem as Crawl;
+            // Crawl actual = LVCrawlsEmision.SelectedItem as Crawl;
             ViewModel.CrawlsEmision.Remove(selection);
         }
     }
@@ -138,6 +162,16 @@ public sealed partial class CrawlsPage : Page
         iconPlay.Glyph = "\uEC57";
         listViewBorder.BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.Green);
         playLista = true;
+
+        //Cambiar zona de edicion para mostrar velocidad de la lista de emision
+        sliderCrawlVel.Value = ViewModel.propiedadesListaEmision.velocidad;
+        if (tggEditor.IsOn)
+        {
+            stckEditior1.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+            txtContenido.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+            btnEliminarCrawl.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+            btnGuardarCrawl.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+        }
     }
 
     private void LVCrawlsEmision_DragOver(object sender, DragEventArgs e)
@@ -154,7 +188,8 @@ public sealed partial class CrawlsPage : Page
             var jsonData = await e.DataView.GetTextAsync(StandardDataFormats.Text);
             var droppedCrawl = JsonSerializer.Deserialize<Crawl>(jsonData);
 
-            if (droppedCrawl != null && !ViewModel.CrawlsEmision.Contains(droppedCrawl))
+            //Compruebo que el elemento no está ya en la lista, para evitar duplicidades
+            if (droppedCrawl != null && !ViewModel.CrawlsEmision.Any(c => c.id == droppedCrawl.id))
             {
                 ViewModel.CrawlsEmision.Add(droppedCrawl);
             }
@@ -162,10 +197,34 @@ public sealed partial class CrawlsPage : Page
         }
     }
 
+    private async void BtnClearEmision_Click(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel.CrawlsEmision.Count > 0)
+        {
+            var dialog = new ContentDialog
+            {
+                XamlRoot = this.XamlRoot,
+                Title = "Confirmación de vaciado",
+                Content = "¿Estás seguro de que quieres vaciar la lista de reproducción de crawls?",
+                CloseButtonText = "Cancelar",
+                PrimaryButtonText = "Confirmar",
+                DefaultButton = ContentDialogButton.Close
+            };
+
+            var result = await dialog.ShowAsync();
+
+            if (result.Equals(ContentDialogResult.Primary))
+            {
+                ViewModel.CrawlsEmision.Clear();
+            }
+        }
+    }
+
     //OPCIONES DE FILTRADO
     private void FiltradoPorTexto_TextChanged(object sender, TextChangedEventArgs e)
     {
-        var filtrada = ViewModel.allCrawls.Where(r => r.linea.texto.Contains(FiltradoPorTexto.Text));
+        var filtrada = ViewModel.allCrawls
+   .Where(r => r.linea.texto.IndexOf(FiltradoPorTexto.Text, StringComparison.OrdinalIgnoreCase) >= 0);
         ViewModel.RemoverNoCoincidentes(filtrada);
         ViewModel.RecuperarLista(filtrada);
     }
@@ -206,9 +265,17 @@ public sealed partial class CrawlsPage : Page
         if (tggEditor.IsOn)
         {
             stckEditior0.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-            stckEditior1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-            txtContenido.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
             stckEditior2.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+            if (!playLista)
+            {
+                stckEditior1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+                txtContenido.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+            }
+            else
+            {
+                btnEliminarCrawl.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+                btnGuardarCrawl.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+            }
         }
         else
         {
@@ -220,16 +287,6 @@ public sealed partial class CrawlsPage : Page
     }
 
     private void sliderCrawlVel_DragLeave(object sender, DragEventArgs e)
-    {
-
-    }
-
-    private void chboxEsTitulo_Checked(object sender, RoutedEventArgs e)
-    {
-
-    }
-
-    private void chboxEsTitulo_Unchecked(object sender, RoutedEventArgs e)
     {
 
     }
@@ -249,22 +306,22 @@ public sealed partial class CrawlsPage : Page
 
     private void btnModificarCrawl_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-        if (LVCrawls.SelectedItem != null)
+        if (playLista)
+        {
+            ViewModel.propiedadesListaEmision.velocidad = (int)sliderCrawlVel.Value;
+            ModificarCrawl(ViewModel.propiedadesListaEmision);
+        }
+        else if (LVCrawls.SelectedItem != null)
         {
             Crawl actual = LVCrawls.SelectedItem as Crawl;
             Crawl modificado = new Crawl();
             modificado.id = actual.id;
             modificado.posicion = int.Parse(txtorden.Text);
-            // modificado.tipo = new Tipo();
-            // modificado.tipo.id = (cmbTiposEditor.SelectedValue as Tipo).id;
-            // modificado.tipo.descripcion = (cmbTiposEditor.SelectedValue as Tipo).descripcion;
-            // modificado.tipo.numLineas = (cmbTiposEditor.SelectedValue as Tipo).numLineas;
-            // modificado.lineas = actual.lineas;
-            //
-            // for (int i = 0; i < modificado.lineas.Count; i++)
-            // {
-            //     modificado.lineas[i].texto = textLineas[i].Text;
-            // }
+            modificado.esTitulo = chboxEsTitulo.IsChecked.Value;
+            modificado.velocidad = (int)sliderCrawlVel.Value;
+            actual.linea.texto = txtContenido.Text;
+            modificado.linea = actual.linea;
+
             ModificarCrawl(modificado);
         }
     }
@@ -281,13 +338,15 @@ public sealed partial class CrawlsPage : Page
             var maxPosicion = ViewModel.Crawls.Max(r => r.posicion);
             nuevoCrawl.id = 0;
             nuevoCrawl.posicion = maxPosicion + 1;
+            nuevoCrawl.esTitulo = chboxEsTitulo.IsChecked.Value;
+            nuevoCrawl.velocidad = (int)sliderCrawlVel.Value;
             Linea linea = new Linea();
             linea.id = 0;
             linea.texto = txtContenido.Text;
             nuevoCrawl.linea = linea;
             GuardarCrawlNuevo(nuevoCrawl);
 
-            // TipGuardarAjustes.IsOpen = true;
+            TipAddNuevoCrawl.IsOpen = true;
         }
     }
     private async void GuardarCrawlNuevo(Crawl nuevo)
@@ -300,40 +359,27 @@ public sealed partial class CrawlsPage : Page
         TipAddNuevoCrawl.IsOpen = false;
     }
 
-    // private async void btnDeleteList_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-    // {
-    //     var dialog = new ContentDialog
-    //     {
-    //         XamlRoot = this.XamlRoot,
-    //         Title = "Confirmación de borrado",
-    //         Content = "¿Estás seguro de que quieres vaciar la lista?",
-    //         CloseButtonText = "Cancelar",
-    //         PrimaryButtonText = "Confirmar",
-    //         DefaultButton = ContentDialogButton.Close
-    //     };
-    //
-    //     var result = await dialog.ShowAsync();
-    //
-    //     if (result.Equals(ContentDialogResult.Primary))
-    //     {
-    //         //TODO: VaciarLista();
-    //     }
-    // }
-
-    private void TipGuardarAjustes_Closed(TeachingTip sender, TeachingTipClosedEventArgs args)
-    {
-        //   TipGuardarAjustes.IsOpen = false;
-    }
-
     //ACCIONES GRAPHICS (PLAY y STOP)
     private void btnPlay_Click(object sender, RoutedEventArgs e)
     {
-        if (playLista) { } else { }
+        if (playLista && LVCrawlsEmision.Items.Count > 0)
+        {
+            //Sacaremos la velocidad de  ViewModel.propiedadesListaEmision.velocidad;
+        }
+        else
+        {
+            //Sacaremos la velocidad de  seleccionado.velocidad
+            if (seleccionado != null)
+            {
+
+            }
+        }
     }
 
     private void btnStop_Click(object sender, RoutedEventArgs e)
     {
 
     }
+
 
 }

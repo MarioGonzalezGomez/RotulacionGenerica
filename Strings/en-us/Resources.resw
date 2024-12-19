@@ -156,4 +156,7 @@
   <data name="Shell_Crawls.Content" xml:space="preserve">
     <value>Crawls</value>
   </data>
+  <data name="Shell_Rodillos.Content" xml:space="preserve">
+    <value>Créditos</value>
+  </data>
 </root>

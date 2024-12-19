@@ -16,6 +16,7 @@ public class PageService : IPageService
     {
         Configure<RotulosViewModel, RotulosPage>();
         Configure<CrawlsViewModel, CrawlsPage>();
+        Configure<RodillosViewModel, RodillosPage>();
         Configure<SettingsViewModel, SettingsPage>();
     }
 

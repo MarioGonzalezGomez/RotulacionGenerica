@@ -17,6 +17,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="config.json" />
+    <None Remove="Views\RodillosPage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="config.json">
@@ -50,9 +51,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="Views\CrawlsPage.xaml">
+    <Page Update="Views\RodillosPage.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   

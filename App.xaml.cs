@@ -75,6 +75,8 @@ public partial class App : Application
             services.AddTransient<RotulosPage>();
             services.AddTransient<CrawlsViewModel>();
             services.AddTransient<CrawlsPage>();
+            services.AddTransient<RodillosViewModel>();
+            services.AddTransient<RodillosPage>();
             services.AddTransient<ShellPage>();
             services.AddTransient<ShellViewModel>();
 

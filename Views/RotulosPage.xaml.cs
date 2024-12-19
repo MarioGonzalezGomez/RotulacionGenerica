@@ -253,7 +253,7 @@ public sealed partial class RotulosPage : Page
             }
             nuevoRotulo.lineas = lineas;
             GuardarRotuloNuevo(nuevoRotulo);
-            TipGuardarAjustes.IsOpen = true;
+            TipAddNuevoRotulo.IsOpen = true;
         }
     }
     private async void GuardarRotuloNuevo(Rotulo nuevo)
@@ -263,7 +263,6 @@ public sealed partial class RotulosPage : Page
 
     private void TipAddNuevoRotulo_Closed(TeachingTip sender, TeachingTipClosedEventArgs args)
     {
-        //TODO: Solucionar que salga donde debe este cartel
         TipGuardarAjustes.IsOpen = false;
     }
 

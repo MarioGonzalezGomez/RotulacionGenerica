@@ -159,4 +159,7 @@
   <data name="Shell_Rodillos.Content" xml:space="preserve">
     <value>Créditos</value>
   </data>
+  <data name="Shell_Faldones.Content" xml:space="preserve">
+    <value>Faldones</value>
+  </data>
 </root>

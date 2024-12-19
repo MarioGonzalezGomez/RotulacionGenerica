@@ -17,6 +17,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="config.json" />
+    <None Remove="Views\FaldonesPage.xaml" />
     <None Remove="Views\RodillosPage.xaml" />
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +55,9 @@
     <Page Update="Views\RodillosPage.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\FaldonesPage.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
   </ItemGroup>
   

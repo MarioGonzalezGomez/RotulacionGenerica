@@ -24,11 +24,67 @@ public sealed partial class RodillosPage : Page
     {
         ViewModel = App.GetService<RodillosViewModel>();
         InitializeComponent();
-
     }
 
     //ACCIONES EN LAS LISTAS
     private void IniciarListas()
+    {
+
+    }
+
+    private void FiltradoPorTexto_TextChanged(object sender, TextChangedEventArgs e)
+    {
+
+    }
+
+    private void FiltradoPorPosicion_TextChanged(object sender, TextChangedEventArgs e)
+    {
+
+    }
+
+    private void tggEditor_Toggled(object sender, RoutedEventArgs e)
+    {
+        if (tggEditor.IsOn)
+        {
+            stckEditior0.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+            stckEditior1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+            stckEditior2.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+        }
+        else
+        {
+            stckEditior0.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+            stckEditior1.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+            stckEditior2.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+        }
+    }
+
+    private void btnEliminarRodillo_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void btnModificarRodillo_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void btnGuardarRodillo_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void TipAddNuevoRodillo_Closed(TeachingTip sender, TeachingTipClosedEventArgs args)
+    {
+        TipAddNuevoRodillo.IsOpen = false;
+    }
+
+    //ACCIONES GRAPHICS (PLAY y STOP)
+    private void btnPlay_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void btnStop_Click(object sender, RoutedEventArgs e)
     {
 
     }

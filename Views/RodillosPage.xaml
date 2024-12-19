@@ -17,7 +17,94 @@
     </Page.Resources>
 
     <Grid x:Name="ContentArea">
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TreeView x:Name="TreeRodillos"
+            Grid.Column="0"
+            BorderThickness="1"
+            BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            SelectionMode="Single"
+            CanDragItems="True" 
+            CanReorderItems="True"
+            AllowDrop="True"/>
+
+        <Grid Grid.Column="1" Margin="10,10,0,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.9*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="0.6*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.3*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock  Grid.Row="0" Style="{ThemeResource BaseTextBlockStyle}">Filtrar por...</TextBlock>
+                <TextBox x:Name="FiltradoPorTexto"  Grid.Row="1" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Texto" TextChanged="FiltradoPorTexto_TextChanged"/>
+                <TextBox x:Name="FiltradoPorPosicion"  Grid.Row="2" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Posicion" TextChanged="FiltradoPorPosicion_TextChanged"/>
+            </Grid>
+            <Grid Grid.Row="1" Margin="0,10,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="0.45*"/>
+                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="0.6*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <ToggleSwitch x:Name="tggEditor" OffContent="Añadir/Editar Off" OnContent="Añadir/Editar On" IsOn="False" Toggled="tggEditor_Toggled"/>
+                </StackPanel>
+                <StackPanel x:Name="stckEditior0" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" Visibility="Collapsed">
+                    <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="0,7,20,0">Ajustes Generales</TextBlock>
+                </StackPanel>
+                <StackPanel x:Name="stckEditior1" Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" Visibility="Collapsed">
+                </StackPanel>
+                <StackPanel x:Name="stckEditior2" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="Collapsed">
+                    <Button  x:Name="btnEliminarRodillo" Click="btnEliminarRodillo_Click">
+                        <SymbolIcon Symbol="Delete"/>
+                    </Button>
+                    <Button  x:Name="btnModificarRodillo" Margin="10,0,0,0" Click="btnModificarRodillo_Click">
+                        <SymbolIcon Symbol="Edit"/>
+                    </Button>
+                    <Button  x:Name="btnGuardarRodillo" Margin="10,0,0,0" Click="btnGuardarRodillo_Click">
+                        <SymbolIcon Symbol="Add"/>
+                    </Button>
+                    <muxc:TeachingTip x:Name="TipAddNuevoRodillo"
+                    Title="Añadido con éxito al final de la lista"
+                    CloseButtonContent="Salir"
+                    Target="{x:Bind btnGuardarRodillo}"
+                    Closed="TipAddNuevoRodillo_Closed"
+                    IsLightDismissEnabled="True">
+                        <muxc:TeachingTip.IconSource>
+                            <SymbolIconSource Symbol="Accept"  Foreground="Green"/>
+                        </muxc:TeachingTip.IconSource>
+                    </muxc:TeachingTip>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="2" Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="btnPlay" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="50" MaxHeight="100" Margin="0,0,10,0" Click="btnPlay_Click">
+                    <Button.Content>
+                        <FontIcon x:Name="iconPlay" Glyph="&#xE768;" FontFamily="Segoe MDL2 Assets" FontSize="40" Foreground="Green"/>
+                    </Button.Content>
+                </Button>
+                <Button x:Name="btnStop" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="50" MaxHeight="100"  Margin="10,0,0,0" Click="btnStop_Click">
+                    <Button.Content>
+                        <FontIcon Glyph="&#xE71A;" FontFamily="Segoe MDL2 Assets" FontSize="35" Foreground="#FFB22222"/>
+                    </Button.Content>
+                </Button>
+            </Grid>
+        </Grid>
     </Grid>
 </Page>
     

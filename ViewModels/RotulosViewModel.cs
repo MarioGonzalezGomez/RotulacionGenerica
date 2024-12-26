@@ -37,6 +37,7 @@ public partial class RotulosViewModel : ObservableRecipient
     {
         var listaRotulos = dataController.GetAllAsync();
         Rotulos.Clear();
+        allRotulos.Clear();
 
         // Agrega cada rotulo a la colección (esto actualizará la vista)
         foreach (var rotulo in listaRotulos)

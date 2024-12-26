@@ -27,10 +27,6 @@ public class Faldon
     {
         get; set;
     }
-    public string ruta
-    {
-        get; set;
-    }
 
     public override string? ToString()
     {

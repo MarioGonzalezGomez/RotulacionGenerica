@@ -45,12 +45,12 @@ public sealed partial class FaldonesPage : Page
         if (LVFaldones.SelectedIndex != -1)
         {
             Faldon seleccionado = (Faldon)LVFaldones.SelectedItem;
-            var textBoxes = new[] { txtLinea1, txtLinea2, txtLinea3, txtLinea4 };
+            // var textBoxes = new[] { txtLinea1, txtLinea2, txtLinea3, txtLinea4 };
 
-            for (int i = 0; i < textBoxes.Length; i++)
-            {
-             //   textBoxes[i].Text = i < seleccionado.lineas.Count ? seleccionado.lineas[i].texto : string.Empty;
-            }
+            //   for (int i = 0; i < textBoxes.Length; i++)
+            //  {
+            //   textBoxes[i].Text = i < seleccionado.lineas.Count ? seleccionado.lineas[i].texto : string.Empty;
+            //  }
 
             Tipo tipo = ViewModel.Tipos.FirstOrDefault(t => t.id == seleccionado.tipo.id);
             cmbTiposEditor.SelectedIndex = ViewModel.Tipos.IndexOf(tipo);
@@ -139,34 +139,6 @@ public sealed partial class FaldonesPage : Page
         if (cmbTiposEditor.SelectedIndex != -1)
         {
             Tipo seleccionado = (Tipo)cmbTiposEditor.SelectedValue;
-            switch (seleccionado.numLineas)
-            {
-                case 1:
-                    txtLinea1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                    txtLinea2.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-                    txtLinea3.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-                    txtLinea4.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-                    break;
-                case 2:
-                    txtLinea1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                    txtLinea2.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                    txtLinea3.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-                    txtLinea4.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-                    break;
-                case 3:
-                    txtLinea1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                    txtLinea2.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                    txtLinea3.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                    txtLinea4.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-                    break;
-                case 4:
-                    txtLinea1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                    txtLinea2.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                    txtLinea3.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                    txtLinea4.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                    break;
-                default: break;
-            }
         }
     }
 
@@ -190,19 +162,19 @@ public sealed partial class FaldonesPage : Page
         {
             Faldon actual = LVFaldones.SelectedItem as Faldon;
             Faldon modificado = new Faldon();
-            var textLineas = new[] { txtLinea1, txtLinea2, txtLinea3, txtLinea4 };
             modificado.id = actual.id;
             modificado.posicion = int.Parse(txtorden.Text);
             modificado.tipo = new Tipo();
             modificado.tipo.id = (cmbTiposEditor.SelectedValue as Tipo).id;
+            modificado.tipo.seAplicaA = (cmbTiposEditor.SelectedValue as Tipo).seAplicaA;
             modificado.tipo.descripcion = (cmbTiposEditor.SelectedValue as Tipo).descripcion;
             modificado.tipo.numLineas = (cmbTiposEditor.SelectedValue as Tipo).numLineas;
-            //modificado.lineas = actual.lineas;
 
-           // for (int i = 0; i < modificado.lineas.Count; i++)
-           // {
-           //     modificado.lineas[i].texto = textLineas[i].Text;
-           // }
+            modificado.titulo = actual.titulo;
+            modificado.titulo.texto = txtTitulo.Text;
+            modificado.texto = actual.texto;
+            modificado.texto.texto = txtCuerpo.Text;
+
             ModificarFaldon(modificado);
         }
     }
@@ -211,31 +183,28 @@ public sealed partial class FaldonesPage : Page
         await ViewModel.GuardarFaldon(modificado);
     }
 
-    private void btnGuardarFaldon_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void btnGuardarFaldon_Click(object sender, RoutedEventArgs e)
     {
-        if (!string.IsNullOrEmpty(txtLinea1.Text))
+        if (!string.IsNullOrEmpty(txtCuerpo.Text))
         {
             Faldon nuevoFaldon = new Faldon();
-            var textLineas = new[] { txtLinea1, txtLinea2, txtLinea3, txtLinea4 };
             var maxPosicion = ViewModel.Faldones.Max(r => r.posicion);
-            List<Linea> lineas = new List<Linea>();
             nuevoFaldon.id = 0;
             nuevoFaldon.posicion = maxPosicion + 1;
             nuevoFaldon.tipo = new Tipo();
             nuevoFaldon.tipo.id = (cmbTiposEditor.SelectedValue as Tipo).id;
-            nuevoFaldon.tipo.descripcion = (cmbTiposEditor.SelectedValue as Tipo).descripcion;
+            nuevoFaldon.tipo.seAplicaA = (cmbTiposEditor.SelectedValue as Tipo).seAplicaA;
 
-            for (int i = 0; i < textLineas.Length; i++)
-            {
-                if (!string.IsNullOrEmpty(textLineas[i].Text))
-                {
-                    Linea linea = new Linea();
-                    linea.id = 0;
-                    linea.texto = textLineas[i].Text;
-                    lineas.Add(linea);
-                }
-            }
-          //  nuevoFaldon.lineas = lineas;
+            Linea titulo = new Linea();
+            titulo.id = 0;
+            titulo.texto = txtTitulo.Text;
+            nuevoFaldon.titulo = titulo;
+
+            Linea cuerpo = new Linea();
+            cuerpo.id = 0;
+            cuerpo.texto = txtCuerpo.Text;
+            nuevoFaldon.texto = cuerpo;
+
             GuardarFaldonNuevo(nuevoFaldon);
             TipAddNuevoFaldon.IsOpen = true;
         }

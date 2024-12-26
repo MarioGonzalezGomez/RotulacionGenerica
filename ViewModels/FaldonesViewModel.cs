@@ -37,6 +37,7 @@ public partial class FaldonesViewModel : ObservableRecipient
     {
         var listaFaldones = dataController.GetAllAsync();
         Faldones.Clear();
+        allFaldones.Clear();
 
         // Agrega cada faldon a la colección (esto actualizará la vista)
         foreach (var faldon in listaFaldones)

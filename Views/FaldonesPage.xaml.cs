@@ -45,16 +45,14 @@ public sealed partial class FaldonesPage : Page
         if (LVFaldones.SelectedIndex != -1)
         {
             Faldon seleccionado = (Faldon)LVFaldones.SelectedItem;
-            // var textBoxes = new[] { txtLinea1, txtLinea2, txtLinea3, txtLinea4 };
-
-            //   for (int i = 0; i < textBoxes.Length; i++)
-            //  {
-            //   textBoxes[i].Text = i < seleccionado.lineas.Count ? seleccionado.lineas[i].texto : string.Empty;
-            //  }
 
             Tipo tipo = ViewModel.Tipos.FirstOrDefault(t => t.id == seleccionado.tipo.id);
             cmbTiposEditor.SelectedIndex = ViewModel.Tipos.IndexOf(tipo);
+
+            txtTitulo.Text = seleccionado.titulo.texto;
+            txtCuerpo.Text = seleccionado.texto.texto;
             txtorden.Text = seleccionado.posicion.ToString();
+
         }
     }
 
@@ -68,7 +66,7 @@ public sealed partial class FaldonesPage : Page
         }
     }
 
-    private void MenuFlyoutEditar_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void MenuFlyoutEditar_Click(object sender, RoutedEventArgs e)
     {
         if (!tggEditor.IsOn)
         {
@@ -76,7 +74,7 @@ public sealed partial class FaldonesPage : Page
         }
     }
 
-    private void MenuFlyoutBorrar_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void MenuFlyoutBorrar_Click(object sender, RoutedEventArgs e)
     {
         if (LVFaldones.SelectedItem != null)
         {
@@ -88,17 +86,33 @@ public sealed partial class FaldonesPage : Page
     //OPCIONES DE FILTRADO
     private void FiltradoPorNombre_TextChanged(object sender, TextChangedEventArgs e)
     {
-
+        var filtrada = ViewModel.allFaldones
+    .Where(r => r.titulo.texto.IndexOf(FiltradoPorNombre.Text, StringComparison.OrdinalIgnoreCase) >= 0);
+        ViewModel.RemoverNoCoincidentes(filtrada);
+        ViewModel.RecuperarLista(filtrada);
     }
 
     private void FiltradoPorCargo_TextChanged(object sender, TextChangedEventArgs e)
     {
-
+        var filtrada = ViewModel.allFaldones
+    .Where(r => r.texto.texto.IndexOf(FiltradoPorCargo.Text, StringComparison.OrdinalIgnoreCase) >= 0);
+        ViewModel.RemoverNoCoincidentes(filtrada);
+        ViewModel.RecuperarLista(filtrada);
     }
 
     private void FiltradoPorPosicion_TextChanged(object sender, TextChangedEventArgs e)
     {
-
+        IEnumerable<Faldon> filtrada;
+        if (int.TryParse(FiltradoPorPosicion.Text, out int value))
+        {
+            filtrada = ViewModel.allFaldones.Where(r => r.posicion >= value);
+        }
+        else
+        {
+            filtrada = ViewModel.allFaldones;
+        }
+        ViewModel.RemoverNoCoincidentes(filtrada);
+        ViewModel.RecuperarLista(filtrada);
     }
 
     //ACCIONES EN EDICIÓN

@@ -101,8 +101,8 @@
                 <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
             <TextBlock  Grid.Row="0" Style="{ThemeResource BaseTextBlockStyle}">Filtrar por...</TextBlock>
-            <TextBox x:Name="FiltradoPorNombre"  Grid.Row="1" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Nombre" TextChanged="FiltradoPorNombre_TextChanged"/>
-            <TextBox x:Name="FiltradoPorCargo"  Grid.Row="2" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Cargo" TextChanged="FiltradoPorCargo_TextChanged"/>
+            <TextBox x:Name="FiltradoPorNombre"  Grid.Row="1" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Título" TextChanged="FiltradoPorNombre_TextChanged"/>
+            <TextBox x:Name="FiltradoPorCargo"  Grid.Row="2" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Contenido" TextChanged="FiltradoPorCargo_TextChanged"/>
             <TextBox x:Name="FiltradoPorPosicion"  Grid.Row="3" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Posicion" TextChanged="FiltradoPorPosicion_TextChanged"/>
         </Grid>
 
@@ -123,7 +123,7 @@
             </StackPanel>
             <StackPanel x:Name="stckEditior2" Grid.Row="2" Margin="0,15,0,0" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Center" Visibility="Collapsed">
                 <TextBox x:Name="txtTitulo" PlaceholderText="Titulo"/>
-                <TextBox x:Name="txtCuerpo" Margin="0,5,0,0" PlaceholderText="Cuerpo del faldón"/>
+                <TextBox x:Name="txtCuerpo" Margin="0,5,0,0" PlaceholderText="Cuerpo del faldón" TextWrapping="Wrap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
             </StackPanel>
             <StackPanel x:Name="stckEditior3" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="Collapsed">
                 <Button  x:Name="btnEliminarFaldon" Click="btnEliminarFaldon_Click">

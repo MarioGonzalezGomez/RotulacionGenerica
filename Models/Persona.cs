@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Generico_Front.Models;
-public class Rodillo
+public class Persona
 {
-    public List<Cargo> cargos
+    public string nombre
     {
         get; set;
     }
-    public Rodillo()
+    public int orden
     {
-        cargos = new List<Cargo>();
+        get; set;
     }
 }

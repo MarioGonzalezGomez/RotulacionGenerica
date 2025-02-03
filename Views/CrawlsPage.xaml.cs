@@ -63,10 +63,10 @@ public sealed partial class CrawlsPage : Page
             }
             if (tggEditor.IsOn)
             {
-                stckEditior1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                txtContenido.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                btnEliminarCrawl.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                btnGuardarCrawl.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+                stckEditior1.Visibility = Visibility.Visible;
+                txtContenido.Visibility = Visibility.Visible;
+                btnEliminarCrawl.Visibility = Visibility.Visible;
+                btnGuardarCrawl.Visibility = Visibility.Visible;
             }
         }
     }
@@ -246,7 +246,7 @@ public sealed partial class CrawlsPage : Page
 
 
     //ACCIONES EN EDICIÓN
-    private void BtnAddCrawl_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void BtnAddCrawl_Click(object sender, RoutedEventArgs e)
     {
         if (!tggEditor.IsOn) { tggEditor.IsOn = true; }
         if (ViewModel.Crawls.Count > 0)
@@ -260,7 +260,7 @@ public sealed partial class CrawlsPage : Page
         }
     }
 
-    private void tggEditor_Toggled(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void tggEditor_Toggled(object sender, RoutedEventArgs e)
     {
         if (tggEditor.IsOn)
         {
@@ -291,7 +291,7 @@ public sealed partial class CrawlsPage : Page
 
     }
 
-    private void btnEliminarCrawl_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void btnEliminarCrawl_Click(object sender, RoutedEventArgs e)
     {
         if (LVCrawls.SelectedItem != null)
         {
@@ -304,7 +304,7 @@ public sealed partial class CrawlsPage : Page
         await ViewModel.EliminarCrawl(aEliminar);
     }
 
-    private void btnModificarCrawl_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void btnModificarCrawl_Click(object sender, RoutedEventArgs e)
     {
         if (playLista)
         {
@@ -330,7 +330,7 @@ public sealed partial class CrawlsPage : Page
         await ViewModel.GuardarCrawl(modificado);
     }
 
-    private void btnGuardarCrawl_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void btnGuardarCrawl_Click(object sender, RoutedEventArgs e)
     {
         if (!string.IsNullOrEmpty(txtContenido.Text))
         {

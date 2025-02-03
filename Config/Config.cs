@@ -55,6 +55,22 @@ public class PrimeOptions
     }
 }
 
+public class RotulacionSettings
+{
+    public int VelocidadCrawl
+    {
+        get; set;
+    }
+    public string RutaRodillo
+    {
+        get; set;
+    }
+    public int VelocidadRodillo
+    {
+        get; set;
+    }
+}
+
 public class Config
 {
     private static Config? instance = null;
@@ -70,6 +86,10 @@ public class Config
     {
         get; set;
     }
+    public RotulacionSettings RotulacionSettings
+    {
+        get; set;
+    }
 
     public Config()
     {
@@ -81,13 +101,13 @@ public class Config
         if (instance == null)
         {
             string relativePath = Path.Combine(AppContext.BaseDirectory, "config.json");
-            instance = LoadFromJson(relativePath);
+            instance = LoadConfig(relativePath);
         }
         return instance;
     }
 
     // Método estático para cargar el JSON desde un archivo y deserializarlo
-    public static Config LoadFromJson(string filePath)
+    public static Config LoadConfig(string filePath)
     {
         try
         {
@@ -96,8 +116,22 @@ public class Config
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error al cargar el archivo JSON: {ex.Message}");
+            Console.WriteLine($"Error al cargar el archivo Config: {ex.Message}");
             return null;
+        }
+    }
+
+    public static void SaveConfig(string filePath, Config config)
+    {
+        try
+        {
+            string jsonString = JsonSerializer.Serialize(config, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(filePath, jsonString);
+            Console.WriteLine("Archivo Config guardado exitosamente.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al guardar el archivo Config: {ex.Message}");
         }
     }
 }

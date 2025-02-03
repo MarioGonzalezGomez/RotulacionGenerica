@@ -7,14 +7,12 @@ using System.Threading.Tasks;
 using Generico_Front.Models;
 
 namespace Generico_Front.Controllers.Data;
-public class RodilloController : IBaseController<Rodillo>
+public class RodilloController
 {
     private static RodilloController instance;
-    private Cliente c;
 
     private RodilloController()
     {
-        c = Cliente.GetInstance();
     }
 
     public static RodilloController GetInstance()
@@ -27,42 +25,72 @@ public class RodilloController : IBaseController<Rodillo>
     }
 
 
-    public List<Rodillo> GetAllAsync()
+    public Rodillo GetRodillo(string filePath)
     {
-        string result = c.GetAsync("api/Rodillos").Result;
-        List<Rodillo> crawl;
-        if (!string.IsNullOrEmpty(result))
+        var rodillo = new Rodillo();
+        try
         {
-            crawl = JsonSerializer.Deserialize<List<Rodillo>>(result);
+            string[] lines = File.ReadAllLines(filePath);
+            Cargo currentCargo = null;
+            int personaOrden = 0;
+            bool siguienteEsCargo = true;
+
+            foreach (var line in lines)
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    siguienteEsCargo = true;
+                    continue;
+                }
+
+                if (siguienteEsCargo) // Es un encabezado de cargo
+                {
+                    currentCargo = new Cargo { nombre = line };
+                    rodillo.cargos.Add(currentCargo);
+                    personaOrden = 0; // Reiniciar el orden para cada cargo
+                    siguienteEsCargo = false;
+                }
+                else if (currentCargo != null) // Es un nombre de persona
+                {
+                    currentCargo.personas.Add(new Persona
+                    {
+                        nombre = line.Trim(),
+                        orden = ++personaOrden
+                    });
+                }
+            }
         }
-        else
+        catch (Exception ex)
         {
-            crawl = new List<Rodillo>();
+            Console.WriteLine($"Error al leer el archivo: {ex.Message}");
         }
-        return crawl;
+
+        return rodillo;
     }
-    public Rodillo GetById(int id)
+
+
+    public void SaveRodillo(string filePath, Rodillo rodillo)
     {
-        string result = c.GetAsync($"api/Rodillos/{id}").Result;
-        Rodillo crawl = JsonSerializer.Deserialize<Rodillo>(result);
-        return crawl;
-    }
-    public Rodillo Post(Rodillo Rodillo)
-    {
-        string json = JsonSerializer.Serialize(Rodillo);
-        string result = c.PostAsync($"api/Rodillos", json).Result;
-        Rodillo crawlResult = JsonSerializer.Deserialize<Rodillo>(result);
-        return crawlResult;
-    }
-    public Rodillo Put(Rodillo crawl)
-    {
-        string json = JsonSerializer.Serialize(crawl);
-        string result = c.PutAsync($"api/Rodillos/{crawl.id}", json).Result;
-        return crawl;
-    }
-    public Rodillo Delete(Rodillo Rodillo)
-    {
-        string result = c.DeleteAsync($"api/Rodillos/{Rodillo.id}").Result;
-        return Rodillo;
+        try
+        {
+            using (var writer = new StreamWriter(filePath))
+            {
+                foreach (var cargo in rodillo.cargos)
+                {
+                    writer.WriteLine(cargo.nombre); // Escribir el nombre del cargo
+                    foreach (var persona in cargo.personas)
+                    {
+                        writer.WriteLine($" {persona.nombre}"); // Indentar los nombres de personas
+                    }
+                    writer.WriteLine(); // Separador entre cargos
+                }
+            }
+
+            Console.WriteLine("Archivo guardado exitosamente.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al guardar el archivo: {ex.Message}");
+        }
     }
 }

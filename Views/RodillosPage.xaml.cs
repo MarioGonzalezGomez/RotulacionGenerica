@@ -15,6 +15,10 @@ namespace Generico_Front.Views;
 
 public sealed partial class RodillosPage : Page
 {
+    public List<Cargo> cargos
+    {
+        get; set;
+    }
     public RodillosViewModel ViewModel
     {
         get;
@@ -24,11 +28,14 @@ public sealed partial class RodillosPage : Page
     {
         ViewModel = App.GetService<RodillosViewModel>();
         InitializeComponent();
+        IniciarListas();
     }
 
     //ACCIONES EN LAS LISTAS
     private void IniciarListas()
     {
+        ViewModel.CargarRodillos();
+        cargos = ViewModel.allCargos;
 
     }
 

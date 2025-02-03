@@ -13,7 +13,7 @@
     </Page.DataContext>
 
     <Page.Resources>
-       
+
     </Page.Resources>
 
     <Grid x:Name="ContentArea">
@@ -23,16 +23,25 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TreeView x:Name="TreeRodillos"
-            Grid.Column="0"
-            BorderThickness="1"
-            BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            SelectionMode="Single"
-            CanDragItems="True" 
-            CanReorderItems="True"
-            AllowDrop="True"/>
+        <TreeView ItemsSource="{x:Bind cargos, Mode=OneWay}">
+            <TreeView.Resources>
+                <!-- Template para los nodos Cargo -->
+                <DataTemplate x:Key="CargoTemplate" x:DataType="Models:Cargo">
+                    <TreeViewItem Content="{x:Bind nombre}" ItemsSource="{x:Bind personas}" />
+                </DataTemplate>
+
+                <!-- Template para los nodos Persona -->
+                <DataTemplate x:Key="PersonaTemplate" x:DataType="Models:Persona">
+                    <TreeViewItem Content="{x:Bind nombre}" />
+                </DataTemplate>
+            </TreeView.Resources>
+
+            <TreeView.ItemTemplateSelector>
+                <viewmodels:TreeViewTemplateSelector
+            CargoTemplate="{StaticResource CargoTemplate}"
+            PersonaTemplate="{StaticResource PersonaTemplate}" />
+            </TreeView.ItemTemplateSelector>
+        </TreeView>
 
         <Grid Grid.Column="1" Margin="10,10,0,20">
             <Grid.RowDefinitions>

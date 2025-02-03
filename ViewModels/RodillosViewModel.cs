@@ -10,101 +10,85 @@ public partial class RodillosViewModel : ObservableRecipient
 {
     private readonly Controllers.Data.RodilloController dataController;
     private readonly RodilloController graphicController;
+    private Config.Config config;
 
     public RodillosViewModel()
     {
         dataController = Controllers.Data.RodilloController.GetInstance();
         graphicController = RodilloController.GetInstance();
-        Rodillos = new ObservableCollection<Rodillo>();
-        RodillosEmision = new ObservableCollection<Rodillo>();
+        cargos = new ObservableCollection<Cargo>();
+        allCargos = new List<Cargo>();
+        config = Config.Config.GetInstance();
     }
 
-    public ObservableCollection<Rodillo> Rodillos
+    public ObservableCollection<Cargo> cargos
     {
         get;
     }
-    public ObservableCollection<Rodillo> RodillosEmision
-    {
-        get;
-    }
+    public List<Cargo> allCargos;
+
 
     // Comando para cargar la lista de rodillos
     [RelayCommand]
     public Task CargarRodillos()
     {
-        var listaRodillos = dataController.GetAllAsync();
-        Rodillos.Clear();
+        Rodillo rodillo = dataController.GetRodillo(config.RotulacionSettings.RutaRodillo);
+        cargos.Clear();
+        allCargos.Clear();
 
         // Agrega cada rodillo a la colección (esto actualizará la vista)
-        foreach (var rodillo in listaRodillos)
+        foreach (var cargo in rodillo.cargos)
         {
-                Rodillos.Add(rodillo);
+            cargos.Add(cargo);
+            allCargos.Add(cargo);
         }
 
         return Task.CompletedTask;
     }
 
-    // Comando para agregar un nuevo rodillo
     [RelayCommand]
     public async Task GuardarRodillo(Rodillo rodillo)
     {
-        if (rodillo.id == 0)
-        {
-            dataController.Post(rodillo);
-        }
-        else
-        {
-            dataController.Put(rodillo);
-        }
-        await CargarRodillos();
-    }
-
-    [RelayCommand]
-    public async Task EliminarRodillo(Rodillo rodillo)
-    {
-
-        dataController.Delete(rodillo);
-
-        await CargarRodillos();
+        dataController.SaveRodillo(config.RotulacionSettings.RutaRodillo, rodillo);
     }
 
 
     //OPCIONES PARA EL FILTRADO
-    public void RemoverNoCoincidentes(IEnumerable<Rodillo> filteredData)
+    public void RemoverNoCoincidentes(IEnumerable<Cargo> filteredData)
     {
-        for (int i = Rodillos.Count - 1; i >= 0; i--)
+        for (int i = cargos.Count - 1; i >= 0; i--)
         {
-            var item = Rodillos[i];
+            var item = cargos[i];
             if (!filteredData.Contains(item))
             {
-                Rodillos.Remove(item);
+                cargos.Remove(item);
             }
         }
     }
 
-    public void RecuperarLista(IEnumerable<Rodillo> filteredData)
+    public void RecuperarLista(IEnumerable<Cargo> filteredData)
     {
         foreach (var item in filteredData)
         {
-            if (!Rodillos.Contains(item))
+            if (!cargos.Contains(item))
             {
                 try
                 {
-                   // Rodillos.Insert(item.posicion - 1, item);
+                    cargos.Insert(item.orden - 1, item);
                 }
                 catch (ArgumentOutOfRangeException) { }
             }
         }
     }
 
-    public async void ActualizarPosiciones(List<Rodillo> ordenados)
+    public async void ActualizarPosiciones(List<Cargo> ordenados)
     {
 
         for (int i = 0; i < ordenados.Count; i++)
         {
-          //  ordenados[i].posicion = i + 1;
-            dataController.Put(ordenados[i]);
+            ordenados[i].orden = i + 1;
+
         }
-        await CargarRodillos();
+       // await CargarRodillos();
     }
 }

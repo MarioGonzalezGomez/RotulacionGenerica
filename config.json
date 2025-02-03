@@ -3,15 +3,20 @@
     "BaseUri": "localhost",
     "Port": "44302"
   },
-    "BrainStormOptions": {
-      "Ip": "127.0.0.1",
-      "Database": "DBS",
-      "Port": "5123",
-      "Auto_Connection": "0"
-    },
-    "PrimeOptions": {
-      "Ip": "127.0.0.1",
-      "Port": "8080",
-      "Auto_Connection": "0"
-    }
+  "BrainStormOptions": {
+    "Ip": "127.0.0.1",
+    "Database": "DBS",
+    "Port": "5123",
+    "Auto_Connection": "0"
+  },
+  "PrimeOptions": {
+    "Ip": "127.0.0.1",
+    "Port": "8080",
+    "Auto_Connection": "0"
+  },
+  "RotulacionSettings": {
+    "VelocidadCrawl": 500,
+    "RutaRodillo": "C:\\Elecciones\\RODILLO.txt",
+    "VelocidadRodillo": 500
+  }
 }

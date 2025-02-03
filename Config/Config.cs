@@ -71,6 +71,34 @@ public class RotulacionSettings
     }
 }
 
+public class PestanasActivas
+{
+    public bool Rotulos
+    {
+        get; set;
+    }
+    public bool Crawls
+    {
+        get; set;
+    }
+    public bool Creditos
+    {
+        get; set;
+    }
+    public bool Faldones
+    {
+        get; set;
+    }
+    public bool Premios
+    {
+        get; set;
+    }
+    public bool Varios
+    {
+        get; set;
+    }
+}
+
 public class Config
 {
     private static Config? instance = null;
@@ -87,6 +115,10 @@ public class Config
         get; set;
     }
     public RotulacionSettings RotulacionSettings
+    {
+        get; set;
+    }
+    public PestanasActivas PestanasActivas
     {
         get; set;
     }
@@ -121,12 +153,13 @@ public class Config
         }
     }
 
-    public static void SaveConfig(string filePath, Config config)
+    public static void SaveConfig(Config config)
     {
         try
         {
+            string relativePath = Path.Combine(AppContext.BaseDirectory, "config.json");
             string jsonString = JsonSerializer.Serialize(config, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(filePath, jsonString);
+            File.WriteAllText(relativePath, jsonString);
             Console.WriteLine("Archivo Config guardado exitosamente.");
         }
         catch (Exception ex)

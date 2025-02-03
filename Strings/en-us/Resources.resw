@@ -126,9 +126,6 @@
   <data name="Shell_Rotulos.Content" xml:space="preserve">
     <value>Rótulos</value>
   </data>
-  <data name="Settings_Personalization.Text" xml:space="preserve">
-    <value>Configuración</value>
-  </data>
   <data name="Settings_Theme.Text" xml:space="preserve">
     <value>Tema</value>
   </data>
@@ -145,13 +142,7 @@
     <value>Sobre la aplicación</value>
   </data>
   <data name="Settings_AboutDescription.Text" xml:space="preserve">
-    <value>TODO: Replace with your app description.</value>
-  </data>
-  <data name="SettingsPage_PrivacyTermsLink.Content" xml:space="preserve">
-    <value>Privacy Statement</value>
-  </data>
-  <data name="SettingsPage_PrivacyTermsLink.NavigateUri" xml:space="preserve">
-    <value>https://YourPrivacyUrlGoesHere/</value>
+    <value>Esta aplicación ha sido creada por el departamento de Transformación Digital de RTVE.</value>
   </data>
   <data name="Shell_Crawls.Content" xml:space="preserve">
     <value>Crawls</value>

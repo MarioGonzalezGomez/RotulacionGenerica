@@ -19,7 +19,6 @@ public partial class CrawlsViewModel : ObservableRecipient
         CrawlsEmision = new ObservableCollection<Crawl>();
         allCrawls = new List<Crawl>();
     }
-    public Crawl propiedadesListaEmision;
     public List<Crawl> allCrawls;
     public ObservableCollection<Crawl> Crawls
     {
@@ -42,15 +41,8 @@ public partial class CrawlsViewModel : ObservableRecipient
         // Agrega cada crawl a la colección (esto actualizará la vista)
         foreach (var crawl in listaCrawls)
         {
-            if (crawl.posicion != 0)
-            {
-                Crawls.Add(crawl);
-                allCrawls.Add(crawl);
-            }
-            else
-            {
-                propiedadesListaEmision = crawl;
-            }
+            Crawls.Add(crawl);
+            allCrawls.Add(crawl);
         }
 
         return Task.CompletedTask;

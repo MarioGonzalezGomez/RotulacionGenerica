@@ -23,12 +23,15 @@ public sealed partial class CrawlsPage : Page
     public CrawlsPage()
     {
         ViewModel = App.GetService<CrawlsViewModel>();
+        config = Config.Config.GetInstance();
         InitializeComponent();
         IniciarListas();
     }
 
     private bool playLista = false;
     Crawl seleccionado = null;
+
+    Config.Config config;
 
     //ACCIONES EN LAS LISTAS
     private void IniciarListas()
@@ -164,13 +167,13 @@ public sealed partial class CrawlsPage : Page
         playLista = true;
 
         //Cambiar zona de edicion para mostrar velocidad de la lista de emision
-        sliderCrawlVel.Value = ViewModel.propiedadesListaEmision.velocidad;
+        sliderCrawlVel.Value = config.RotulacionSettings.VelocidadCrawl;
         if (tggEditor.IsOn)
         {
-            stckEditior1.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-            txtContenido.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-            btnEliminarCrawl.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-            btnGuardarCrawl.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+            stckEditior1.Visibility = Visibility.Collapsed;
+            txtContenido.Visibility = Visibility.Collapsed;
+            btnEliminarCrawl.Visibility = Visibility.Collapsed;
+            btnGuardarCrawl.Visibility = Visibility.Collapsed;
         }
     }
 
@@ -286,10 +289,7 @@ public sealed partial class CrawlsPage : Page
         }
     }
 
-    private void sliderCrawlVel_DragLeave(object sender, DragEventArgs e)
-    {
 
-    }
 
     private void btnEliminarCrawl_Click(object sender, RoutedEventArgs e)
     {
@@ -308,8 +308,8 @@ public sealed partial class CrawlsPage : Page
     {
         if (playLista)
         {
-            ViewModel.propiedadesListaEmision.velocidad = (int)sliderCrawlVel.Value;
-            ModificarCrawl(ViewModel.propiedadesListaEmision);
+            config.RotulacionSettings.VelocidadCrawl = (int)sliderCrawlVel.Value;
+            Config.Config.SaveConfig(config);
         }
         else if (LVCrawls.SelectedItem != null)
         {
@@ -364,7 +364,7 @@ public sealed partial class CrawlsPage : Page
     {
         if (playLista && LVCrawlsEmision.Items.Count > 0)
         {
-            //Sacaremos la velocidad de  ViewModel.propiedadesListaEmision.velocidad;
+            //Sacaremos la velocidad de config
         }
         else
         {

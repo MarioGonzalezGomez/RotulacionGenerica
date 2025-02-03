@@ -14,10 +14,16 @@ namespace Generico_Front.Views;
 // TODO: Update NavigationViewItem titles and icons in ShellPage.xaml.
 public sealed partial class ShellPage : Page
 {
+    public static ShellPage instance
+    {
+        get; private set;
+    }
+
     public ShellViewModel ViewModel
     {
         get;
     }
+    Config.Config config;
 
     public ShellPage(ShellViewModel viewModel)
     {
@@ -34,6 +40,9 @@ public sealed partial class ShellPage : Page
         App.MainWindow.SetTitleBar(AppTitleBar);
         App.MainWindow.Activated += MainWindow_Activated;
         AppTitleBarText.Text = "AppDisplayName".GetLocalized();
+        config = Config.Config.GetInstance();
+        InitialWindows();
+        instance = this;
     }
 
     private void OnLoaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
@@ -81,5 +90,34 @@ public sealed partial class ShellPage : Page
         var result = navigationService.GoBack();
 
         args.Handled = result;
+    }
+
+    private void InitialWindows()
+    {
+        ventanaRotulos.Visibility = config.PestanasActivas.Rotulos ? Visibility.Visible : Visibility.Collapsed;
+        ventanaCrawls.Visibility = config.PestanasActivas.Crawls ? Visibility.Visible : Visibility.Collapsed;
+        ventanaCreditos.Visibility = config.PestanasActivas.Creditos ? Visibility.Visible : Visibility.Collapsed;
+        ventanaFaldones.Visibility = config.PestanasActivas.Faldones ? Visibility.Visible : Visibility.Collapsed;
+    }
+    public void UpdateWindows(int modificada, bool activo)
+    {
+        switch (modificada)
+        {
+            case 0:
+                ventanaRotulos.Visibility = activo ? Visibility.Visible : Visibility.Collapsed;
+                break;
+            case 1:
+                ventanaCrawls.Visibility = activo ? Visibility.Visible : Visibility.Collapsed;
+                break;
+            case 2:
+                ventanaCreditos.Visibility = activo ? Visibility.Visible : Visibility.Collapsed;
+                break;
+            case 3:
+                ventanaFaldones.Visibility = activo ? Visibility.Visible : Visibility.Collapsed;
+                break;
+            case 4:
+                //  ventanaPremios.Visibility = activo ? Visibility.Visible : Visibility.Collapsed;
+                break;
+        }
     }
 }

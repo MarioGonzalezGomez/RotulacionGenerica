@@ -38,38 +38,54 @@ public sealed partial class SettingsPage : Page
     //CHECK BOX PESTANAS
     private void RotulosCheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-
+        ShellPage.instance.UpdateWindows(0, true);
+        config.PestanasActivas.Rotulos = true;
+        Config.Config.SaveConfig(config);
     }
     private void RotulosCheckBox_Unchecked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-
+        ShellPage.instance.UpdateWindows(0, false);
+        config.PestanasActivas.Rotulos = false;
+        Config.Config.SaveConfig(config);
     }
 
     private void CrawlsCheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-
+        ShellPage.instance.UpdateWindows(1, true);
+        config.PestanasActivas.Crawls = true;
+        Config.Config.SaveConfig(config);
     }
     private void CrawlsCheckBox_Unchecked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-
+        ShellPage.instance.UpdateWindows(1, false);
+        config.PestanasActivas.Crawls = false;
+        Config.Config.SaveConfig(config);
     }
 
     private void CreditosCheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-
+        ShellPage.instance.UpdateWindows(2, true);
+        config.PestanasActivas.Creditos = true;
+        Config.Config.SaveConfig(config);
     }
     private void CreditosCheckBox_Unchecked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-
+        ShellPage.instance.UpdateWindows(2, false);
+        config.PestanasActivas.Creditos = false;
+        Config.Config.SaveConfig(config);
     }
 
     private void FaldonesCheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-
+        ShellPage.instance.UpdateWindows(3, true);
+        config.PestanasActivas.Faldones = true;
+        Config.Config.SaveConfig(config);
     }
     private void FaldonesCheckBox_Unchecked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-
+        ShellPage.instance.UpdateWindows(3, false);
+        config.PestanasActivas.Faldones = false;
+        Config.Config.SaveConfig(config);
     }
 
     private void PremiosCheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
@@ -89,6 +105,7 @@ public sealed partial class SettingsPage : Page
     {
 
     }
+
 
     //SOFTWARE GRAFICO
     private void IpBrainstorm_TextChanged(object sender, TextChangedEventArgs e)

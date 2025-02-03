@@ -36,22 +36,22 @@
             DisplayModeChanged="NavigationViewControl_DisplayModeChanged"
             Header="{x:Bind ((ContentControl)ViewModel.Selected).Content, Mode=OneWay}">
             <NavigationView.MenuItems>
-                <NavigationViewItem x:Uid="Shell_Rotulos" helpers:NavigationHelper.NavigateTo="Generico_Front.ViewModels.RotulosViewModel">
+                <NavigationViewItem x:Name="ventanaRotulos" x:Uid="Shell_Rotulos" helpers:NavigationHelper.NavigateTo="Generico_Front.ViewModels.RotulosViewModel">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE77B;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:Uid="Shell_Crawls" helpers:NavigationHelper.NavigateTo="Generico_Front.ViewModels.CrawlsViewModel">
+                <NavigationViewItem x:Name="ventanaCrawls" x:Uid="Shell_Crawls" helpers:NavigationHelper.NavigateTo="Generico_Front.ViewModels.CrawlsViewModel">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE751;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:Uid="Shell_Rodillos" helpers:NavigationHelper.NavigateTo="Generico_Front.ViewModels.RodillosViewModel">
+                <NavigationViewItem x:Name="ventanaCreditos" x:Uid="Shell_Rodillos" helpers:NavigationHelper.NavigateTo="Generico_Front.ViewModels.RodillosViewModel">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE71D;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:Uid="Shell_Faldones" helpers:NavigationHelper.NavigateTo="Generico_Front.ViewModels.FaldonesViewModel">
+                <NavigationViewItem x:Name="ventanaFaldones" x:Uid="Shell_Faldones" helpers:NavigationHelper.NavigateTo="Generico_Front.ViewModels.FaldonesViewModel">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE75A;"/>
                     </NavigationViewItem.Icon>

@@ -161,6 +161,7 @@ public class Config
             string jsonString = JsonSerializer.Serialize(config, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(relativePath, jsonString);
             Console.WriteLine("Archivo Config guardado exitosamente.");
+            instance = config;
         }
         catch (Exception ex)
         {

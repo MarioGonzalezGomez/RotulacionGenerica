@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:helpers="using:Generico_Front.Helpers"
-    xmlns:xaml="using:Microsoft.UI.Xaml"
+    xmlns:xaml="using:Microsoft.UI.Xaml" xmlns:muxc="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     mc:Ignorable="d">
     <Page.Resources>
         <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
@@ -89,10 +89,25 @@
 
                 <StackPanel Grid.Column="2" Grid.RowSpan="3" HorizontalAlignment="Stretch">
                     <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}">Software gráfico</TextBlock>
-                    <TextBox x:Name="IpBrainstorm" Margin="0,10,0,0" Header="IP Brainstorm" TextChanged="IpBrainstorm_TextChanged"/>
+                    <Grid HorizontalAlignment="Stretch" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="IpBrainstorm" Header="IP Brainstorm" TextChanged="IpBrainstorm_TextChanged" Grid.Column="0" HorizontalAlignment="Stretch"/>
+                        <Button x:Name="btnReconectarBS" Width="45" Click="btnReconectarBS_Click" Grid.Column="1" Margin="10,24,0,0" ToolTipService.ToolTip="Reconectar">
+                            <SymbolIcon Symbol="Refresh"/>
+                        </Button>
+                    </Grid>
                     <TextBox x:Name="DbBrainstorm" Margin="0,5,0,0" Header="Database Brainstorm" TextChanged="DbBrainstorm_TextChanged"/>
                 </StackPanel>
             </Grid>
         </StackPanel>
+
+        <muxc:InfoBar x:Name="SuccessInfoBar"
+          Title="Conectado con éxito"
+          Severity="Success"
+          IsOpen="False"/>
     </Grid>
+    
 </Page>

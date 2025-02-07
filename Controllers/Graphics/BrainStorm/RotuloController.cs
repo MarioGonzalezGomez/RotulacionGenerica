@@ -29,5 +29,4 @@ public class RotuloController
         return instance;
     }
 
-   
 }

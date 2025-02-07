@@ -11,6 +11,7 @@ public class BSConexion
 {
     private static BSConexion? instance;
     public bool activo = false;
+
     private Socket client;
     private string _ip;
     private int _port;
@@ -58,7 +59,29 @@ public class BSConexion
 
     public void CerrarConexion()
     {
-        client.Close();
-        activo = false;
+        try
+        {
+            client.Close();
+            activo = false;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+        }
+
+    }
+
+    public bool Reconectar()
+    {
+        if (activo == false)
+        {
+            AbrirConexion();
+        }
+        else
+        {
+            CerrarConexion();
+            AbrirConexion();
+        }
+        return activo;
     }
 }

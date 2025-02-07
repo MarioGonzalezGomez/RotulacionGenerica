@@ -30,7 +30,7 @@ public class RodilloController
         var rodillo = new Rodillo();
         try
         {
-            string[] lines = File.ReadAllLines(filePath);
+            string[] lines = File.ReadAllLines(filePath, Encoding.UTF8);
             Cargo currentCargo = null;
             int personaOrden = 0;
             bool siguienteEsCargo = true;
@@ -73,7 +73,7 @@ public class RodilloController
     {
         try
         {
-            using (var writer = new StreamWriter(filePath))
+            using (var writer = new StreamWriter(filePath, false, Encoding.UTF8)) // Forzar UTF-8
             {
                 foreach (var cargo in rodillo.cargos)
                 {
@@ -86,7 +86,7 @@ public class RodilloController
                 }
             }
 
-            Console.WriteLine("Archivo guardado exitosamente.");
+            Console.WriteLine("Archivo guardado exitosamente en UTF-8.");
         }
         catch (Exception ex)
         {

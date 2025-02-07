@@ -11,7 +11,6 @@ using Windows.System;
 
 namespace Generico_Front.Views;
 
-// TODO: Update NavigationViewItem titles and icons in ShellPage.xaml.
 public sealed partial class ShellPage : Page
 {
     public static ShellPage instance
@@ -45,7 +44,7 @@ public sealed partial class ShellPage : Page
         instance = this;
     }
 
-    private void OnLoaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void OnLoaded(object sender, RoutedEventArgs e)
     {
         TitleBarHelper.UpdateTitleBar(RequestedTheme);
 

@@ -1,4 +1,5 @@
-﻿using Generico_Front.ViewModels;
+﻿using Generico_Front.Graphics.Conexion;
+using Generico_Front.ViewModels;
 
 using Microsoft.UI.Xaml.Controls;
 
@@ -88,6 +89,7 @@ public sealed partial class SettingsPage : Page
         Config.Config.SaveConfig(config);
     }
 
+    //TODO completar cuando estés estas pestanas
     private void PremiosCheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
 
@@ -110,11 +112,39 @@ public sealed partial class SettingsPage : Page
     //SOFTWARE GRAFICO
     private void IpBrainstorm_TextChanged(object sender, TextChangedEventArgs e)
     {
-
+        config.BrainStormOptions.Ip = IpBrainstorm.Text;
+        Config.Config.SaveConfig(config);
     }
 
     private void DbBrainstorm_TextChanged(object sender, TextChangedEventArgs e)
     {
+        config.BrainStormOptions.Database = DbBrainstorm.Text;
+        Config.Config.SaveConfig(config);
+    }
 
+    private void btnReconectarBS_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        bool exito = BSConexion.GetInstance().Reconectar();
+        ShowDialog(exito);
+    }
+    public async void ShowDialog(bool exito)
+    {
+        if (exito)
+        {
+            SuccessInfoBar.Message = $"Se ha conectado con éxito a Brainstorm en el equipo {IpBrainstorm.Text}";
+            SuccessInfoBar.IsOpen = true;
+        }
+        else
+        {
+            ContentDialog errorDialog = new ContentDialog()
+            {
+                Title = "Error al conectarse a Brainstorm",
+                Content = "Parece que ha ocurrido un error al conectarse con Brainstorm.\nRevise que la IP sea correcta y que el programa esté en funcionamiento en el equipo especificado",
+                CloseButtonText = "Cerrar",
+                XamlRoot = this.XamlRoot
+            };
+
+            await errorDialog.ShowAsync();
+        }
     }
 }

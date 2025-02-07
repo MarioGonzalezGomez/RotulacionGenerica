@@ -65,6 +65,10 @@ public class RotulacionSettings
     {
         get; set;
     }
+    public string RutaPremios
+    {
+        get; set;
+    }
     public int VelocidadRodillo
     {
         get; set;

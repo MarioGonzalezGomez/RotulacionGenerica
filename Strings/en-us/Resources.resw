@@ -153,4 +153,7 @@
   <data name="Shell_Faldones.Content" xml:space="preserve">
     <value>Faldones</value>
   </data>
+  <data name="Shell_Premios.Content" xml:space="preserve">
+    <value>Premios</value>
+  </data>
 </root>

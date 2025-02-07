@@ -79,6 +79,8 @@ public partial class App : Application
             services.AddTransient<RodillosPage>();
             services.AddTransient<FaldonesViewModel>();
             services.AddTransient<FaldonesPage>();
+            services.AddTransient<PremiosPage>();
+            services.AddTransient<PremiosViewModel>();
             services.AddTransient<ShellPage>();
             services.AddTransient<ShellViewModel>();
 

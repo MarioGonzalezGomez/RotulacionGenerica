@@ -17,6 +17,7 @@
   "RotulacionSettings": {
     "VelocidadCrawl": 500,
     "RutaRodillo": "C:\\Elecciones\\RODILLO.txt",
+    "RutaPremios": "C:\\Elecciones\\RODILLO.txt",
     "VelocidadRodillo": 500
   },
   "PestanasActivas": {

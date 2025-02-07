@@ -52,6 +52,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Views\PremiosPage.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Views\RodillosPage.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>

@@ -56,6 +56,11 @@
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE75A;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
+                <NavigationViewItem x:Name="ventanaPremios" x:Uid="Shell_Premios" helpers:NavigationHelper.NavigateTo="Generico_Front.ViewModels.PremiosViewModel">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE728;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
             <NavigationView.HeaderTemplate>
                 <DataTemplate>

@@ -18,6 +18,7 @@ public class PageService : IPageService
         Configure<CrawlsViewModel, CrawlsPage>();
         Configure<RodillosViewModel, RodillosPage>();
         Configure<FaldonesViewModel, FaldonesPage>();
+        Configure<PremiosViewModel, PremiosPage>();
         Configure<SettingsViewModel, SettingsPage>();
     }
 

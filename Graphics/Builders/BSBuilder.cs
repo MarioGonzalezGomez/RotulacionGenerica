@@ -72,6 +72,16 @@ public class BSBuilder
         return Sale("Rodillo");
     }
 
+    //MOSCA
+    public string MoscaEntra()
+    {
+        return Entra("Mosca");
+    }
+    public string MoscaSale()
+    {
+        return Sale("Mosca");
+    }
+
     //Mensajes comunes
     public string Reset()
     {

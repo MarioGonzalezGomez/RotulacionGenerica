@@ -1,8 +1,9 @@
 ﻿using Generico_Front.Contracts.Services;
+using Generico_Front.Controllers.Graphics.BrainStorm;
 using Generico_Front.Graphics.Conexion;
 using Generico_Front.Helpers;
 using Generico_Front.ViewModels;
-
+using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
@@ -23,7 +24,9 @@ public sealed partial class ShellPage : Page
     {
         get;
     }
-    Config.Config config;
+    private BSController controller;
+    private Config.Config config;
+    private bool mosca = false;
 
     public ShellPage(ShellViewModel viewModel)
     {
@@ -41,6 +44,7 @@ public sealed partial class ShellPage : Page
         App.MainWindow.Activated += MainWindow_Activated;
         AppTitleBarText.Text = "AppDisplayName".GetLocalized();
         config = Config.Config.GetInstance();
+        controller = BSController.GetInstance();
         InitialWindows();
         instance = this;
         bool exito = BSConexion.GetInstance().Reconectar();
@@ -94,6 +98,7 @@ public sealed partial class ShellPage : Page
         args.Handled = result;
     }
 
+    //MANEJO PESTANAS ACTIVAS
     private void InitialWindows()
     {
         ventanaRotulos.Visibility = config.PestanasActivas.Rotulos ? Visibility.Visible : Visibility.Collapsed;
@@ -124,6 +129,7 @@ public sealed partial class ShellPage : Page
         }
     }
 
+    //MANEJO CONEXION
     public async void ShowDialog(bool exito)
     {
         if (exito)
@@ -139,6 +145,23 @@ public sealed partial class ShellPage : Page
             SuccessInfoBar.Message = $"No se ha podido conectar a Brainstorm en el equipo {config.BrainStormOptions.Ip}, revise que los datos sean correctos en el apartado de Settings y que Brainstorm esté funcionando correctamente en el equipo destino";
             SuccessInfoBar.Severity = InfoBarSeverity.Error;
             SuccessInfoBar.IsOpen = true;
+        }
+    }
+
+    //MANEJO MOSCA
+    private void btnMosca_Click(object sender, RoutedEventArgs e)
+    {
+        if (mosca)
+        {
+            controller.MoscaSale();
+            mosca = false;
+            btnMosca.Foreground = new SolidColorBrush(Colors.Green);
+        }
+        else
+        {
+            controller.MoscaEntra();
+            mosca = true;
+            btnMosca.Foreground = new SolidColorBrush(ColorHelper.FromArgb(0xFF, 0xB2, 0x22, 0x22));
         }
     }
 }

@@ -10,6 +10,8 @@
     Loaded="OnLoaded">
 
     <Grid>
+       
+
         <Grid x:Name="AppTitleBar"
               Canvas.ZIndex="1"
               Height="{Binding ElementName=NavigationViewControl, Path=CompactPaneLength}"
@@ -89,6 +91,7 @@
                 <Frame x:Name="NavigationFrame" />
             </Grid>
         </NavigationView>
+        <Button x:Name="btnMosca" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,60,15,0"  MinHeight="30" MaxHeight="50" Content="MOSCA" FontSize="25" Foreground="Green" Click="btnMosca_Click" />
         <muxc:InfoBar x:Name="SuccessInfoBar"
             VerticalAlignment="Bottom"
             Title="Conectado con éxito"

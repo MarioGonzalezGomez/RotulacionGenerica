@@ -36,12 +36,14 @@ public class BSController
         conexion.EnviarMensaje(builder.Reset());
     }
 
-    public void ConectarBrainStorm()
+    //MOSCA
+    public void MoscaEntra()
     {
-        if (conexion.activo)
-        {
-            conexion.CerrarConexion();
-        }
-        conexion.AbrirConexion();
+        conexion.EnviarMensaje(builder.MoscaEntra());
     }
+    public void MoscaSale()
+    {
+        conexion.EnviarMensaje(builder.MoscaSale());
+    }
+
 }

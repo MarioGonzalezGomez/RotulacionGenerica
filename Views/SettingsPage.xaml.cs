@@ -92,11 +92,15 @@ public sealed partial class SettingsPage : Page
     //TODO completar cuando estés estas pestanas
     private void PremiosCheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-
+        ShellPage.instance.UpdateWindows(4, true);
+        config.PestanasActivas.Premios = true;
+        Config.Config.SaveConfig(config);
     }
     private void PremiosCheckBox_Unchecked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-
+        ShellPage.instance.UpdateWindows(4, false);
+        config.PestanasActivas.Premios = false;
+        Config.Config.SaveConfig(config);
     }
 
     private void VariosCheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)

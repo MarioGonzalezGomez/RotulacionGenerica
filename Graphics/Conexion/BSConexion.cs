@@ -52,9 +52,12 @@ public class BSConexion
 
     public void EnviarMensaje(string mensaje)
     {
-        byte[] bytes = Encoding.UTF8.GetBytes(mensaje);
-        client.Send(bytes);
-        Console.WriteLine($"{mensaje}");
+        if (activo)
+        {
+            byte[] bytes = Encoding.UTF8.GetBytes(mensaje);
+            client.Send(bytes);
+            Console.WriteLine($"{mensaje}");
+        }
     }
 
     public void CerrarConexion()

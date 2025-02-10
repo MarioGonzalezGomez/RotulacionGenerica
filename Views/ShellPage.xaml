@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:helpers="using:Generico_Front.Helpers"
     xmlns:behaviors="using:Generico_Front.Behaviors"
-    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:i="using:Microsoft.Xaml.Interactivity" xmlns:muxc="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     Loaded="OnLoaded">
 
     <Grid>
@@ -89,5 +89,10 @@
                 <Frame x:Name="NavigationFrame" />
             </Grid>
         </NavigationView>
+        <muxc:InfoBar x:Name="SuccessInfoBar"
+            VerticalAlignment="Bottom"
+            Title="Conectado con éxito"
+            Severity="Success"
+            IsOpen="False"/>
     </Grid>
 </Page>

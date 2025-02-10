@@ -15,6 +15,8 @@ public sealed partial class RotulosPage : Page
     {
         get;
     }
+    private Rotulo? seleccionado = null;
+    private bool rotuloIn = false;
 
     public RotulosPage()
     {
@@ -44,7 +46,7 @@ public sealed partial class RotulosPage : Page
     {
         if (LVRotulos.SelectedIndex != -1)
         {
-            Rotulo seleccionado = (Rotulo)LVRotulos.SelectedItem;
+            seleccionado = (Rotulo)LVRotulos.SelectedItem;
             var textBoxes = new[] { txtLinea1, txtLinea2, txtLinea3, txtLinea4 };
 
             for (int i = 0; i < textBoxes.Length; i++)
@@ -68,7 +70,7 @@ public sealed partial class RotulosPage : Page
         }
     }
 
-    private void MenuFlyoutEditar_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void MenuFlyoutEditar_Click(object sender, RoutedEventArgs e)
     {
         if (!tggEditor.IsOn)
         {
@@ -76,7 +78,7 @@ public sealed partial class RotulosPage : Page
         }
     }
 
-    private void MenuFlyoutBorrar_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void MenuFlyoutBorrar_Click(object sender, RoutedEventArgs e)
     {
         if (LVRotulos.SelectedItem != null)
         {
@@ -118,7 +120,7 @@ public sealed partial class RotulosPage : Page
     }
 
     //ACCIONES EN EDICIÓN
-    private void BtnAddRotulo_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void BtnAddRotulo_Click(object sender, RoutedEventArgs e)
     {
         if (!tggEditor.IsOn) { tggEditor.IsOn = true; }
         if (ViewModel.Rotulos.Count > 0)
@@ -132,7 +134,7 @@ public sealed partial class RotulosPage : Page
         }
     }
 
-    private void tggEditor_Toggled(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void tggEditor_Toggled(object sender, RoutedEventArgs e)
     {
         if (tggEditor.IsOn)
         {
@@ -187,7 +189,7 @@ public sealed partial class RotulosPage : Page
     }
 
 
-    private void btnEliminarRotulo_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void btnEliminarRotulo_Click(object sender, RoutedEventArgs e)
     {
         if (LVRotulos.SelectedItem != null)
         {
@@ -200,7 +202,7 @@ public sealed partial class RotulosPage : Page
         await ViewModel.EliminarRotulo(aEliminar);
     }
 
-    private void btnModificarRotulo_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void btnModificarRotulo_Click(object sender, RoutedEventArgs e)
     {
         if (LVRotulos.SelectedItem != null)
         {
@@ -227,7 +229,7 @@ public sealed partial class RotulosPage : Page
         await ViewModel.GuardarRotulo(modificado);
     }
 
-    private void btnGuardarRotulo_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void btnGuardarRotulo_Click(object sender, RoutedEventArgs e)
     {
         if (!string.IsNullOrEmpty(txtLinea1.Text))
         {
@@ -269,12 +271,12 @@ public sealed partial class RotulosPage : Page
 
     //ACCIONES EN AJUSTES ADICIONALES
     //TODO: Ajustes adicionales. Hacer si se va a utilizar.
-    private void AbrirPanelAjustes(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void AbrirPanelAjustes(object sender, RoutedEventArgs e)
     {
         SplitView.IsPaneOpen = true;
     }
 
-    private void CerrarPanelAjustes(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void CerrarPanelAjustes(object sender, RoutedEventArgs e)
     {
         SplitView.IsPaneOpen = false;
     }
@@ -308,7 +310,7 @@ public sealed partial class RotulosPage : Page
     //     }
     // }
 
-    private async void btnDeleteList_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private async void btnDeleteList_Click(object sender, RoutedEventArgs e)
     {
         var dialog = new ContentDialog
         {
@@ -328,7 +330,7 @@ public sealed partial class RotulosPage : Page
         }
     }
 
-    private void btnSaveAjustes_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void btnSaveAjustes_Click(object sender, RoutedEventArgs e)
     {
         TipGuardarAjustes.IsOpen = true;
         //TODO: Logica de comprobaciones antes de guardar
@@ -338,5 +340,24 @@ public sealed partial class RotulosPage : Page
     private void TipGuardarAjustes_Closed(TeachingTip sender, TeachingTipClosedEventArgs args)
     {
         TipGuardarAjustes.IsOpen = false;
+    }
+
+    //ENTRA Y SALE
+    private void btnEntra_Click(object sender, RoutedEventArgs e)
+    {
+        if (seleccionado != null)
+        {
+            ViewModel.Entra(seleccionado);
+            rotuloIn = true;
+        }
+    }
+
+    private void btnSale_Click(object sender, RoutedEventArgs e)
+    {
+        if (rotuloIn)
+        {
+            ViewModel.Sale();
+            rotuloIn = false;
+        }
     }
 }

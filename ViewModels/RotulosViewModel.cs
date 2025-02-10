@@ -10,13 +10,15 @@ public partial class RotulosViewModel : ObservableRecipient
 {
     private readonly Controllers.Data.RotuloController dataController;
     private readonly Controllers.Data.TipoController tipoController;
-    private readonly BSController graphicController;
+    private readonly RotuloController graphicController;
+    private readonly Graphics.Conexion.BSConexion conexion;
 
     public RotulosViewModel()
     {
         dataController = Controllers.Data.RotuloController.GetInstance();
         tipoController = Controllers.Data.TipoController.GetInstance();
-        graphicController = BSController.GetInstance();
+        graphicController = RotuloController.GetInstance();
+        conexion = Graphics.Conexion.BSConexion.GetInstance();
         Tipos = new ObservableCollection<Tipo>();
         Rotulos = new ObservableCollection<Rotulo>();
         allRotulos = new List<Rotulo>();
@@ -82,7 +84,10 @@ public partial class RotulosViewModel : ObservableRecipient
 
         foreach (var tipo in listaTipos)
         {
-            Tipos.Add(tipo);
+            if (tipo.seAplicaA.Equals("Rotulos"))
+            {
+                Tipos.Add(tipo);
+            }
         }
 
         return Task.CompletedTask;
@@ -140,5 +145,15 @@ public partial class RotulosViewModel : ObservableRecipient
             dataController.Put(ordenados[i]);
         }
         await CargarRotulos();
+    }
+
+    //Acciones Gráficas
+    public void Entra(Rotulo rotulo)
+    {
+        graphicController.Entra(rotulo);
+    }
+    public void Sale()
+    {
+        graphicController.Sale();
     }
 }

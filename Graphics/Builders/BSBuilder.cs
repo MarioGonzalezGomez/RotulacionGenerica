@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Generico_Front.Models;
 
 namespace Generico_Front.Graphics.Builders;
 public class BSBuilder
@@ -26,22 +27,72 @@ public class BSBuilder
         return instance;
     }
 
+    //ROTULO
+    public string RotuloEntra(Rotulo rotulo)
+    {
+        string mensaje = "";
+        for (int i = 0; i < 4; i++)
+        {
+            string texto = i < rotulo.lineas.Count ? rotulo.lineas[i].texto : "";
+            mensaje += CambiaTexto($"Rotulo/linea0{i + 1}", texto);
+        }
+        mensaje += Entra("Rotulo");
+
+        return mensaje;
+    }
+    public string RotuloSale()
+    {
+        return Sale("Rotulo");
+    }
+    //FALDON
+    public string FaldonEntra()
+    {
+        return Entra("Faldon");
+    }
+    public string FaldonSale()
+    {
+        return Sale("Faldon");
+    }
+    //CRAWL
+    public string CrawlEntra()
+    {
+        return Entra("Crawl");
+    }
+    public string CrawlSale()
+    {
+        return Sale("Crawl");
+    }
+    //CREDITOS
+    public string CreditosEntra()
+    {
+        return Entra("Rodillo");
+    }
+    public string CreditosSale()
+    {
+        return Sale("Rodillo");
+    }
+
     //Mensajes comunes
     public string Reset()
     {
-        return EventRunBuild("RESET");
+        return EventRunBuild("Reset");
     }
-    public string Entra(string objeto)
+    private string Entra(string objeto)
     {
-        return EventRunBuild($"{objeto}/ENTRA");
+        return EventRunBuild($"{objeto}/Entra");
     }
-    public string Encadena(string objeto)
+    private string Encadena(string objeto)
     {
-        return EventRunBuild($"{objeto}/ENCADENA");
+        return EventRunBuild($"{objeto}/Encadena");
     }
-    public string Sale(string objeto)
+    private string Sale(string objeto)
     {
-        return EventRunBuild($"{objeto}/SALE");
+        return EventRunBuild($"{objeto}/Sale");
+    }
+
+    private string CambiaTexto(string objeto, string texto)
+    {
+        return EventBuild(objeto, "TEXT_STRING", $"'{texto}'", 1);
     }
 
     //CONSTRUCTORES

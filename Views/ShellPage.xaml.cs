@@ -1,4 +1,5 @@
 ﻿using Generico_Front.Contracts.Services;
+using Generico_Front.Graphics.Conexion;
 using Generico_Front.Helpers;
 using Generico_Front.ViewModels;
 
@@ -42,6 +43,8 @@ public sealed partial class ShellPage : Page
         config = Config.Config.GetInstance();
         InitialWindows();
         instance = this;
+        bool exito = BSConexion.GetInstance().Reconectar();
+        ShowDialog(exito);
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
@@ -97,6 +100,7 @@ public sealed partial class ShellPage : Page
         ventanaCrawls.Visibility = config.PestanasActivas.Crawls ? Visibility.Visible : Visibility.Collapsed;
         ventanaCreditos.Visibility = config.PestanasActivas.Creditos ? Visibility.Visible : Visibility.Collapsed;
         ventanaFaldones.Visibility = config.PestanasActivas.Faldones ? Visibility.Visible : Visibility.Collapsed;
+        ventanaPremios.Visibility = config.PestanasActivas.Premios ? Visibility.Visible : Visibility.Collapsed;
     }
     public void UpdateWindows(int modificada, bool activo)
     {
@@ -115,8 +119,26 @@ public sealed partial class ShellPage : Page
                 ventanaFaldones.Visibility = activo ? Visibility.Visible : Visibility.Collapsed;
                 break;
             case 4:
-                //  ventanaPremios.Visibility = activo ? Visibility.Visible : Visibility.Collapsed;
+                ventanaPremios.Visibility = activo ? Visibility.Visible : Visibility.Collapsed;
                 break;
+        }
+    }
+
+    public async void ShowDialog(bool exito)
+    {
+        if (exito)
+        {
+            SuccessInfoBar.Title = "Conectado con éxito";
+            SuccessInfoBar.Message = $"Se ha conectado con éxito a Brainstorm en el equipo {config.BrainStormOptions.Ip}";
+            SuccessInfoBar.Severity = InfoBarSeverity.Success;
+            SuccessInfoBar.IsOpen = true;
+        }
+        else
+        {
+            SuccessInfoBar.Title = "Error al conectar";
+            SuccessInfoBar.Message = $"No se ha podido conectar a Brainstorm en el equipo {config.BrainStormOptions.Ip}, revise que los datos sean correctos en el apartado de Settings y que Brainstorm esté funcionando correctamente en el equipo destino";
+            SuccessInfoBar.Severity = InfoBarSeverity.Error;
+            SuccessInfoBar.IsOpen = true;
         }
     }
 }

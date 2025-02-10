@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Generico_Front.Controllers.Data;
 using Generico_Front.Graphics.Builders;
 using Generico_Front.Graphics.Conexion;
+using Generico_Front.Models;
 
 namespace Generico_Front.Controllers.Graphics.BrainStorm;
 public class RotuloController
@@ -27,6 +28,16 @@ public class RotuloController
             instance = new RotuloController();
         }
         return instance;
+    }
+
+    public void Entra(Rotulo rotulo)
+    {
+        conexion.EnviarMensaje(builder.RotuloEntra(rotulo));
+    }
+
+    public void Sale()
+    {
+        conexion.EnviarMensaje(builder.RotuloSale());
     }
 
 }

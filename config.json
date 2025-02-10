@@ -5,7 +5,7 @@
   },
   "BrainStormOptions": {
     "Ip": "127.0.0.1",
-    "Database": "DBS",
+    "Database": "dbs1",
     "Port": "5123",
     "Auto_Connection": "0"
   },
@@ -16,8 +16,8 @@
   },
   "RotulacionSettings": {
     "VelocidadCrawl": 500,
-    "RutaRodillo": "C:\\Elecciones\\RODILLO.txt",
-    "RutaPremios": "C:\\Elecciones\\RODILLO.txt",
+    "RutaRodillo": "C:\\TrabajoIPF\\2025\\AppGenerica\\Control\\RODILLO.txt",
+    "RutaPremios": "C:\\TrabajoIPF\\2025\\AppGenerica\\Control\\RODILLO.txt",
     "VelocidadRodillo": 500
   },
   "PestanasActivas": {

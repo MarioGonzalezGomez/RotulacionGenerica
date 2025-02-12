@@ -20,7 +20,7 @@ public sealed partial class SettingsPage : Page
         LoadSettings();
     }
 
-    Config.Config config;
+    private Config.Config config;
 
     //CARAGA DE DATOS
     private void LoadSettings()

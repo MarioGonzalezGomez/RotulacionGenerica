@@ -213,13 +213,26 @@ public sealed partial class RotulosPage : Page
             modificado.posicion = int.Parse(txtorden.Text);
             modificado.tipo = new Tipo();
             modificado.tipo.id = (cmbTiposEditor.SelectedValue as Tipo).id;
+            modificado.tipo.seAplicaA = (cmbTiposEditor.SelectedValue as Tipo).seAplicaA;
             modificado.tipo.descripcion = (cmbTiposEditor.SelectedValue as Tipo).descripcion;
             modificado.tipo.numLineas = (cmbTiposEditor.SelectedValue as Tipo).numLineas;
-            modificado.lineas = actual.lineas;
+            modificado.lineas = new List<Linea>();
 
-            for (int i = 0; i < modificado.lineas.Count; i++)
+            for (int i = 0; i < modificado.tipo.numLineas; i++)
             {
-                modificado.lineas[i].texto = textLineas[i].Text;
+                Linea nuevaLinea = new Linea();
+                if (i < actual.lineas.Count)
+                {
+                    nuevaLinea.id = actual.lineas[i].id;
+                }
+                else
+                {
+                    nuevaLinea.id = 0;
+                }
+                nuevaLinea.texto = textLineas[i].Text;
+                modificado.lineas.Add(nuevaLinea);
+
+
             }
             ModificarRotulo(modificado);
         }
@@ -241,6 +254,7 @@ public sealed partial class RotulosPage : Page
             nuevoRotulo.posicion = maxPosicion + 1;
             nuevoRotulo.tipo = new Tipo();
             nuevoRotulo.tipo.id = (cmbTiposEditor.SelectedValue as Tipo).id;
+            nuevoRotulo.tipo.seAplicaA = (cmbTiposEditor.SelectedValue as Tipo).seAplicaA;
             nuevoRotulo.tipo.descripcion = (cmbTiposEditor.SelectedValue as Tipo).descripcion;
 
             for (int i = 0; i < textLineas.Length; i++)
@@ -255,17 +269,20 @@ public sealed partial class RotulosPage : Page
             }
             nuevoRotulo.lineas = lineas;
             GuardarRotuloNuevo(nuevoRotulo);
-            TipAddNuevoRotulo.IsOpen = true;
         }
     }
     private async void GuardarRotuloNuevo(Rotulo nuevo)
     {
-        await ViewModel.GuardarRotulo(nuevo);
+        Tip.Target = btnGuardarRotulo;
+
+        // await ViewModel.GuardarRotulo(nuevo);
     }
 
-    private void TipAddNuevoRotulo_Closed(TeachingTip sender, TeachingTipClosedEventArgs args)
+    private async void AbrirTip()
     {
-        TipGuardarAjustes.IsOpen = false;
+        Tip.IsOpen = true;
+        await Task.Delay(1000);
+        Tip.IsOpen = false;
     }
 
 
@@ -360,4 +377,5 @@ public sealed partial class RotulosPage : Page
             rotuloIn = false;
         }
     }
+
 }

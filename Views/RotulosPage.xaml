@@ -144,16 +144,7 @@
                 <Button  x:Name="btnGuardarRotulo" Margin="10,0,0,0" Click="btnGuardarRotulo_Click">
                     <SymbolIcon Symbol="Add"/>
                 </Button>
-                <muxc:TeachingTip x:Name="TipAddNuevoRotulo"
-                    Title="Añadido con éxito al final de la lista"
-                    CloseButtonContent="Salir"
-                    Target="{x:Bind btnGuardarRotulo}"
-                    Closed="TipAddNuevoRotulo_Closed"
-                    IsLightDismissEnabled="True">
-                    <muxc:TeachingTip.IconSource>
-                        <SymbolIconSource Symbol="Accept"  Foreground="Green"/>
-                    </muxc:TeachingTip.IconSource>
-                </muxc:TeachingTip>
+                
             </StackPanel>
         </Grid>
 
@@ -302,6 +293,13 @@
 
             </SplitView.Pane>
         </SplitView>
+
+        <muxc:TeachingTip x:Name="Tip"
+            IsLightDismissEnabled="False">
+            <TeachingTip.IconSource>
+                <SymbolIconSource Symbol="Accept" />
+            </TeachingTip.IconSource>
+        </muxc:TeachingTip>
     </Grid>
 </Page>
     

@@ -247,7 +247,7 @@
             IsLightDismissEnabled="False"
             CloseButtonContent="">
             <TeachingTip.IconSource>
-                <SymbolIconSource Symbol="Accept" />
+                <SymbolIconSource x:Name="tipSymbol" Symbol="Accept" />
             </TeachingTip.IconSource>
         </muxc:TeachingTip>
     </Grid>

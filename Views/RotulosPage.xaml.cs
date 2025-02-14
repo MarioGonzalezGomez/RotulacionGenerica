@@ -288,7 +288,7 @@ public sealed partial class RotulosPage : Page
     private async void AbrirTip()
     {
         Tip.IsOpen = true;
-        await Task.Delay(1000);
+        await Task.Delay(1500);
         Tip.IsOpen = false;
     }
 
@@ -369,13 +369,25 @@ public sealed partial class RotulosPage : Page
                 selected.numLineas = cmbNumLineas.SelectedIndex + 1;
             }
             selected.descripcion = txtNombreTipo.Text;
-            GuardarTipoNuevo(selected);
+            bool existe = ViewModel.Tipos.Any(t => t.descripcion.Equals(selected.descripcion, StringComparison.OrdinalIgnoreCase));
+            if (existe)
+            {
+                Tip.Target = btnSaveAjustes;
+                Tip.Title = $"El tipo {selected.descripcion} ya existe";
+                AbrirTip();
+            }
+            else
+            {
+                GuardarTipoNuevo(selected);
+            }
+
         }
     }
     private async void GuardarTipoNuevo(Tipo tipo)
     {
         Tip.Target = btnSaveAjustes;
         Tip.Title = "Guardado con éxito";
+        tipSymbol.Symbol = Symbol.Accept;
         await ViewModel.GuardarTipo(tipo);
         AbrirTip();
     }
@@ -386,7 +398,7 @@ public sealed partial class RotulosPage : Page
         {
             XamlRoot = this.XamlRoot,
             Title = "Confirmación de borrado",
-            Content = "¿Estás seguro de que quieres vaciar la lista?",
+            Content = "¿Estás seguro de que quieres vaciar la lista?\nEsto eliminará de la base de datos todos los rótulos actuales",
             CloseButtonText = "Cancelar",
             PrimaryButtonText = "Confirmar",
             DefaultButton = ContentDialogButton.Close
@@ -396,7 +408,7 @@ public sealed partial class RotulosPage : Page
 
         if (result.Equals(ContentDialogResult.Primary))
         {
-            //TODO: VaciarLista();
+            await ViewModel.BorrarTodos();
         }
     }
 

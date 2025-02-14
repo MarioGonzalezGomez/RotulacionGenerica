@@ -75,6 +75,15 @@ public partial class RotulosViewModel : ObservableRecipient
         await CargarRotulos();
     }
 
+    public async Task BorrarTodos()
+    {
+        foreach (Rotulo r in allRotulos)
+        {
+            EliminarRotulo(r);
+        }
+        await CargarRotulos();
+    }
+
     //OPCIONES PARA OBTENER TIPOS
     [RelayCommand]
     public Task CargarTipos()

@@ -5,6 +5,7 @@ using Generico_Front.Models;
 using Generico_Front.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
 using Windows.ApplicationModel.Contacts;
 
 namespace Generico_Front.Views;
@@ -31,9 +32,8 @@ public sealed partial class RotulosPage : Page
         ViewModel.CargarRotulos();
         LVRotulos.ItemsSource = ViewModel.Rotulos;
         ViewModel.CargarTipos();
+        cmbTipos.ItemsSource = ViewModel.Tipos;
         cmbTiposEditor.ItemsSource = ViewModel.Tipos;
-        cmbAccionesConTipos.ItemsSource = ViewModel.Tipos;
-        cmbAccionesConTipos.SelectedIndex = 0;
     }
 
     private void LVRotulos_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
@@ -199,7 +199,10 @@ public sealed partial class RotulosPage : Page
     }
     private async void EliminarRotulo(Rotulo aEliminar)
     {
+        Tip.Target = btnEliminarRotulo;
+        Tip.Title = "Rótulo eliminado";
         await ViewModel.EliminarRotulo(aEliminar);
+        AbrirTip();
     }
 
     private void btnModificarRotulo_Click(object sender, RoutedEventArgs e)
@@ -239,7 +242,10 @@ public sealed partial class RotulosPage : Page
     }
     private async void ModificarRotulo(Rotulo modificado)
     {
+        Tip.Target = btnModificarRotulo;
+        Tip.Title = "Modificado con éxito";
         await ViewModel.GuardarRotulo(modificado);
+        AbrirTip();
     }
 
     private void btnGuardarRotulo_Click(object sender, RoutedEventArgs e)
@@ -274,8 +280,9 @@ public sealed partial class RotulosPage : Page
     private async void GuardarRotuloNuevo(Rotulo nuevo)
     {
         Tip.Target = btnGuardarRotulo;
-
-        // await ViewModel.GuardarRotulo(nuevo);
+        Tip.Title = "Guardado con éxito";
+        await ViewModel.GuardarRotulo(nuevo);
+        AbrirTip();
     }
 
     private async void AbrirTip()
@@ -287,7 +294,6 @@ public sealed partial class RotulosPage : Page
 
 
     //ACCIONES EN AJUSTES ADICIONALES
-    //TODO: Ajustes adicionales. Hacer si se va a utilizar.
     private void AbrirPanelAjustes(object sender, RoutedEventArgs e)
     {
         SplitView.IsPaneOpen = true;
@@ -298,34 +304,81 @@ public sealed partial class RotulosPage : Page
         SplitView.IsPaneOpen = false;
     }
 
-    private void cmbAccionesConTipos_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        cmbTipos.ItemsSource = cmbAccionesConTipos.SelectedIndex == 0 ? null : ViewModel.Tipos;
-        cmbTipos.IsEditable = cmbAccionesConTipos.SelectedIndex != 2;
-    }
     private void cmbTipos_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        //TODO: Add logica de cargar datos del tipo seleccionado
-        //No olvidar poner el num de lineas en la parte de edicion por linea
+        if (cmbTipos.SelectedIndex != -1)
+        {
+            Tipo tipoSeleccionado = (Tipo)cmbTipos.SelectedItem;
+            txtNombreTipo.Text = tipoSeleccionado.descripcion;
+            cmbNumLineas.SelectedIndex = tipoSeleccionado.numLineas - 1;
+            txtNombreTipo.Visibility = Visibility.Visible;
+            stackNumlineas.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            txtNombreTipo.Visibility = Visibility.Collapsed;
+            stackNumlineas.Visibility = Visibility.Collapsed;
+        }
     }
 
-    // private void tggPorLineas_Toggled(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-    // {
-    //     if (tggPorLineas.IsOn)
-    //     {
-    //         stckLineas.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-    //         stckEscala.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-    //         stckPosX.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-    //         stckPosY.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-    //     }
-    //     else
-    //     {
-    //         stckLineas.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-    //         stckEscala.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-    //         stckPosX.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-    //         stckPosY.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-    //     }
-    // }
+    private void btnDeleteAjustes_Click(object sender, RoutedEventArgs e)
+    {
+        if (cmbTipos.SelectedIndex != -1)
+        {
+            Tipo selected = (Tipo)cmbTipos.SelectedItem;
+            EliminarTipo(selected);
+        }
+    }
+    private async void EliminarTipo(Tipo tipo)
+    {
+        Tip.Target = btnDeleteAjustes;
+        Tip.Title = "Tipo eliminado";
+        await ViewModel.EliminarTipo(tipo);
+        AbrirTip();
+    }
+
+    private void btnEditAjustes_Click(object sender, RoutedEventArgs e)
+    {
+        if (cmbTipos.SelectedIndex != -1)
+        {
+            Tipo selected = (Tipo)cmbTipos.SelectedItem;
+            if (cmbNumLineas.SelectedIndex != -1)
+            {
+                selected.numLineas = cmbNumLineas.SelectedIndex + 1;
+            }
+            selected.descripcion = txtNombreTipo.Text;
+            ModificarTipo(selected);
+        }
+    }
+    private async void ModificarTipo(Tipo tipo)
+    {
+        Tip.Target = btnEditAjustes;
+        Tip.Title = "Modificado con éxito";
+        await ViewModel.GuardarTipo(tipo);
+        AbrirTip();
+    }
+
+    private void btnSaveAjustes_Click(object sender, RoutedEventArgs e)
+    {
+        if (cmbTipos.SelectedIndex != -1)
+        {
+            Tipo selected = (Tipo)cmbTipos.SelectedItem;
+            selected.id = 0;
+            if (cmbNumLineas.SelectedIndex != -1)
+            {
+                selected.numLineas = cmbNumLineas.SelectedIndex + 1;
+            }
+            selected.descripcion = txtNombreTipo.Text;
+            GuardarTipoNuevo(selected);
+        }
+    }
+    private async void GuardarTipoNuevo(Tipo tipo)
+    {
+        Tip.Target = btnSaveAjustes;
+        Tip.Title = "Guardado con éxito";
+        await ViewModel.GuardarTipo(tipo);
+        AbrirTip();
+    }
 
     private async void btnDeleteList_Click(object sender, RoutedEventArgs e)
     {
@@ -347,18 +400,6 @@ public sealed partial class RotulosPage : Page
         }
     }
 
-    private void btnSaveAjustes_Click(object sender, RoutedEventArgs e)
-    {
-        TipGuardarAjustes.IsOpen = true;
-        //TODO: Logica de comprobaciones antes de guardar
-        //GuardarAjustes()
-    }
-
-    private void TipGuardarAjustes_Closed(TeachingTip sender, TeachingTipClosedEventArgs args)
-    {
-        TipGuardarAjustes.IsOpen = false;
-    }
-
     //ENTRA Y SALE
     private void btnEntra_Click(object sender, RoutedEventArgs e)
     {
@@ -377,5 +418,4 @@ public sealed partial class RotulosPage : Page
             rotuloIn = false;
         }
     }
-
 }

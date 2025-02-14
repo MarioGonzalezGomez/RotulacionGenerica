@@ -58,9 +58,8 @@ public class TipoController : IBaseController<Tipo>
     public Tipo Put(Tipo tipo)
     {
         string json = JsonSerializer.Serialize(tipo);
-        string result = c.PutAsync($"api/Tipos/{tipo.id}", json).Result;
-        Tipo tipoResult = JsonSerializer.Deserialize<Tipo>(result);
-        return tipoResult;
+        _ = c.PutAsync($"api/Tipos/{tipo.id}", json).Result;
+        return tipo;
     }
     public Tipo Delete(Tipo tipo)
     {

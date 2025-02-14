@@ -47,9 +47,9 @@ public class CrawlController : IBaseController<Crawl>
         Crawl crawl = JsonSerializer.Deserialize<Crawl>(result);
         return crawl;
     }
-    public Crawl Post(Crawl Crawl)
+    public Crawl Post(Crawl crawl)
     {
-        string json = JsonSerializer.Serialize(Crawl);
+        string json = JsonSerializer.Serialize(crawl);
         string result = c.PostAsync($"api/Crawls", json).Result;
         Crawl crawlResult = JsonSerializer.Deserialize<Crawl>(result);
         return crawlResult;
@@ -57,12 +57,12 @@ public class CrawlController : IBaseController<Crawl>
     public Crawl Put(Crawl crawl)
     {
         string json = JsonSerializer.Serialize(crawl);
-        string result = c.PutAsync($"api/Crawls/{crawl.id}", json).Result;
+        _ = c.PutAsync($"api/Crawls/{crawl.id}", json).Result;
         return crawl;
     }
-    public Crawl Delete(Crawl Crawl)
+    public Crawl Delete(Crawl crawl)
     {
-        string result = c.DeleteAsync($"api/Crawls/{Crawl.id}").Result;
-        return Crawl;
+        string result = c.DeleteAsync($"api/Crawls/{crawl.id}").Result;
+        return crawl;
     }
 }

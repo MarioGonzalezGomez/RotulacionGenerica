@@ -81,13 +81,20 @@ public partial class RotulosViewModel : ObservableRecipient
     {
         var listaTipos = tipoController.GetAllAsync();
         Tipos.Clear();
-
         foreach (var tipo in listaTipos)
         {
             if (tipo.seAplicaA.Equals("Rotulos"))
             {
                 Tipos.Add(tipo);
             }
+        }
+        if (Tipos.Count == 0)
+        {
+            Tipo porDefecto = new Tipo();
+            porDefecto.id = 0;
+            porDefecto.seAplicaA = "Rotulos";
+            porDefecto.descripcion = "Tipo por defecto";
+            porDefecto.numLineas = 1;
         }
 
         return Task.CompletedTask;
@@ -104,6 +111,13 @@ public partial class RotulosViewModel : ObservableRecipient
         {
             tipoController.Put(tipo);
         }
+        await CargarTipos();
+    }
+
+    [RelayCommand]
+    public async Task EliminarTipo(Tipo tipo)
+    {
+        tipoController.Delete(tipo);
         await CargarTipos();
     }
 

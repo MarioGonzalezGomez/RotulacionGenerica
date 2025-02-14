@@ -47,9 +47,9 @@ public class FaldonController : IBaseController<Faldon>
         Faldon faldon = JsonSerializer.Deserialize<Faldon>(result);
         return faldon;
     }
-    public Faldon Post(Faldon Faldon)
+    public Faldon Post(Faldon faldon)
     {
-        string json = JsonSerializer.Serialize(Faldon);
+        string json = JsonSerializer.Serialize(faldon);
         string result = c.PostAsync($"api/Faldones", json).Result;
         Faldon faldonResult = JsonSerializer.Deserialize<Faldon>(result);
         return faldonResult;
@@ -57,12 +57,12 @@ public class FaldonController : IBaseController<Faldon>
     public Faldon Put(Faldon faldon)
     {
         string json = JsonSerializer.Serialize(faldon);
-        string result = c.PutAsync($"api/Faldones/{faldon.id}", json).Result;
+        _ = c.PutAsync($"api/Faldones/{faldon.id}", json).Result;
         return faldon;
     }
-    public Faldon Delete(Faldon Faldon)
+    public Faldon Delete(Faldon faldon)
     {
-        string result = c.DeleteAsync($"api/Faldones/{Faldon.id}").Result;
-        return Faldon;
+        string result = c.DeleteAsync($"api/Faldones/{faldon.id}").Result;
+        return faldon;
     }
 }

@@ -47,9 +47,9 @@ public class RotuloController : IBaseController<Rotulo>
         Rotulo rotulo = JsonSerializer.Deserialize<Rotulo>(result);
         return rotulo;
     }
-    public Rotulo Post(Rotulo Rotulo)
+    public Rotulo Post(Rotulo rotulo)
     {
-        string json = JsonSerializer.Serialize(Rotulo);
+        string json = JsonSerializer.Serialize(rotulo);
         string result = c.PostAsync($"api/Rotulos", json).Result;
         Rotulo rotuloResult = JsonSerializer.Deserialize<Rotulo>(result);
         return rotuloResult;
@@ -57,12 +57,12 @@ public class RotuloController : IBaseController<Rotulo>
     public Rotulo Put(Rotulo rotulo)
     {
         string json = JsonSerializer.Serialize(rotulo);
-        string result = c.PutAsync($"api/Rotulos/{rotulo.id}", json).Result;
+        _ = c.PutAsync($"api/Rotulos/{rotulo.id}", json).Result;
         return rotulo;
     }
-    public Rotulo Delete(Rotulo Rotulo)
+    public Rotulo Delete(Rotulo rotulo)
     {
-        string result = c.DeleteAsync($"api/Rotulos/{Rotulo.id}").Result;
-        return Rotulo;
+        string result = c.DeleteAsync($"api/Rotulos/{rotulo.id}").Result;
+        return rotulo;
     }
 }

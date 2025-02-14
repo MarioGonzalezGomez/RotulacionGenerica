@@ -122,7 +122,7 @@
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Horizontal">
                 <ToggleSwitch x:Name="tggEditor" OffContent="Añadir/Editar Off" OnContent="Añadir/Editar On" IsOn="False" Toggled="tggEditor_Toggled"/>
-                <HyperlinkButton  x:Name="linkAjustes" Content="Ajustes adicionales"  Margin="20,0,0,0" Click="AbrirPanelAjustes" Visibility="Collapsed"/>
+                <HyperlinkButton  x:Name="linkAjustes" Content="Ajustar tipos" Margin="70,0,0,0" Click="AbrirPanelAjustes" Visibility="Collapsed"/>
             </StackPanel>
             <StackPanel x:Name="stckEditior1" Grid.Row="1" Margin="0,0,0,0" Orientation="Horizontal" VerticalAlignment="Center" Visibility="Collapsed">
                 <TextBox x:Name="txtorden" Margin="0,0,10,0" Header="Orden" IsEnabled="False" />
@@ -144,7 +144,7 @@
                 <Button  x:Name="btnGuardarRotulo" Margin="10,0,0,0" Click="btnGuardarRotulo_Click">
                     <SymbolIcon Symbol="Add"/>
                 </Button>
-                
+
             </StackPanel>
         </Grid>
 
@@ -193,71 +193,34 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="1.1*"/>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.ColumnSpan="2" Grid.Row="0" Margin="0,0,0,15" HorizontalAlignment="Center" VerticalAlignment="Bottom" Style="{ThemeResource BaseTextBlockStyle}">Editar tipo de Rótulo</TextBlock>
-                        <ComboBox x:Name="cmbAccionesConTipos" Grid.ColumnSpan="2" Grid.Row="1"  SelectionChanged="cmbAccionesConTipos_SelectionChanged" Width="300">
-                            <x:String>Crear desde cero</x:String>
-                            <x:String>Crear desde otro tipo</x:String>
-                            <x:String>Modificar tipo</x:String>
-                        </ComboBox>
-                        <ComboBox x:Name="cmbTipos" Grid.ColumnSpan="2" Grid.Row="2" Width="300" SelectionChanged="cmbTipos_SelectionChanged"/>
-                        <StackPanel  Grid.ColumnSpan="2" Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Número de líneas" Margin="0,0,10,0" VerticalAlignment="Center"/>
+
+                        <ComboBox x:Name="cmbTipos" Grid.ColumnSpan="2" Grid.Row="1" Width="300" SelectionChanged="cmbTipos_SelectionChanged"/>
+                        <TextBox x:Name="txtNombreTipo"  Grid.ColumnSpan="2" Grid.Row="2"  Header="Nombre del tipo"/>
+                        <StackPanel  x:Name="stackNumlineas" Grid.ColumnSpan="2" Grid.Row="3" Margin="0,15,0,0" Orientation="Horizontal">
+                            <TextBlock Text="Nº Líneas" Margin="0,7,10,0" VerticalAlignment="Top"/>
                             <ComboBox x:Name="cmbNumLineas" Width="65">
                                 <x:String>1</x:String>
                                 <x:String>2</x:String>
                                 <x:String>3</x:String>
                                 <x:String>4</x:String>
                             </ComboBox>
-                        </StackPanel>
-                        <!--
-                        <StackPanel  Grid.Column="0" Grid.Row="4" Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Escala" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <TextBox x:Name="txtEscala" PlaceholderText="0.0" />
-                        </StackPanel>
-                        <StackPanel  Grid.Column="1" Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Posición X" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <TextBox x:Name="txtPosX" PlaceholderText="0.0"/>
-                        </StackPanel>
-                        <StackPanel  Grid.Column="1" Grid.Row="4" Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Posición Y" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <TextBox x:Name="txtPosY" PlaceholderText="0.0"/>
-                        </StackPanel>
-                        -->
-                    </Grid>
-<!-- Edicion por lineas deshabilitado
-                    <Grid Grid.Row="1" Margin="3,25,3,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <ToggleSwitch x:Name="tggPorLineas" Grid.Column="0" Grid.Row="0" Header="Edicción por líneas" OffContent="Off" OnContent="On" IsOn="False" Toggled="tggPorLineas_Toggled"/>
-                        <StackPanel x:Name="stckLineas"  Visibility="Collapsed" Grid.Column="0" Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Línea " Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <ComboBox x:Name="cmbLineaAEditar" Width="75"/>
-                        </StackPanel>
-                        <StackPanel x:Name="stckEscala" Visibility="Collapsed" Grid.Column="0" Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Escala" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <TextBox x:Name="txtEscalaLinea" PlaceholderText="0.0" />
-                        </StackPanel>
-                        <StackPanel x:Name="stckPosX"  Visibility="Collapsed" Grid.Column="1" Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Posición X" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <TextBox x:Name="txtPosXLinea" PlaceholderText="0.0"/>
-                        </StackPanel>
-                        <StackPanel x:Name="stckPosY" Visibility="Collapsed" Grid.Column="1" Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Posición Y" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <TextBox x:Name="txtPosYLinea" PlaceholderText="0.0"/>
+                            <Button  x:Name="btnDeleteAjustes" VerticalAlignment="Top" Margin="20,0,0,0" Click="btnDeleteAjustes_Click">
+                                <SymbolIcon Symbol="Delete"/>
+                            </Button>
+                            <Button x:Name="btnEditAjustes" VerticalAlignment="Top"  Margin="5,0,0,0" Click="btnEditAjustes_Click">
+                                <SymbolIcon Symbol="Edit"/>
+                            </Button>
+                            <Button x:Name="btnSaveAjustes" VerticalAlignment="Top" Margin="5,0,0,0" Click="btnSaveAjustes_Click">
+                                <SymbolIcon Symbol="Add"/>
+                            </Button>
                         </StackPanel>
                     </Grid>
--->
+
                     <Grid Grid.Row="2" Margin="3,0,3,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -275,27 +238,14 @@
                             <TextBlock Text="Vaciar lista" Margin="5,0,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnSaveAjustes" Grid.RowSpan="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" Click="btnSaveAjustes_Click">
-                        <SymbolIcon Symbol="Save" Foreground="DodgerBlue" />
-                    </Button>
-
-                    <muxc:TeachingTip x:Name="TipGuardarAjustes"
-                      Title="Guardado con éxito"
-                      CloseButtonContent="Salir"
-                      Target="{x:Bind btnSaveAjustes}"
-                      Closed="TipGuardarAjustes_Closed"
-                      IsLightDismissEnabled="True">
-                        <muxc:TeachingTip.IconSource>
-                            <SymbolIconSource Symbol="Accept"  Foreground="Green"/>
-                        </muxc:TeachingTip.IconSource>
-                    </muxc:TeachingTip>
                 </Grid>
 
             </SplitView.Pane>
         </SplitView>
 
         <muxc:TeachingTip x:Name="Tip"
-            IsLightDismissEnabled="False">
+            IsLightDismissEnabled="False"
+            CloseButtonContent="">
             <TeachingTip.IconSource>
                 <SymbolIconSource Symbol="Accept" />
             </TeachingTip.IconSource>

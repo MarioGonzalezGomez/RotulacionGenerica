@@ -28,6 +28,7 @@
     "Premios": true,
     "Gafas": true,
     "Varios": false,
+    "Reset": true,
     "Mosca": true
   }
 }

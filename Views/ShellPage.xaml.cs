@@ -109,6 +109,7 @@ public sealed partial class ShellPage : Page
         ventanaGafas.Visibility = config.PestanasActivas.Gafas ? Visibility.Visible : Visibility.Collapsed;
         ventanaVarios.Visibility = config.PestanasActivas.Varios ? Visibility.Visible : Visibility.Collapsed;
 
+        btnReset.Visibility = config.PestanasActivas.Reset ? Visibility.Visible : Visibility.Collapsed;
         btnMosca.Visibility = config.PestanasActivas.Mosca ? Visibility.Visible : Visibility.Collapsed;
     }
     public void UpdateWindows(int modificada, bool activo)
@@ -158,6 +159,23 @@ public sealed partial class ShellPage : Page
         }
     }
 
+    //MANEJO RESET
+    private void btnReset_Click(object sender, RoutedEventArgs e)
+    {
+        controller.Reset();
+    }
+    public void btnResetActivo(bool activo)
+    {
+        if (activo)
+        {
+            btnReset.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            btnReset.Visibility = Visibility.Collapsed;
+        }
+    }
+
     //MANEJO MOSCA
     private void btnMosca_Click(object sender, RoutedEventArgs e)
     {
@@ -174,9 +192,9 @@ public sealed partial class ShellPage : Page
             btnMosca.Foreground = new SolidColorBrush(ColorHelper.FromArgb(0xFF, 0xB2, 0x22, 0x22));
         }
     }
-    public void btnMoscaActivo(bool poner)
+    public void btnMoscaActivo(bool activo)
     {
-        if (poner)
+        if (activo)
         {
             btnMosca.Visibility = Visibility.Visible;
         }

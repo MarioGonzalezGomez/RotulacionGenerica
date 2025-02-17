@@ -101,6 +101,7 @@
                 <Frame x:Name="NavigationFrame" />
             </Grid>
         </NavigationView>
+        <AppBarButton x:Name="btnReset" Label="Reset" Icon="Clear" HorizontalAlignment="Center" Foreground="#FFB22222" Click="btnReset_Click"/>
         <Button x:Name="btnMosca" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,60,15,0"  MinHeight="30" MaxHeight="50" Content="Logo" FontSize="25" Foreground="Green" Click="btnMosca_Click" />
         <muxc:InfoBar x:Name="SuccessInfoBar"
             VerticalAlignment="Bottom"

@@ -73,6 +73,7 @@
                 </StackPanel>
                 <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,30,0,0">Botones adicionales</TextBlock>
                 <StackPanel Margin="0,10,0,0">
+                    <CheckBox x:Name="ResetCheckBox" Content="Reset"  Checked="ResetCheckBox_Checked"  Unchecked="ResetCheckBox_Unchecked"/>
                     <CheckBox x:Name="LogoCheckBox" Content="Mosca"  Checked="LogoCheckBox_Checked"  Unchecked="LogoCheckBox_Unchecked"/>
                 </StackPanel>
             </StackPanel>

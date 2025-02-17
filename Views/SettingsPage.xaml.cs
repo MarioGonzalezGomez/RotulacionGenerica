@@ -32,6 +32,7 @@ public sealed partial class SettingsPage : Page
         PremiosCheckBox.IsChecked = config.PestanasActivas.Premios;
         GafasCheckBox.IsChecked = config.PestanasActivas.Gafas;
         VariosCheckBox.IsChecked = config.PestanasActivas.Varios;
+        ResetCheckBox.IsChecked = config.PestanasActivas.Reset;
         LogoCheckBox.IsChecked = config.PestanasActivas.Mosca;
 
         IpBrainstorm.Text = config.BrainStormOptions.Ip;
@@ -131,6 +132,19 @@ public sealed partial class SettingsPage : Page
     }
 
     //CHECK BOX BOTONES
+    private void ResetCheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        ShellPage.instance.btnResetActivo(true);
+        config.PestanasActivas.Reset = true;
+        Config.Config.SaveConfig(config);
+    }
+    private void ResetCheckBox_Unchecked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        ShellPage.instance.btnResetActivo(false);
+        config.PestanasActivas.Reset = false;
+        Config.Config.SaveConfig(config);
+    }
+
     private void LogoCheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
         ShellPage.instance.btnMoscaActivo(true);

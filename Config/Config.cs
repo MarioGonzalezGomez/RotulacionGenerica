@@ -105,6 +105,10 @@ public class PestanasActivas
     {
         get; set;
     }
+    public bool Reset
+    {
+        get; set;
+    }
     public bool Mosca
     {
         get; set;

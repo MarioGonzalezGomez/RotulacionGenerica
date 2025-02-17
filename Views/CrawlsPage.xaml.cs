@@ -29,9 +29,9 @@ public sealed partial class CrawlsPage : Page
     }
 
     private bool playLista = false;
-    Crawl seleccionado = null;
+    private Crawl seleccionado = null;
 
-    Config.Config config;
+    private Config.Config config;
 
     //ACCIONES EN LAS LISTAS
     private void IniciarListas()
@@ -227,7 +227,7 @@ public sealed partial class CrawlsPage : Page
     private void FiltradoPorTexto_TextChanged(object sender, TextChangedEventArgs e)
     {
         var filtrada = ViewModel.allCrawls
-   .Where(r => r.linea.texto.IndexOf(FiltradoPorTexto.Text, StringComparison.OrdinalIgnoreCase) >= 0);
+        .Where(r => r.linea.texto.IndexOf(FiltradoPorTexto.Text, StringComparison.OrdinalIgnoreCase) >= 0);
         ViewModel.RemoverNoCoincidentes(filtrada);
         ViewModel.RecuperarLista(filtrada);
     }
@@ -267,29 +267,27 @@ public sealed partial class CrawlsPage : Page
     {
         if (tggEditor.IsOn)
         {
-            stckEditior0.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-            stckEditior2.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+            stckEditior0.Visibility = Visibility.Visible;
+            stckEditior2.Visibility = Visibility.Visible;
             if (!playLista)
             {
-                stckEditior1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                txtContenido.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+                stckEditior1.Visibility = Visibility.Visible;
+                txtContenido.Visibility = Visibility.Visible;
             }
             else
             {
-                btnEliminarCrawl.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-                btnGuardarCrawl.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+                btnEliminarCrawl.Visibility = Visibility.Collapsed;
+                btnGuardarCrawl.Visibility = Visibility.Collapsed;
             }
         }
         else
         {
-            stckEditior0.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-            stckEditior1.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-            txtContenido.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-            stckEditior2.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+            stckEditior0.Visibility = Visibility.Collapsed;
+            stckEditior1.Visibility = Visibility.Collapsed;
+            txtContenido.Visibility = Visibility.Collapsed;
+            stckEditior2.Visibility = Visibility.Collapsed;
         }
     }
-
-
 
     private void btnEliminarCrawl_Click(object sender, RoutedEventArgs e)
     {
@@ -371,14 +369,14 @@ public sealed partial class CrawlsPage : Page
             //Sacaremos la velocidad de  seleccionado.velocidad
             if (seleccionado != null)
             {
-
+                ViewModel.Entra(seleccionado);
             }
         }
     }
 
     private void btnStop_Click(object sender, RoutedEventArgs e)
     {
-
+        ViewModel.Sale();
     }
 
 

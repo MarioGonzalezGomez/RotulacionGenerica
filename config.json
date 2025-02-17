@@ -15,10 +15,10 @@
     "Auto_Connection": "0"
   },
   "RotulacionSettings": {
-    "VelocidadCrawl": 500,
+    "VelocidadCrawl": 200,
     "RutaRodillo": "C:\\TrabajoIPF\\2025\\AppGenerica\\Control\\RODILLO.txt",
     "RutaPremios": "C:\\TrabajoIPF\\2025\\AppGenerica\\Control\\RODILLO.txt",
-    "VelocidadRodillo": 500
+    "VelocidadRodillo": 300
   },
   "PestanasActivas": {
     "Rotulos": true,

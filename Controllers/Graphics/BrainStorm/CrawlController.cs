@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Generico_Front.Controllers.Data;
 using Generico_Front.Graphics.Builders;
 using Generico_Front.Graphics.Conexion;
+using Generico_Front.Models;
 
 namespace Generico_Front.Controllers.Graphics.BrainStorm;
 public class CrawlController
@@ -29,4 +30,13 @@ public class CrawlController
         return instance;
     }
 
+    public void Entra(Crawl crawl)
+    {
+        conexion.EnviarMensaje(builder.CrawlEntra(crawl));
+    }
+
+    public void Sale()
+    {
+        conexion.EnviarMensaje(builder.CrawlSale());
+    }
 }

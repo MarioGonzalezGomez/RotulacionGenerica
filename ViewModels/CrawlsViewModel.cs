@@ -111,4 +111,14 @@ public partial class CrawlsViewModel : ObservableRecipient
         }
         await CargarCrawls();
     }
+
+    //Acciones Gráficas
+    public void Entra(Crawl crawl)
+    {
+        graphicController.Entra(crawl);
+    }
+    public void Sale()
+    {
+        graphicController.Sale();
+    }
 }

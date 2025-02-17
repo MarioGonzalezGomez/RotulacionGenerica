@@ -175,7 +175,7 @@
             </StackPanel>
             <StackPanel x:Name="stckEditior0" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" Visibility="Collapsed">
                 <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="0,7,20,0">Velocidad</TextBlock>
-                <Slider x:Name="sliderCrawlVel" Width="200" Minimum="100" Maximum="1000" StepFrequency="100" SmallChange="100" Value="500"/>
+                <Slider x:Name="sliderCrawlVel" Width="200" Minimum="0" Maximum="300" StepFrequency="10" SmallChange="10" Value="100"/>
             </StackPanel>
             <StackPanel x:Name="stckEditior1" Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" Visibility="Collapsed">
                 <TextBox x:Name="txtorden" Margin="0,0,10,10" PlaceholderText="Orden" IsEnabled="False"/>

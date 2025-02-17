@@ -54,9 +54,15 @@ public class BSBuilder
         return Sale("Faldon");
     }
     //CRAWL
-    public string CrawlEntra()
+    public string CrawlEntra(Crawl crawl)
     {
-        return Entra("Crawl");
+        string mensaje = "";
+        mensaje += EventBuild("Crawl/Txt", "TEXT_TRAVEL_SPEED", crawl.velocidad, 1);
+        //TODO: Add los \f \s o modificaciones necesarios en caso de ser titulo
+        string texto = crawl.esTitulo ? crawl.linea.texto : crawl.linea.texto;
+        mensaje += CambiaTexto("Crawl/Txt", texto);
+        mensaje += Entra("Crawl");
+        return mensaje;
     }
     public string CrawlSale()
     {
@@ -119,7 +125,19 @@ public class BSBuilder
         }
         return $"{setOgo}<{_bd}>{objeto}','{propiedad}',{values});";
     }
-
+    private string EventBuild(string objeto, string propiedad, int value, int tipoItem)
+    {
+        string setOgo = "";
+        if (tipoItem == 1)
+        {
+            setOgo = "itemset('";
+        }
+        if (tipoItem == 2)
+        {
+            setOgo = "itemgo('";
+        }
+        return $"{setOgo}<{_bd}>{objeto}','{propiedad}',{value});";
+    }
     private string EventBuild(string objeto, string propiedad, int tipoItem)
     {
         string setOgo = "";

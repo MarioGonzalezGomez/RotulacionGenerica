@@ -30,7 +30,9 @@ public sealed partial class SettingsPage : Page
         CreditosCheckBox.IsChecked = config.PestanasActivas.Creditos;
         FaldonesCheckBox.IsChecked = config.PestanasActivas.Faldones;
         PremiosCheckBox.IsChecked = config.PestanasActivas.Premios;
+        GafasCheckBox.IsChecked = config.PestanasActivas.Gafas;
         VariosCheckBox.IsChecked = config.PestanasActivas.Varios;
+        LogoCheckBox.IsChecked = config.PestanasActivas.Mosca;
 
         IpBrainstorm.Text = config.BrainStormOptions.Ip;
         DbBrainstorm.Text = config.BrainStormOptions.Database;
@@ -89,7 +91,6 @@ public sealed partial class SettingsPage : Page
         Config.Config.SaveConfig(config);
     }
 
-    //TODO completar cuando estés estas pestanas
     private void PremiosCheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
         ShellPage.instance.UpdateWindows(4, true);
@@ -103,15 +104,45 @@ public sealed partial class SettingsPage : Page
         Config.Config.SaveConfig(config);
     }
 
+    private void GafasCheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        ShellPage.instance.UpdateWindows(5, true);
+        config.PestanasActivas.Gafas = true;
+        Config.Config.SaveConfig(config);
+    }
+    private void GafasCheckBox_Unchecked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        ShellPage.instance.UpdateWindows(5, false);
+        config.PestanasActivas.Gafas = false;
+        Config.Config.SaveConfig(config);
+    }
+
     private void VariosCheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-
+        ShellPage.instance.UpdateWindows(6, true);
+        config.PestanasActivas.Varios = true;
+        Config.Config.SaveConfig(config);
     }
     private void VariosCheckBox_Unchecked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-
+        ShellPage.instance.UpdateWindows(6, false);
+        config.PestanasActivas.Varios = false;
+        Config.Config.SaveConfig(config);
     }
 
+    //CHECK BOX BOTONES
+    private void LogoCheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        ShellPage.instance.btnMoscaActivo(true);
+        config.PestanasActivas.Mosca = true;
+        Config.Config.SaveConfig(config);
+    }
+    private void LogoCheckBox_Unchecked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        ShellPage.instance.btnMoscaActivo(false);
+        config.PestanasActivas.Mosca = false;
+        Config.Config.SaveConfig(config);
+    }
 
     //SOFTWARE GRAFICO
     private void IpBrainstorm_TextChanged(object sender, TextChangedEventArgs e)
@@ -151,4 +182,6 @@ public sealed partial class SettingsPage : Page
             await errorDialog.ShowAsync();
         }
     }
+
+
 }

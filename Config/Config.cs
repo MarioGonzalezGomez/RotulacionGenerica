@@ -97,7 +97,15 @@ public class PestanasActivas
     {
         get; set;
     }
+    public bool Gafas
+    {
+        get; set;
+    }
     public bool Varios
+    {
+        get; set;
+    }
+    public bool Mosca
     {
         get; set;
     }

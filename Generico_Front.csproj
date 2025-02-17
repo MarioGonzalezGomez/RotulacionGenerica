@@ -18,6 +18,7 @@
   <ItemGroup>
     <None Remove="config.json" />
     <None Remove="Views\FaldonesPage.xaml" />
+    <None Remove="Views\GafasPage.xaml" />
     <None Remove="Views\RodillosPage.xaml" />
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +53,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Views\GafasPage.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\VariosPage.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Views\PremiosPage.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>

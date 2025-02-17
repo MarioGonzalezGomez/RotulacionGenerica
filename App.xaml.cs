@@ -40,7 +40,10 @@ public partial class App : Application
 
     public static WindowEx MainWindow { get; } = new MainWindow();
 
-    public static UIElement? AppTitlebar { get; set; }
+    public static UIElement? AppTitlebar
+    {
+        get; set;
+    }
 
     public App()
     {
@@ -81,6 +84,10 @@ public partial class App : Application
             services.AddTransient<FaldonesPage>();
             services.AddTransient<PremiosPage>();
             services.AddTransient<PremiosViewModel>();
+            services.AddTransient<GafasPage>();
+            services.AddTransient<GafasViewModel>();
+            services.AddTransient<VariosPage>();
+            services.AddTransient<VariosViewModel>();
             services.AddTransient<ShellPage>();
             services.AddTransient<ShellViewModel>();
 

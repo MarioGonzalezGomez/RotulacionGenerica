@@ -11,98 +11,101 @@
         <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
     </Page.Resources>
     <Grid>
-        <StackPanel x:Name="ContentArea">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+        <Grid x:Name="ContentArea">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="0.6*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Column="0" Grid.Row="0">
-                    <TextBlock x:Uid="Settings_Theme" Style="{ThemeResource SubtitleTextBlockStyle}"/>
+            <StackPanel Grid.Column="0" Grid.Row="0">
+                <TextBlock x:Uid="Settings_Theme" Style="{ThemeResource SubtitleTextBlockStyle}"/>
 
-                    <StackPanel Margin="{StaticResource XSmallTopMargin}">
-                        <RadioButton
+                <StackPanel Margin="{StaticResource XSmallTopMargin}">
+                    <RadioButton
                         x:Uid="Settings_Theme_Light"
                         Command="{x:Bind ViewModel.SwitchThemeCommand}"
                         IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}"
                         FontSize="15"
                         GroupName="AppTheme">
-                            <RadioButton.CommandParameter>
-                                <xaml:ElementTheme>Light</xaml:ElementTheme>
-                            </RadioButton.CommandParameter>
-                        </RadioButton>
-                        <RadioButton
+                        <RadioButton.CommandParameter>
+                            <xaml:ElementTheme>Light</xaml:ElementTheme>
+                        </RadioButton.CommandParameter>
+                    </RadioButton>
+                    <RadioButton
                         x:Uid="Settings_Theme_Dark"
                         Command="{x:Bind ViewModel.SwitchThemeCommand}"
                         IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}"
                         FontSize="15"
                         GroupName="AppTheme">
-                            <RadioButton.CommandParameter>
-                                <xaml:ElementTheme>Dark</xaml:ElementTheme>
-                            </RadioButton.CommandParameter>
-                        </RadioButton>
-                        <RadioButton
+                        <RadioButton.CommandParameter>
+                            <xaml:ElementTheme>Dark</xaml:ElementTheme>
+                        </RadioButton.CommandParameter>
+                    </RadioButton>
+                    <RadioButton
                         x:Uid="Settings_Theme_Default"
                         Command="{x:Bind ViewModel.SwitchThemeCommand}"
                         IsChecked="{x:Bind ViewModel.ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Default, Mode=OneWay}"
                         FontSize="15"
                         GroupName="AppTheme">
-                            <RadioButton.CommandParameter>
-                                <xaml:ElementTheme>Default</xaml:ElementTheme>
-                            </RadioButton.CommandParameter>
-                        </RadioButton>
-                    </StackPanel>
+                        <RadioButton.CommandParameter>
+                            <xaml:ElementTheme>Default</xaml:ElementTheme>
+                        </RadioButton.CommandParameter>
+                    </RadioButton>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Grid.RowSpan="3" HorizontalAlignment="Stretch">
+                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}">Pestañas activas</TextBlock>
+                <StackPanel Margin="0,10,0,0">
+                    <CheckBox x:Name="RotulosCheckBox" Content="Rótulos"  Checked="RotulosCheckBox_Checked"  Unchecked="RotulosCheckBox_Unchecked"/>
+                    <CheckBox x:Name="CrawlsCheckBox" Content="Crawls"  Checked="CrawlsCheckBox_Checked"  Unchecked="CrawlsCheckBox_Unchecked"/>
+                    <CheckBox x:Name="CreditosCheckBox" Content="Créditos"  Checked="CreditosCheckBox_Checked"  Unchecked="CreditosCheckBox_Unchecked"/>
+                    <CheckBox x:Name="FaldonesCheckBox" Content="Faldones"  Checked="FaldonesCheckBox_Checked"  Unchecked="FaldonesCheckBox_Unchecked"/>
+                    <CheckBox x:Name="PremiosCheckBox" Content="Premios"  Checked="PremiosCheckBox_Checked"  Unchecked="PremiosCheckBox_Unchecked"/>
+                    <CheckBox x:Name="GafasCheckBox" Content="Gafas" Checked="GafasCheckBox_Checked" Unchecked="GafasCheckBox_Unchecked"/>
+                    <CheckBox x:Name="VariosCheckBox" Content="Varios"  Checked="VariosCheckBox_Checked"  Unchecked="VariosCheckBox_Unchecked"/>
+                </StackPanel>
+                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,30,0,0">Botones adicionales</TextBlock>
+                <StackPanel Margin="0,10,0,0">
+                    <CheckBox x:Name="LogoCheckBox" Content="Mosca"  Checked="LogoCheckBox_Checked"  Unchecked="LogoCheckBox_Unchecked"/>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2" Grid.RowSpan="3" HorizontalAlignment="Stretch">
+                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}">Software gráfico</TextBlock>
+                <Grid HorizontalAlignment="Stretch" Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="IpBrainstorm" Header="IP Brainstorm" TextChanged="IpBrainstorm_TextChanged" Grid.Column="0" HorizontalAlignment="Stretch"/>
+                    <Button x:Name="btnReconectarBS" Width="45" Click="btnReconectarBS_Click" Grid.Column="1" Margin="10,24,0,0" ToolTipService.ToolTip="Reconectar">
+                        <SymbolIcon Symbol="Refresh"/>
+                    </Button>
+                </Grid>
+                <TextBox x:Name="DbBrainstorm" Margin="0,5,0,0" Header="Database Brainstorm" TextChanged="DbBrainstorm_TextChanged"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2" Grid.Row="2" Margin="{StaticResource SmallTopBottomMargin}" >
+                <TextBlock x:Uid="Settings_About" Style="{ThemeResource SubtitleTextBlockStyle}" />
+
+                <StackPanel Margin="{StaticResource XSmallTopMargin}">
+                    <TextBlock Text="{x:Bind ViewModel.VersionDescription, Mode=OneWay}" Style="{ThemeResource BodyTextBlockStyle}" />
+
+                    <TextBlock
+             x:Uid="Settings_AboutDescription"
+             Margin="{StaticResource XSmallTopMargin}"
+             Style="{ThemeResource BodyTextBlockStyle}" />
                 </StackPanel>
 
-                <StackPanel Grid.Column="0" Grid.Row="1" Margin="{StaticResource SmallTopBottomMargin}">
-                    <TextBlock x:Uid="Settings_About" Style="{ThemeResource SubtitleTextBlockStyle}" />
-
-                    <StackPanel Margin="{StaticResource XSmallTopMargin}">
-                        <TextBlock Text="{x:Bind ViewModel.VersionDescription, Mode=OneWay}" Style="{ThemeResource BodyTextBlockStyle}" />
-
-                        <TextBlock
-                        x:Uid="Settings_AboutDescription"
-                        Margin="{StaticResource XSmallTopMargin}"
-                        Style="{ThemeResource BodyTextBlockStyle}" />
-                    </StackPanel>
-
-                </StackPanel>
-
-                <StackPanel Grid.Column="1" Grid.RowSpan="3" HorizontalAlignment="Center">
-                    <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}">Pestañas activas</TextBlock>
-                    <StackPanel Margin="0,10,0,0">
-                        <CheckBox x:Name="RotulosCheckBox" Content="Rótulos"  Checked="RotulosCheckBox_Checked"  Unchecked="RotulosCheckBox_Unchecked"/>
-                        <CheckBox x:Name="CrawlsCheckBox" Content="Crawls"  Checked="CrawlsCheckBox_Checked"  Unchecked="CrawlsCheckBox_Unchecked"/>
-                        <CheckBox x:Name="CreditosCheckBox" Content="Créditos"  Checked="CreditosCheckBox_Checked"  Unchecked="CreditosCheckBox_Unchecked"/>
-                        <CheckBox x:Name="FaldonesCheckBox" Content="Faldones"  Checked="FaldonesCheckBox_Checked"  Unchecked="FaldonesCheckBox_Unchecked"/>
-                        <CheckBox x:Name="PremiosCheckBox" Content="Premios"  Checked="PremiosCheckBox_Checked"  Unchecked="PremiosCheckBox_Unchecked"/>
-                        <CheckBox x:Name="VariosCheckBox" Content="Varios"  Checked="VariosCheckBox_Checked"  Unchecked="VariosCheckBox_Unchecked"/>
-                    </StackPanel>
-                </StackPanel>
-
-                <StackPanel Grid.Column="2" Grid.RowSpan="3" HorizontalAlignment="Stretch">
-                    <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}">Software gráfico</TextBlock>
-                    <Grid HorizontalAlignment="Stretch" Margin="0,10,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBox x:Name="IpBrainstorm" Header="IP Brainstorm" TextChanged="IpBrainstorm_TextChanged" Grid.Column="0" HorizontalAlignment="Stretch"/>
-                        <Button x:Name="btnReconectarBS" Width="45" Click="btnReconectarBS_Click" Grid.Column="1" Margin="10,24,0,0" ToolTipService.ToolTip="Reconectar">
-                            <SymbolIcon Symbol="Refresh"/>
-                        </Button>
-                    </Grid>
-                    <TextBox x:Name="DbBrainstorm" Margin="0,5,0,0" Header="Database Brainstorm" TextChanged="DbBrainstorm_TextChanged"/>
-                </StackPanel>
-            </Grid>
-        </StackPanel>
+            </StackPanel>
+        </Grid>
 
         <muxc:InfoBar x:Name="SuccessInfoBar"
           Title="Conectado con éxito"

@@ -21,11 +21,13 @@
     "VelocidadRodillo": 500
   },
   "PestanasActivas": {
-    "Rotulos":  true,
-    "Crawls":  true,
-    "Creditos":  true,
-    "Faldones":  true,
-    "Premios":  false,
-    "Varios":  false
+    "Rotulos": true,
+    "Crawls": true,
+    "Creditos": true,
+    "Faldones": true,
+    "Premios": true,
+    "Gafas": true,
+    "Varios": false,
+    "Mosca": true
   }
 }

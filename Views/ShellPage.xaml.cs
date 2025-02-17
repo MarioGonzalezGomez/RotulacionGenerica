@@ -106,6 +106,10 @@ public sealed partial class ShellPage : Page
         ventanaCreditos.Visibility = config.PestanasActivas.Creditos ? Visibility.Visible : Visibility.Collapsed;
         ventanaFaldones.Visibility = config.PestanasActivas.Faldones ? Visibility.Visible : Visibility.Collapsed;
         ventanaPremios.Visibility = config.PestanasActivas.Premios ? Visibility.Visible : Visibility.Collapsed;
+        ventanaGafas.Visibility = config.PestanasActivas.Gafas ? Visibility.Visible : Visibility.Collapsed;
+        ventanaVarios.Visibility = config.PestanasActivas.Varios ? Visibility.Visible : Visibility.Collapsed;
+
+        btnMosca.Visibility = config.PestanasActivas.Mosca ? Visibility.Visible : Visibility.Collapsed;
     }
     public void UpdateWindows(int modificada, bool activo)
     {
@@ -125,6 +129,12 @@ public sealed partial class ShellPage : Page
                 break;
             case 4:
                 ventanaPremios.Visibility = activo ? Visibility.Visible : Visibility.Collapsed;
+                break;
+            case 5:
+                ventanaGafas.Visibility = activo ? Visibility.Visible : Visibility.Collapsed;
+                break;
+            case 6:
+                ventanaVarios.Visibility = activo ? Visibility.Visible : Visibility.Collapsed;
                 break;
         }
     }
@@ -162,6 +172,17 @@ public sealed partial class ShellPage : Page
             controller.MoscaEntra();
             mosca = true;
             btnMosca.Foreground = new SolidColorBrush(ColorHelper.FromArgb(0xFF, 0xB2, 0x22, 0x22));
+        }
+    }
+    public void btnMoscaActivo(bool poner)
+    {
+        if (poner)
+        {
+            btnMosca.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            btnMosca.Visibility = Visibility.Collapsed;
         }
     }
 }

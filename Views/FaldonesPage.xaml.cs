@@ -170,7 +170,10 @@ public sealed partial class FaldonesPage : Page
     }
     private async void EliminarFaldon(Faldon aEliminar)
     {
+        Tip.Target = btnEliminarFaldon;
+        Tip.Title = "Faldón eliminado";
         await ViewModel.EliminarFaldon(aEliminar);
+        AbrirTip();
     }
 
     private void btnModificarFaldon_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
@@ -197,7 +200,10 @@ public sealed partial class FaldonesPage : Page
     }
     private async void ModificarFaldon(Faldon modificado)
     {
+        Tip.Target = btnModificarFaldon;
+        Tip.Title = "Modificado con éxito";
         await ViewModel.GuardarFaldon(modificado);
+        AbrirTip();
     }
 
     private void btnGuardarFaldon_Click(object sender, RoutedEventArgs e)
@@ -205,12 +211,13 @@ public sealed partial class FaldonesPage : Page
         if (!string.IsNullOrEmpty(txtCuerpo.Text))
         {
             Faldon nuevoFaldon = new Faldon();
-            var maxPosicion = ViewModel.Faldones.Max(r => r.posicion);
+            var maxPosicion = ViewModel.Faldones.Count > 0 ? ViewModel.Faldones.Max(r => r.posicion) : 0;
             nuevoFaldon.id = 0;
             nuevoFaldon.posicion = maxPosicion + 1;
             nuevoFaldon.tipo = new Tipo();
             nuevoFaldon.tipo.id = (cmbTiposEditor.SelectedValue as Tipo).id;
             nuevoFaldon.tipo.seAplicaA = (cmbTiposEditor.SelectedValue as Tipo).seAplicaA;
+            nuevoFaldon.tipo.descripcion = (cmbTiposEditor.SelectedValue as Tipo).descripcion;
 
             Linea titulo = new Linea();
             titulo.id = 0;
@@ -223,19 +230,22 @@ public sealed partial class FaldonesPage : Page
             nuevoFaldon.texto = cuerpo;
 
             GuardarFaldonNuevo(nuevoFaldon);
-            TipAddNuevoFaldon.IsOpen = true;
         }
     }
     private async void GuardarFaldonNuevo(Faldon nuevo)
     {
+        Tip.Target = btnGuardarFaldon;
+        Tip.Title = "Guardado con éxito";
         await ViewModel.GuardarFaldon(nuevo);
+        AbrirTip();
     }
 
-    private void TipAddNuevoFaldon_Closed(TeachingTip sender, TeachingTipClosedEventArgs args)
+    private async void AbrirTip()
     {
-        TipGuardarAjustes.IsOpen = false;
+        Tip.IsOpen = true;
+        await Task.Delay(1500);
+        Tip.IsOpen = false;
     }
-
 
     //ACCIONES EN AJUSTES ADICIONALES
     //TODO: Ajustes adicionales. Hacer si se va a utilizar.
@@ -300,14 +310,8 @@ public sealed partial class FaldonesPage : Page
 
     private void btnSaveAjustes_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-        TipGuardarAjustes.IsOpen = true;
         //TODO: Logica de comprobaciones antes de guardar
         //GuardarAjustes()
-    }
-
-    private void TipGuardarAjustes_Closed(TeachingTip sender, TeachingTipClosedEventArgs args)
-    {
-        TipGuardarAjustes.IsOpen = false;
     }
 
     //Acciones Graficas

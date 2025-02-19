@@ -234,8 +234,6 @@ public sealed partial class RotulosPage : Page
                 }
                 nuevaLinea.texto = textLineas[i].Text;
                 modificado.lineas.Add(nuevaLinea);
-
-
             }
             ModificarRotulo(modificado);
         }
@@ -254,7 +252,7 @@ public sealed partial class RotulosPage : Page
         {
             Rotulo nuevoRotulo = new Rotulo();
             var textLineas = new[] { txtLinea1, txtLinea2, txtLinea3, txtLinea4 };
-            var maxPosicion = ViewModel.Rotulos.Max(r => r.posicion);
+            var maxPosicion = ViewModel.Rotulos.Count > 0 ? ViewModel.Rotulos.Max(r => r.posicion) : 0;
             List<Linea> lineas = new List<Linea>();
             nuevoRotulo.id = 0;
             nuevoRotulo.posicion = maxPosicion + 1;

@@ -135,16 +135,6 @@
                 <Button  x:Name="btnGuardarFaldon" Margin="10,0,0,0" Click="btnGuardarFaldon_Click">
                     <SymbolIcon Symbol="Add"/>
                 </Button>
-                <muxc:TeachingTip x:Name="TipAddNuevoFaldon"
-                    Title="Añadido con éxito al final de la lista"
-                    CloseButtonContent="Salir"
-                    Target="{x:Bind btnGuardarFaldon}"
-                    Closed="TipAddNuevoFaldon_Closed"
-                    IsLightDismissEnabled="True">
-                    <muxc:TeachingTip.IconSource>
-                        <SymbolIconSource Symbol="Accept"  Foreground="Green"/>
-                    </muxc:TeachingTip.IconSource>
-                </muxc:TeachingTip>
             </StackPanel>
         </Grid>
 
@@ -278,21 +268,17 @@
                     <Button x:Name="btnSaveAjustes" Grid.RowSpan="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" Click="btnSaveAjustes_Click">
                         <SymbolIcon Symbol="Save" Foreground="DodgerBlue" />
                     </Button>
-
-                    <muxc:TeachingTip x:Name="TipGuardarAjustes"
-                      Title="Guardado con éxito"
-                      CloseButtonContent="Salir"
-                      Target="{x:Bind btnSaveAjustes}"
-                      Closed="TipGuardarAjustes_Closed"
-                      IsLightDismissEnabled="True">
-                        <muxc:TeachingTip.IconSource>
-                            <SymbolIconSource Symbol="Accept"  Foreground="Green"/>
-                        </muxc:TeachingTip.IconSource>
-                    </muxc:TeachingTip>
                 </Grid>
 
             </SplitView.Pane>
         </SplitView>
+        <muxc:TeachingTip x:Name="Tip"
+            IsLightDismissEnabled="False"
+            CloseButtonContent="">
+            <TeachingTip.IconSource>
+                <SymbolIconSource x:Name="tipSymbol" Symbol="Accept" />
+            </TeachingTip.IconSource>
+        </muxc:TeachingTip>
     </Grid>
 </Page>
     

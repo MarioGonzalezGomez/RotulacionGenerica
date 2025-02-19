@@ -30,6 +30,7 @@ public sealed partial class CrawlsPage : Page
 
     private bool playLista = false;
     private Crawl seleccionado = null;
+    private bool crawlIn = false;
 
     private Config.Config config;
 
@@ -339,7 +340,7 @@ public sealed partial class CrawlsPage : Page
         if (!string.IsNullOrEmpty(txtContenido.Text))
         {
             Crawl nuevoCrawl = new Crawl();
-            var maxPosicion = ViewModel.Crawls.Max(r => r.posicion);
+            var maxPosicion = ViewModel.Crawls.Count > 0 ? ViewModel.Crawls.Max(r => r.posicion) : 0;
             nuevoCrawl.id = 0;
             nuevoCrawl.posicion = maxPosicion + 1;
             nuevoCrawl.esTitulo = chboxEsTitulo.IsChecked.Value;
@@ -372,21 +373,25 @@ public sealed partial class CrawlsPage : Page
         if (playLista && LVCrawlsEmision.Items.Count > 0)
         {
             ViewModel.EntraLista(ViewModel.CrawlsEmision.ToList());
-
+            crawlIn = true;
         }
         else
         {
             if (seleccionado != null)
             {
                 ViewModel.Entra(seleccionado);
+                crawlIn = true;
             }
         }
     }
 
     private void btnStop_Click(object sender, RoutedEventArgs e)
     {
-        ViewModel.Sale();
+        if (crawlIn)
+        {
+            ViewModel.Sale();
+            crawlIn = false;
+        }
     }
-
 
 }

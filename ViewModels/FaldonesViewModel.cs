@@ -82,7 +82,18 @@ public partial class FaldonesViewModel : ObservableRecipient
 
         foreach (var tipo in listaTipos)
         {
-            Tipos.Add(tipo);
+            if (tipo.seAplicaA.Equals("Faldones"))
+            {
+                Tipos.Add(tipo);
+            }
+        }
+        if (Tipos.Count == 0)
+        {
+            Tipo porDefecto = new Tipo();
+            porDefecto.id = 0;
+            porDefecto.seAplicaA = "Faldones";
+            porDefecto.descripcion = "Tipo por defecto";
+            porDefecto.numLineas = 1;
         }
 
         return Task.CompletedTask;

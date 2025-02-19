@@ -34,6 +34,10 @@ public class CrawlController
     {
         conexion.EnviarMensaje(builder.CrawlEntra(crawl));
     }
+    public void EntraLista(List<Crawl> crawls)
+    {
+        conexion.EnviarMensaje(builder.CrawlEntraLista(crawls));
+    }
 
     public void Sale()
     {

@@ -117,6 +117,10 @@ public partial class CrawlsViewModel : ObservableRecipient
     {
         graphicController.Entra(crawl);
     }
+    public void EntraLista(List<Crawl> crawls)
+    {
+        graphicController.EntraLista(crawls);
+    }
     public void Sale()
     {
         graphicController.Sale();

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Generico_Front.Models;
+using Newtonsoft.Json.Linq;
 
 namespace Generico_Front.Graphics.Builders;
 public class BSBuilder
@@ -59,8 +60,29 @@ public class BSBuilder
         string mensaje = "";
         mensaje += EventBuild("Crawl/Txt", "TEXT_TRAVEL_SPEED", crawl.velocidad, 1);
         //TODO: Add los \f \s o modificaciones necesarios en caso de ser titulo
-        string texto = crawl.esTitulo ? crawl.linea.texto : crawl.linea.texto;
-        mensaje += CambiaTexto("Crawl/Txt", texto);
+        string texto = crawl.esTitulo ? $"'{crawl.linea.texto}'" : $"'{crawl.linea.texto}'";
+        mensaje += EventBuild("Crawl/Txt", "TEXT_FEEDER_RESET", 1);
+        mensaje += EventBuild("Crawl/Txt", "TEXT_FEEDER_LIST", $"[{texto}]", 1);
+        mensaje += Entra("Crawl");
+        return mensaje;
+    }
+    public string CrawlEntraLista(List<Crawl> crawls)
+    {
+        string mensaje = "";
+        string texto = "";
+        mensaje += EventBuild("Crawl/Txt", "TEXT_TRAVEL_SPEED", config.RotulacionSettings.VelocidadCrawl, 1);
+
+        foreach (Crawl c in crawls)
+        {
+            //TODO: Add los \f \s o modificaciones necesarios en caso de ser titulo
+            texto += c.esTitulo ? $"'{c.linea.texto}'" : $"'{c.linea.texto}'";
+            if (crawls.IndexOf(c) != crawls.Count - 1)
+            {
+                texto += ",";
+            }
+        }
+        mensaje += EventBuild("Crawl/Txt", "TEXT_FEEDER_RESET", 1);
+        mensaje += EventBuild("Crawl/Txt", "TEXT_FEEDER_LIST", $"[{texto}]", 1);
         mensaje += Entra("Crawl");
         return mensaje;
     }

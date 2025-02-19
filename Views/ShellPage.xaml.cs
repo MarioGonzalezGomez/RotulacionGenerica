@@ -2,6 +2,7 @@
 using Generico_Front.Controllers.Graphics.BrainStorm;
 using Generico_Front.Graphics.Conexion;
 using Generico_Front.Helpers;
+using Generico_Front.Models;
 using Generico_Front.ViewModels;
 using Microsoft.UI;
 using Microsoft.UI.Xaml;
@@ -149,6 +150,8 @@ public sealed partial class ShellPage : Page
             SuccessInfoBar.Message = $"Se ha conectado con éxito a Brainstorm en el equipo {config.BrainStormOptions.Ip}";
             SuccessInfoBar.Severity = InfoBarSeverity.Success;
             SuccessInfoBar.IsOpen = true;
+            await Task.Delay(3000);
+            SuccessInfoBar.IsOpen = false;
         }
         else
         {
@@ -157,6 +160,7 @@ public sealed partial class ShellPage : Page
             SuccessInfoBar.Severity = InfoBarSeverity.Error;
             SuccessInfoBar.IsOpen = true;
         }
+       
     }
 
     //MANEJO RESET

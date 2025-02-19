@@ -362,11 +362,11 @@ public sealed partial class CrawlsPage : Page
     {
         if (playLista && LVCrawlsEmision.Items.Count > 0)
         {
-            //Sacaremos la velocidad de config
+            ViewModel.EntraLista(ViewModel.CrawlsEmision.ToList());
+
         }
         else
         {
-            //Sacaremos la velocidad de  seleccionado.velocidad
             if (seleccionado != null)
             {
                 ViewModel.Entra(seleccionado);

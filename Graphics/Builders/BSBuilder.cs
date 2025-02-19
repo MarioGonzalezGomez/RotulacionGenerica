@@ -46,9 +46,16 @@ public class BSBuilder
         return Sale("Rotulo");
     }
     //FALDON
-    public string FaldonEntra()
+    public string FaldonEntra(Faldon faldon)
     {
-        return Entra("Faldon");
+        string mensaje = "";
+        if (!string.IsNullOrEmpty(faldon.titulo.texto)) {
+            mensaje += CambiaTexto("Faldon/Titular", faldon.titulo.texto);
+        }
+        mensaje += CambiaTexto($"Faldon/Txt", faldon.texto.texto);
+        mensaje += Entra("Faldon");
+
+        return mensaje;
     }
     public string FaldonSale()
     {

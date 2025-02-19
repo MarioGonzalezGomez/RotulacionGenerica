@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Generico_Front.Controllers.Data;
 using Generico_Front.Graphics.Builders;
 using Generico_Front.Graphics.Conexion;
+using Generico_Front.Models;
 
 namespace Generico_Front.Controllers.Graphics.BrainStorm;
 public class FaldonController
@@ -28,6 +29,14 @@ public class FaldonController
         }
         return instance;
     }
+    public void Entra(Faldon faldon)
+    {
+        conexion.EnviarMensaje(builder.FaldonEntra(faldon));
+    }
 
-   
+    public void Sale()
+    {
+        conexion.EnviarMensaje(builder.FaldonSale());
+    }
+
 }

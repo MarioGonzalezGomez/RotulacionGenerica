@@ -23,6 +23,9 @@ public sealed partial class FaldonesPage : Page
         IniciarListas();
     }
 
+    private Faldon seleccionado = null;
+    private bool faldonIn = false;
+
     //ACCIONES EN LAS LISTAS
     private void IniciarListas()
     {
@@ -44,7 +47,7 @@ public sealed partial class FaldonesPage : Page
     {
         if (LVFaldones.SelectedIndex != -1)
         {
-            Faldon seleccionado = (Faldon)LVFaldones.SelectedItem;
+            seleccionado = (Faldon)LVFaldones.SelectedItem;
 
             Tipo tipo = ViewModel.Tipos.FirstOrDefault(t => t.id == seleccionado.tipo.id);
             cmbTiposEditor.SelectedIndex = ViewModel.Tipos.IndexOf(tipo);
@@ -305,5 +308,24 @@ public sealed partial class FaldonesPage : Page
     private void TipGuardarAjustes_Closed(TeachingTip sender, TeachingTipClosedEventArgs args)
     {
         TipGuardarAjustes.IsOpen = false;
+    }
+
+    //Acciones Graficas
+    private void btnEntra_Click(object sender, RoutedEventArgs e)
+    {
+        if (seleccionado != null)
+        {
+            ViewModel.Entra(seleccionado);
+            faldonIn = true;
+        }
+    }
+
+    private void btnSale_Click(object sender, RoutedEventArgs e)
+    {
+        if (faldonIn)
+        {
+            ViewModel.Sale();
+            faldonIn = false;
+        }
     }
 }

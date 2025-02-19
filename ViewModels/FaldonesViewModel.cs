@@ -10,13 +10,13 @@ public partial class FaldonesViewModel : ObservableRecipient
 {
     private readonly Controllers.Data.FaldonController dataController;
     private readonly Controllers.Data.TipoController tipoController;
-    private readonly BSController graphicController;
+    private readonly FaldonController graphicController;
 
     public FaldonesViewModel()
     {
         dataController = Controllers.Data.FaldonController.GetInstance();
         tipoController = Controllers.Data.TipoController.GetInstance();
-        graphicController = BSController.GetInstance();
+        graphicController = FaldonController.GetInstance();
         Tipos = new ObservableCollection<Tipo>();
         Faldones = new ObservableCollection<Faldon>();
         allFaldones = new List<Faldon>();
@@ -140,5 +140,15 @@ public partial class FaldonesViewModel : ObservableRecipient
             dataController.Put(ordenados[i]);
         }
         await CargarFaldones();
+    }
+
+    //Acciones Gráficas
+    public void Entra(Faldon faldon)
+    {
+        graphicController.Entra(faldon);
+    }
+    public void Sale()
+    {
+        graphicController.Sale();
     }
 }

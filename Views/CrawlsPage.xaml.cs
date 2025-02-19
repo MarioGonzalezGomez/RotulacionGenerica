@@ -299,7 +299,10 @@ public sealed partial class CrawlsPage : Page
     }
     private async void EliminarCrawl(Crawl aEliminar)
     {
+        Tip.Target = btnEliminarCrawl;
+        Tip.Title = "Crawl eliminado";
         await ViewModel.EliminarCrawl(aEliminar);
+        AbrirTip();
     }
 
     private void btnModificarCrawl_Click(object sender, RoutedEventArgs e)
@@ -325,7 +328,10 @@ public sealed partial class CrawlsPage : Page
     }
     private async void ModificarCrawl(Crawl modificado)
     {
+        Tip.Target = btnModificarCrawl;
+        Tip.Title = "Modificado con éxito";
         await ViewModel.GuardarCrawl(modificado);
+        AbrirTip();
     }
 
     private void btnGuardarCrawl_Click(object sender, RoutedEventArgs e)
@@ -343,18 +349,21 @@ public sealed partial class CrawlsPage : Page
             linea.texto = txtContenido.Text;
             nuevoCrawl.linea = linea;
             GuardarCrawlNuevo(nuevoCrawl);
-
-            TipAddNuevoCrawl.IsOpen = true;
         }
     }
     private async void GuardarCrawlNuevo(Crawl nuevo)
     {
+        Tip.Target = btnGuardarCrawl;
+        Tip.Title = "Guardado con éxito";
         await ViewModel.GuardarCrawl(nuevo);
+        AbrirTip();
     }
 
-    private void TipAddNuevoCrawl_Closed(TeachingTip sender, TeachingTipClosedEventArgs args)
+    private async void AbrirTip()
     {
-        TipAddNuevoCrawl.IsOpen = false;
+        Tip.IsOpen = true;
+        await Task.Delay(1500);
+        Tip.IsOpen = false;
     }
 
     //ACCIONES GRAPHICS (PLAY y STOP)

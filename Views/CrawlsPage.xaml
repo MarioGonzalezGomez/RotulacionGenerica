@@ -192,16 +192,6 @@
                 <Button  x:Name="btnGuardarCrawl" Margin="10,0,0,0" Click="btnGuardarCrawl_Click">
                     <SymbolIcon Symbol="Add"/>
                 </Button>
-                <muxc:TeachingTip x:Name="TipAddNuevoCrawl"
-                    Title="Añadido con éxito al final de la lista"
-                    CloseButtonContent="Salir"
-                    Target="{x:Bind btnGuardarCrawl}"
-                    Closed="TipAddNuevoCrawl_Closed"
-                    IsLightDismissEnabled="True">
-                    <muxc:TeachingTip.IconSource>
-                        <SymbolIconSource Symbol="Accept"  Foreground="Green"/>
-                    </muxc:TeachingTip.IconSource>
-                </muxc:TeachingTip>
             </StackPanel>
         </Grid>
 
@@ -221,6 +211,13 @@
                 </Button.Content>
             </Button>
         </Grid>
+        <muxc:TeachingTip x:Name="Tip"
+            IsLightDismissEnabled="False"
+            CloseButtonContent="">
+            <TeachingTip.IconSource>
+                <SymbolIconSource x:Name="tipSymbol" Symbol="Accept" />
+            </TeachingTip.IconSource>
+        </muxc:TeachingTip>
     </Grid>
 </Page>
     

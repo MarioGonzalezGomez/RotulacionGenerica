@@ -113,6 +113,13 @@ public partial class FaldonesViewModel : ObservableRecipient
         await CargarTipos();
     }
 
+    [RelayCommand]
+    public async Task EliminarTipo(Tipo tipo)
+    {
+        tipoController.Delete(tipo);
+        await CargarTipos();
+    }
+
     //OPCIONES PARA EL FILTRADO
     public void RemoverNoCoincidentes(IEnumerable<Faldon> filteredData)
     {

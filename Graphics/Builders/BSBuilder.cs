@@ -97,12 +97,13 @@ public class BSBuilder
     {
         return Sale("Crawl");
     }
-    //CREDITOS
-    public string CreditosEntra()
+    
+    //CREDITOS-RODILLO
+    public string RodilloEntra(Rodillo rodillo)
     {
         return Entra("Rodillo");
     }
-    public string CreditosSale()
+    public string RodilloSale()
     {
         return Sale("Rodillo");
     }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Generico_Front.Controllers.Data;
 using Generico_Front.Graphics.Builders;
 using Generico_Front.Graphics.Conexion;
+using Generico_Front.Models;
 
 namespace Generico_Front.Controllers.Graphics.BrainStorm;
 public class RodilloController
@@ -29,4 +30,13 @@ public class RodilloController
         return instance;
     }
 
+    public void Entra(Rodillo rodillo)
+    {
+        conexion.EnviarMensaje(builder.RodilloEntra(rodillo));
+    }
+
+    public void Sale()
+    {
+        conexion.EnviarMensaje(builder.RodilloSale());
+    }
 }

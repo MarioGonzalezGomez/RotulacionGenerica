@@ -65,11 +65,15 @@ public class RotulacionSettings
     {
         get; set;
     }
-    public string RutaPremios
+    public string TipoRodillo
     {
         get; set;
     }
     public int VelocidadRodillo
+    {
+        get; set;
+    }
+    public string RutaPremios
     {
         get; set;
     }

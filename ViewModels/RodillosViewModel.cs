@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Generico_Front.Controllers.Data;
 using Generico_Front.Controllers.Graphics.BrainStorm;
 using Generico_Front.Models;
 
@@ -9,16 +10,20 @@ namespace Generico_Front.ViewModels;
 public partial class RodillosViewModel : ObservableRecipient
 {
     private readonly Controllers.Data.RodilloController dataController;
-    private readonly RodilloController graphicController;
+    private readonly TipoController tipoController;
+    private readonly Controllers.Graphics.BrainStorm.RodilloController graphicController;
     private Config.Config config;
 
     public RodillosViewModel()
     {
         dataController = Controllers.Data.RodilloController.GetInstance();
-        graphicController = RodilloController.GetInstance();
+        tipoController = TipoController.GetInstance();
+        graphicController = Controllers.Graphics.BrainStorm.RodilloController.GetInstance();
         cargos = new ObservableCollection<Cargo>();
         allCargos = new List<Cargo>();
+        Tipos = new ObservableCollection<Tipo>();
         config = Config.Config.GetInstance();
+
     }
 
     public ObservableCollection<Cargo> cargos
@@ -26,7 +31,10 @@ public partial class RodillosViewModel : ObservableRecipient
         get;
     }
     public List<Cargo> allCargos;
-
+    public ObservableCollection<Tipo> Tipos
+    {
+        get;
+    }
 
     // Comando para cargar la lista de rodillos
     [RelayCommand]
@@ -46,10 +54,51 @@ public partial class RodillosViewModel : ObservableRecipient
         return Task.CompletedTask;
     }
 
+
+    //OPCIONES PARA OBTENER TIPOS
     [RelayCommand]
-    public async Task GuardarRodillo(Rodillo rodillo)
+    public Task CargarTipos()
     {
-        dataController.SaveRodillo(config.RotulacionSettings.RutaRodillo, rodillo);
+        var listaTipos = tipoController.GetAllAsync();
+        Tipos.Clear();
+        foreach (var tipo in listaTipos)
+        {
+            if (tipo.seAplicaA.Equals("Rodillos"))
+            {
+                Tipos.Add(tipo);
+            }
+        }
+        if (Tipos.Count == 0)
+        {
+            Tipo porDefecto = new Tipo();
+            porDefecto.id = 0;
+            porDefecto.seAplicaA = "Rodillos";
+            porDefecto.descripcion = "Tipo por defecto";
+            porDefecto.numLineas = 1;
+        }
+
+        return Task.CompletedTask;
+    }
+
+    [RelayCommand]
+    public async Task GuardarTipo(Tipo tipo)
+    {
+        if (tipo.id == 0)
+        {
+            tipoController.Post(tipo);
+        }
+        else
+        {
+            tipoController.Put(tipo);
+        }
+        await CargarTipos();
+    }
+
+    [RelayCommand]
+    public async Task EliminarTipo(Tipo tipo)
+    {
+        tipoController.Delete(tipo);
+        await CargarTipos();
     }
 
 
@@ -81,14 +130,14 @@ public partial class RodillosViewModel : ObservableRecipient
         }
     }
 
-    public async void ActualizarPosiciones(List<Cargo> ordenados)
+
+    //Acciones Gráficas
+    public void Entra(Rodillo rodillo)
     {
-
-        for (int i = 0; i < ordenados.Count; i++)
-        {
-            ordenados[i].orden = i + 1;
-
-        }
-       // await CargarRodillos();
+        graphicController.Entra(rodillo);
+    }
+    public void Sale()
+    {
+        graphicController.Sale();
     }
 }

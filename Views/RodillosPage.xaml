@@ -23,7 +23,10 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TreeView ItemsSource="{x:Bind cargos, Mode=OneWay}" Margin="0,0,0,15">
+        <TreeView x:Name="treeRodillo" Margin="0,0,0,15"
+                  AllowDrop="True"
+                  DragOver="treeRodillo_DragOver"
+                  RightTapped="treeRodillo_RightTapped">
             <TreeView.Resources>
                 <!-- Template para los nodos Cargo -->
                 <DataTemplate x:Key="CargoTemplate" x:DataType="Models:Cargo">
@@ -62,45 +65,40 @@
             <Grid Grid.Row="1" Margin="0,10,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="0.2*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="0.3*"/>
+                    <RowDefinition Height="0.3*"/>
 
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Horizontal">
                     <ToggleSwitch x:Name="tggEditor" OffContent="Añadir/Editar Off" OnContent="Añadir/Editar On" IsOn="False" Toggled="tggEditor_Toggled"/>
                 </StackPanel>
-                <StackPanel x:Name="stckEditior0" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" Visibility="Collapsed">
+                <StackPanel x:Name="stckEditior0" Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Stretch" Visibility="Collapsed">
                     <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="0,7,20,0">Selector de ruta</TextBlock>
+                    <Grid VerticalAlignment="Center" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="filePicker" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Stretch" Click="filePicker_Click">
+                            <Button.Content>
+                                <FontIcon Glyph="&#xEC50;" FontFamily="Segoe MDL2 Assets" FontSize="20"/>
+                            </Button.Content>
+                        </Button>
+                        <TextBox x:Name="txtRuta" Grid.Column="1" HorizontalAlignment="Stretch" Margin="10,0,0,0"/>
+                    </Grid>
                 </StackPanel>
-                <StackPanel x:Name="stckEditior1" Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" Visibility="Collapsed">
-                    <Button x:Name="filePicker"  HorizontalAlignment="Left" VerticalAlignment="Stretch" Click="filePicker_Click">
-                        <Button.Content>
-                            <FontIcon Glyph="&#xEC50;" FontFamily="Segoe MDL2 Assets" FontSize="20"/>
-                        </Button.Content>
-                    </Button>
-                    <TextBox x:Name="txtRuta" HorizontalAlignment="Left" TextChanged="txtRuta_TextChanged"/>
+
+                <ComboBox x:Name="cmbTipos" Grid.Row="2" HorizontalAlignment="Stretch" SelectionChanged="cmbTipos_SelectionChanged"  Header="Tipo de rodillo" Visibility="Collapsed"/>
+                <StackPanel x:Name="stckVelocidad" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Stretch" Visibility="Collapsed">
+                    <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="0,7,20,0">Velocidad</TextBlock>
+                    <Slider x:Name="slideVelocidad" Width="200" Minimum="0" Maximum="300" StepFrequency="10" SmallChange="10" Value="100" ValueChanged="slideVelocidad_ValueChanged"/>
                 </StackPanel>
-                <StackPanel x:Name="stckEditior2" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="Collapsed">
-                    <Button  x:Name="btnEliminarRodillo" Click="btnEliminarRodillo_Click">
-                        <SymbolIcon Symbol="Delete"/>
-                    </Button>
-                    <Button  x:Name="btnModificarRodillo" Margin="10,0,0,0" Click="btnModificarRodillo_Click">
-                        <SymbolIcon Symbol="Edit"/>
-                    </Button>
-                    <Button  x:Name="btnGuardarRodillo" Margin="10,0,0,0" Click="btnGuardarRodillo_Click">
-                        <SymbolIcon Symbol="Add"/>
-                    </Button>
-                    <muxc:TeachingTip x:Name="TipAddNuevoRodillo"
-                    Title="Añadido con éxito al final de la lista"
-                    CloseButtonContent="Salir"
-                    Target="{x:Bind btnGuardarRodillo}"
-                    Closed="TipAddNuevoRodillo_Closed"
-                    IsLightDismissEnabled="True">
-                        <muxc:TeachingTip.IconSource>
-                            <SymbolIconSource Symbol="Accept"  Foreground="Green"/>
-                        </muxc:TeachingTip.IconSource>
-                    </muxc:TeachingTip>
-                </StackPanel>
+
+                <Button x:Name="btnModificar" Grid.Row="4" HorizontalAlignment="Right" Click="btnModificar_Click" Visibility="Collapsed">
+                    <SymbolIcon Symbol="Edit"/>
+                </Button>
             </Grid>
             <Grid Grid.Row="2" Margin="0,10,0,0">
                 <Grid.ColumnDefinitions>
@@ -119,6 +117,15 @@
                 </Button>
             </Grid>
         </Grid>
+        <muxc:TeachingTip x:Name="Tip"
+        Title="Añadido con éxito al final de la lista"
+        CloseButtonContent="Salir"
+        Closed="Tip_Closed"
+        IsLightDismissEnabled="True">
+            <muxc:TeachingTip.IconSource>
+                <SymbolIconSource Symbol="Accept"  Foreground="Green"/>
+            </muxc:TeachingTip.IconSource>
+        </muxc:TeachingTip>
     </Grid>
 </Page>
     

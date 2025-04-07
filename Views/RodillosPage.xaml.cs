@@ -16,10 +16,6 @@ namespace Generico_Front.Views;
 
 public sealed partial class RodillosPage : Page
 {
-    public List<Cargo> cargos
-    {
-        get; set;
-    }
     Config.Config config;
     public RodillosViewModel ViewModel
     {
@@ -38,8 +34,68 @@ public sealed partial class RodillosPage : Page
     private void IniciarListas()
     {
         ViewModel.CargarRodillos();
-        cargos = ViewModel.allCargos;
+        ViewModel.CargarTipos();
+        txtRuta.Text = config.RotulacionSettings.RutaRodillo;
+        treeRodillo.ItemsSource = ViewModel.cargos;
+        cmbTipos.ItemsSource = ViewModel.Tipos;
+        cmbTipos.SelectedItem = ViewModel.Tipos.FirstOrDefault(t => t.descripcion.Equals(config.RotulacionSettings.TipoRodillo));
+    }
 
+    private void treeRodillo_DragOver(object sender, DragEventArgs e)
+    {
+        // Evita el reordenamiento de elementos dentro del TreeView
+        e.AcceptedOperation = DataPackageOperation.None;
+    }
+    private void treeRodillo_RightTapped(object sender, Microsoft.UI.Xaml.Input.RightTappedRoutedEventArgs e)
+    {
+        var menu = new MenuFlyout();
+
+        // Opción para Desplegar Todos
+        var desplegarTodos = new MenuFlyoutItem { Text = "Desplegar todos" };
+        desplegarTodos.Click += DesplegarTodos_Click;
+        menu.Items.Add(desplegarTodos);
+
+        // Opción para Replegar Todos
+        var replegarTodos = new MenuFlyoutItem { Text = "Replegar todos" };
+        replegarTodos.Click += ReplegarTodos_Click;
+        menu.Items.Add(replegarTodos);
+
+        menu.ShowAt(treeRodillo, e.GetPosition(treeRodillo));
+    }
+
+    private void DesplegarTodos_Click(object sender, RoutedEventArgs e)
+    {
+        // Recorre todos los elementos principales del TreeView
+        foreach (var item in treeRodillo.RootNodes)
+        {
+            ExpandAllItems(item);
+        }
+    }
+    private void ExpandAllItems(TreeViewNode node)
+    {
+        node.IsExpanded = true; // Despliega el nodo actual
+
+        foreach (var child in node.Children)
+        {
+            ExpandAllItems(child); // Llama recursivamente para expandir los hijos
+        }
+    }
+
+    private void ReplegarTodos_Click(object sender, RoutedEventArgs e)
+    {
+        foreach (var item in treeRodillo.RootNodes)
+        {
+            CollapseAllItems(item);
+        }
+    }
+    private void CollapseAllItems(TreeViewNode node)
+    {
+        node.IsExpanded = false;
+
+        foreach (var child in node.Children)
+        {
+            CollapseAllItems(child);
+        }
     }
 
     //FILTRADO
@@ -59,27 +115,26 @@ public sealed partial class RodillosPage : Page
         if (tggEditor.IsOn)
         {
             stckEditior0.Visibility = Visibility.Visible;
-            stckEditior1.Visibility = Visibility.Visible;
-            stckEditior2.Visibility = Visibility.Visible;
+            cmbTipos.Visibility = Visibility.Visible;
+            stckVelocidad.Visibility = Visibility.Visible;
+            btnModificar.Visibility = Visibility.Visible;
         }
         else
         {
             stckEditior0.Visibility = Visibility.Collapsed;
-            stckEditior1.Visibility = Visibility.Collapsed;
-            stckEditior2.Visibility = Visibility.Collapsed;
+            cmbTipos.Visibility = Visibility.Collapsed;
+            stckVelocidad.Visibility = Visibility.Collapsed;
+            btnModificar.Visibility = Visibility.Collapsed;
         }
     }
 
-    private void filePicker_Click(object sender, RoutedEventArgs e)
+    private async void filePicker_Click(object sender, RoutedEventArgs e)
     {
-        //disable the button to avoid double-clicking
         var senderButton = sender as Button;
         senderButton.IsEnabled = false;
 
-        // Clear previous returned file name, if it exists, between iterations of this scenario
         txtRuta.Text = "";
 
-        // Create a file picker
         var openPicker = new FileOpenPicker();
 
         var window = App.MainWindow;
@@ -92,29 +147,34 @@ public sealed partial class RodillosPage : Page
         openPicker.FileTypeFilter.Add(".txt");
         openPicker.FileTypeFilter.Add(".csv");
 
-        // Open the picker for the user to pick a file
-        var file = abrirFilePicker(openPicker);
+        var file = await abrirFilePicker(openPicker);
         if (file != null)
         {
-            txtRuta.Text = file.Result.Path;
+            txtRuta.Text = file.Path;
+            config.RotulacionSettings.RutaRodillo = file.Path;
+            PonerRodilloEnLista();
+        }
+        else
+        {
+            txtRuta.Text = config.RotulacionSettings.RutaRodillo;
         }
 
-        //re-enable the button
         senderButton.IsEnabled = true;
     }
+
     private async Task<Windows.Storage.StorageFile> abrirFilePicker(FileOpenPicker openPicker)
     {
         var file = await openPicker.PickSingleFileAsync();
         return file;
     }
 
-    private void txtRuta_TextChanged(object sender, TextChangedEventArgs e)
+    private void PonerRodilloEnLista()
     {
         try
         {
-            ViewModel.CargarRodillos();
             config.RotulacionSettings.RutaRodillo = txtRuta.Text;
             Config.Config.SaveConfig(config);
+            ViewModel.CargarRodillos();
         }
         catch (Exception)
         {
@@ -122,24 +182,28 @@ public sealed partial class RodillosPage : Page
         }
     }
 
-    private void btnEliminarRodillo_Click(object sender, RoutedEventArgs e)
+    private void cmbTipos_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (cmbTipos.SelectedIndex != -1)
+        {
+            Tipo seleccionado = (Tipo)cmbTipos.SelectedValue;
+            config.RotulacionSettings.TipoRodillo = seleccionado.descripcion;
+        }
+    }
+
+    private void btnModificar_Click(object sender, RoutedEventArgs e)
     {
 
     }
 
-    private void btnModificarRodillo_Click(object sender, RoutedEventArgs e)
+    private void slideVelocidad_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
     {
 
     }
 
-    private void btnGuardarRodillo_Click(object sender, RoutedEventArgs e)
+    private void Tip_Closed(TeachingTip sender, TeachingTipClosedEventArgs args)
     {
-
-    }
-
-    private void TipAddNuevoRodillo_Closed(TeachingTip sender, TeachingTipClosedEventArgs args)
-    {
-        TipAddNuevoRodillo.IsOpen = false;
+        Tip.IsOpen = false;
     }
 
     //ACCIONES GRAPHICS (PLAY y STOP)
@@ -153,5 +217,5 @@ public sealed partial class RodillosPage : Page
 
     }
 
-
+   
 }

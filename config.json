@@ -17,8 +17,9 @@
   "RotulacionSettings": {
     "VelocidadCrawl": 200,
     "RutaRodillo": "C:\\TrabajoIPF\\2025\\AppGenerica\\Control\\RODILLO.txt",
-    "RutaPremios": "C:\\TrabajoIPF\\2025\\AppGenerica\\Control\\RODILLO.txt",
-    "VelocidadRodillo": 300
+    "TipoRodillo": "Vertical",
+    "VelocidadRodillo": 300,
+    "RutaPremios": "C:\\TrabajoIPF\\2025\\AppGenerica\\Control\\RODILLO.txt"
   },
   "PestanasActivas": {
     "Rotulos": true,

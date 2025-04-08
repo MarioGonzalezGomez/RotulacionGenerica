@@ -160,34 +160,33 @@ public sealed partial class RotulosPage : Page
             switch (seleccionado.numLineas)
             {
                 case 1:
-                    txtLinea1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                    txtLinea2.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-                    txtLinea3.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-                    txtLinea4.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+                    txtLinea1.Visibility = Visibility.Visible;
+                    txtLinea2.Visibility = Visibility.Collapsed;
+                    txtLinea3.Visibility = Visibility.Collapsed;
+                    txtLinea4.Visibility = Visibility.Collapsed;
                     break;
                 case 2:
-                    txtLinea1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                    txtLinea2.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                    txtLinea3.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-                    txtLinea4.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+                    txtLinea1.Visibility = Visibility.Visible;
+                    txtLinea2.Visibility = Visibility.Visible;
+                    txtLinea3.Visibility = Visibility.Collapsed;
+                    txtLinea4.Visibility = Visibility.Collapsed;
                     break;
                 case 3:
-                    txtLinea1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                    txtLinea2.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                    txtLinea3.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                    txtLinea4.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+                    txtLinea1.Visibility = Visibility.Visible;
+                    txtLinea2.Visibility = Visibility.Visible;
+                    txtLinea3.Visibility = Visibility.Visible;
+                    txtLinea4.Visibility = Visibility.Collapsed;
                     break;
                 case 4:
-                    txtLinea1.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                    txtLinea2.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                    txtLinea3.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                    txtLinea4.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+                    txtLinea1.Visibility = Visibility.Visible;
+                    txtLinea2.Visibility = Visibility.Visible;
+                    txtLinea3.Visibility = Visibility.Visible;
+                    txtLinea4.Visibility = Visibility.Visible;
                     break;
                 default: break;
             }
         }
     }
-
 
     private void btnEliminarRotulo_Click(object sender, RoutedEventArgs e)
     {
@@ -319,75 +318,81 @@ public sealed partial class RotulosPage : Page
         }
     }
 
-    private void btnDeleteAjustes_Click(object sender, RoutedEventArgs e)
+    private async void btnDeleteAjustes_Click(object sender, RoutedEventArgs e)
     {
-        if (cmbTipos.SelectedIndex != -1)
+        if (cmbTipos.SelectedItem != null)
         {
-            Tipo selected = (Tipo)cmbTipos.SelectedItem;
-            EliminarTipo(selected);
+            Tipo selected = cmbTipos.SelectedItem as Tipo;
+            await ViewModel.EliminarTipo(selected);
+            Tip.Target = btnDeleteAjustes;
+            Tip.Title = "Tipo eliminado";
+            AbrirTip();
+        }
+        else
+        {
+            ShowDialog("Seleccionar tipo", "No se ha seleccionado ningún tipo para ser eliminado");
         }
     }
-    private async void EliminarTipo(Tipo tipo)
-    {
-        Tip.Target = btnDeleteAjustes;
-        Tip.Title = "Tipo eliminado";
-        await ViewModel.EliminarTipo(tipo);
-        AbrirTip();
-    }
 
-    private void btnEditAjustes_Click(object sender, RoutedEventArgs e)
+    private async void btnEditAjustes_Click(object sender, RoutedEventArgs e)
     {
-        if (cmbTipos.SelectedIndex != -1)
+        string nuevoNombre = txtNombreTipo.Text?.Trim();
+        if (cmbTipos.SelectedItem != null && !string.IsNullOrEmpty(nuevoNombre))
         {
-            Tipo selected = (Tipo)cmbTipos.SelectedItem;
-            if (cmbNumLineas.SelectedIndex != -1)
-            {
-                selected.numLineas = cmbNumLineas.SelectedIndex + 1;
-            }
-            selected.descripcion = txtNombreTipo.Text;
-            ModificarTipo(selected);
+            Tipo seleccionado = cmbTipos.SelectedItem as Tipo;
+            seleccionado.descripcion = nuevoNombre;
+            seleccionado.numLineas = cmbNumLineas.SelectedItem != null ? cmbNumLineas.SelectedIndex + 1 : seleccionado.numLineas;
+            await ViewModel.GuardarTipo(seleccionado);
+            Tip.Target = btnEditAjustes;
+            Tip.Title = "Editado con éxito";
+            AbrirTip();
+        }
+        else
+        {
+            ShowDialog("Seleccionar tipo", "No se ha seleccionado ningún tipo para ser editado");
         }
     }
-    private async void ModificarTipo(Tipo tipo)
-    {
-        Tip.Target = btnEditAjustes;
-        Tip.Title = "Modificado con éxito";
-        await ViewModel.GuardarTipo(tipo);
-        AbrirTip();
-    }
 
-    private void btnSaveAjustes_Click(object sender, RoutedEventArgs e)
+    private async void btnSaveAjustes_Click(object sender, RoutedEventArgs e)
     {
-        if (cmbTipos.SelectedIndex != -1)
+        string nuevoNombre = txtNombreTipo.Text?.Trim();
+
+        if (!string.IsNullOrEmpty(nuevoNombre))
         {
-            Tipo selected = (Tipo)cmbTipos.SelectedItem;
-            selected.id = 0;
-            if (cmbNumLineas.SelectedIndex != -1)
+            if (cmbTipos.SelectedItem != null)
             {
-                selected.numLineas = cmbNumLineas.SelectedIndex + 1;
+                Tipo seleccionado = cmbTipos.SelectedItem as Tipo;
+                if (string.Equals(seleccionado.descripcion, nuevoNombre, StringComparison.OrdinalIgnoreCase))
+                {
+                    ShowDialog("Cambio de nombre", "No se puede guardar un nuevo tipo con el mismo nombre que uno ya registrado, por favor, edite el nombre actual si quiere guardarlo como un nuevo tipo de Rótulo.");
+                    return;
+                }
             }
-            selected.descripcion = txtNombreTipo.Text;
-            bool existe = ViewModel.Tipos.Any(t => t.descripcion.Equals(selected.descripcion, StringComparison.OrdinalIgnoreCase));
-            if (existe)
+            Tipo nuevoTipo = new Tipo();
+            nuevoTipo.id = 0;
+            nuevoTipo.seAplicaA = "Rotulos";
+            nuevoTipo.descripcion = nuevoNombre;
+            if (cmbNumLineas.SelectedItem != null)
             {
-                Tip.Target = btnSaveAjustes;
-                Tip.Title = $"El tipo {selected.descripcion} ya existe";
-                AbrirTip();
+                nuevoTipo.numLineas = cmbNumLineas.SelectedIndex + 1;
             }
             else
             {
-                GuardarTipoNuevo(selected);
+                ShowDialog("Falta número de líneas", "No se ha especificado el número de líneas que tendrá este nuevo Tipo. Por favor, rellene ese campo");
+                return;
             }
 
+
+            await ViewModel.GuardarTipo(nuevoTipo);
+            Tip.Target = btnSaveAjustes;
+            Tip.Title = "Creado con éxito";
+            AbrirTip();
         }
-    }
-    private async void GuardarTipoNuevo(Tipo tipo)
-    {
-        Tip.Target = btnSaveAjustes;
-        Tip.Title = "Guardado con éxito";
-        tipSymbol.Symbol = Symbol.Accept;
-        await ViewModel.GuardarTipo(tipo);
-        AbrirTip();
+        else
+        {
+            ShowDialog("Seleccionar tipo", "No se ha seleccionado ningún tipo para ser editado");
+            return;
+        }
     }
 
     private async void btnDeleteList_Click(object sender, RoutedEventArgs e)
@@ -408,6 +413,20 @@ public sealed partial class RotulosPage : Page
         {
             await ViewModel.BorrarTodos();
         }
+    }
+
+    //ENVIAR MENSAJES UI
+    public async void ShowDialog(string titulo, string content)
+    {
+        ContentDialog dialog = new ContentDialog()
+        {
+            Title = titulo,
+            Content = content,
+            CloseButtonText = "Cerrar",
+            XamlRoot = this.XamlRoot
+        };
+
+        await dialog.ShowAsync();
     }
 
     //ENTRA Y SALE

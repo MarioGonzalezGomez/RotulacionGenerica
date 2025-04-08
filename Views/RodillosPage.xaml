@@ -73,6 +73,7 @@
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Horizontal">
                     <ToggleSwitch x:Name="tggEditor" OffContent="Añadir/Editar Off" OnContent="Añadir/Editar On" IsOn="False" Toggled="tggEditor_Toggled"/>
+                    <HyperlinkButton  x:Name="linkAjustes" Content="Ajustar tipos" Margin="70,0,0,0" Click="AbrirPanelAjustes" Visibility="Collapsed"/>
                 </StackPanel>
                 <StackPanel x:Name="stckEditior0" Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Stretch" Visibility="Collapsed">
                     <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="0,7,20,0">Selector de ruta</TextBlock>
@@ -93,12 +94,17 @@
                 <ComboBox x:Name="cmbTipos" Grid.Row="2" HorizontalAlignment="Stretch" SelectionChanged="cmbTipos_SelectionChanged"  Header="Tipo de rodillo" Visibility="Collapsed"/>
                 <StackPanel x:Name="stckVelocidad" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Stretch" Visibility="Collapsed">
                     <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="0,7,20,0">Velocidad</TextBlock>
-                    <Slider x:Name="slideVelocidad" Width="200" Minimum="0" Maximum="300" StepFrequency="10" SmallChange="10" Value="100" ValueChanged="slideVelocidad_ValueChanged"/>
+                    <Slider x:Name="slideVelocidad" Width="200" Minimum="0" Maximum="300" StepFrequency="10" SmallChange="10" Value="100"/>
                 </StackPanel>
 
-                <Button x:Name="btnModificar" Grid.Row="4" HorizontalAlignment="Right" Click="btnModificar_Click" Visibility="Collapsed">
-                    <SymbolIcon Symbol="Edit"/>
-                </Button>
+                <StackPanel x:Name="stckBotonera" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="Collapsed">
+                    <Button  x:Name="btnModificar" Click="btnModificar_Click">
+                        <SymbolIcon Symbol="Edit"/>
+                    </Button>
+                    <Button  x:Name="btnGuardar" Margin="10,0,0,0" Click="btnGuardar_Click">
+                        <SymbolIcon Symbol="Save"/>
+                    </Button>
+                </StackPanel>
             </Grid>
             <Grid Grid.Row="2" Margin="0,10,0,0">
                 <Grid.ColumnDefinitions>
@@ -117,6 +123,58 @@
                 </Button>
             </Grid>
         </Grid>
+
+        <SplitView x:Name="SplitView"
+            Grid.Column="2"
+            Grid.RowSpan="3"
+            Margin="0,0,0,20"       
+            DisplayMode="Overlay"
+            IsPaneOpen="False"
+            OpenPaneLength="320"
+            PanePlacement="Right" >
+
+            <SplitView.Pane>
+                <Grid Margin="10,0,5,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1.5*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="0.8*"/>
+                    </Grid.RowDefinitions>
+                    <Button  HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" Click="CerrarPanelAjustes">
+                        <SymbolIcon Symbol="Forward"/>
+                    </Button>
+                    <Grid Grid.Row="0" Margin="3,0,3,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="1.1*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.ColumnSpan="2" Grid.Row="0" Margin="0,0,0,15" HorizontalAlignment="Center" VerticalAlignment="Bottom" Style="{ThemeResource BaseTextBlockStyle}">Editar tipo de Rótulo</TextBlock>
+
+                        <ComboBox x:Name="cmbTiposEdicion" Grid.ColumnSpan="2" Grid.Row="1" Width="300" SelectionChanged="cmbTiposEdicion_SelectionChanged"/>
+                        <TextBox x:Name="txtNombreTipo"  Grid.ColumnSpan="2" Grid.Row="2"  Header="Nombre del tipo"/>
+                        <StackPanel  Grid.ColumnSpan="2" Grid.Row="3" Margin="0,15,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button  x:Name="btnDeleteAjustes" VerticalAlignment="Top" Margin="20,0,0,0" Click="btnDeleteAjustes_Click">
+                                <SymbolIcon Symbol="Delete"/>
+                            </Button>
+                            <Button x:Name="btnEditAjustes" VerticalAlignment="Top"  Margin="5,0,0,0" Click="btnEditAjustes_Click">
+                                <SymbolIcon Symbol="Edit"/>
+                            </Button>
+                            <Button x:Name="btnSaveAjustes" VerticalAlignment="Top" Margin="5,0,0,0" Click="btnSaveAjustes_Click">
+                                <SymbolIcon Symbol="Add"/>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </SplitView.Pane>
+        </SplitView>
+
         <muxc:TeachingTip x:Name="Tip"
         Title="Añadido con éxito al final de la lista"
         CloseButtonContent="Salir"

@@ -50,6 +50,10 @@ public partial class RodillosViewModel : ObservableRecipient
             cargos.Add(cargo);
             allCargos.Add(cargo);
         }
+        foreach (var cargo in allCargos)
+        {
+            cargo.orden = allCargos.IndexOf(cargo) + 1;
+        }
 
         return Task.CompletedTask;
     }

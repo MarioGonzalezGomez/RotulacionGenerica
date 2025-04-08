@@ -64,7 +64,6 @@ public class TipoController : IBaseController<Tipo>
     public Tipo Delete(Tipo tipo)
     {
         string result = c.DeleteAsync($"api/Tipos/{tipo.id}").Result;
-        Tipo tipoResult = JsonSerializer.Deserialize<Tipo>(result);
-        return tipoResult;
+        return tipo;
     }
 }

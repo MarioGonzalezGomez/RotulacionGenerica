@@ -16,32 +16,32 @@ public partial class PremiosViewModel : ObservableRecipient
     {
         dataController = Controllers.Data.PremioController.GetInstance();
         graphicController = PremioController.GetInstance();
-        cargos = new ObservableCollection<Cargo>();
-        allCargos = new List<Cargo>();
+        premios = new ObservableCollection<Premio>();
+        allPremios = new List<Premio>();
         config = Config.Config.GetInstance();
     }
 
-    public ObservableCollection<Cargo> cargos
+    public ObservableCollection<Premio> premios
     {
         get;
     }
-    public List<Cargo> allCargos;
+    public List<Premio> allPremios;
 
 
     // Comando para cargar la lista de premios
     [RelayCommand]
     public Task CargarPremios()
     {
-        Premio premio = dataController.GetPremio(config.RotulacionSettings.RutaPremios);
-        cargos.Clear();
-        allCargos.Clear();
+        List<Premio> dataPremios = dataController.GetPremios(config.RotulacionSettings.RutaPremios);
+        premios.Clear();
+        allPremios.Clear();
 
-        // Agrega cada premio a la colección (esto actualizará la vista)
-        // foreach (var cargo in premio.cargos)
-        // {
-        //  cargos.Add(cargo);
-        //  allCargos.Add(cargo);
-        // }
+        //Agrega cada premio a la colección (esto actualizará la vista)
+        foreach (var premio in dataPremios)
+        {
+            premios.Add(premio);
+            allPremios.Add(premio);
+        }
 
         return Task.CompletedTask;
     }
@@ -54,41 +54,31 @@ public partial class PremiosViewModel : ObservableRecipient
 
 
     //OPCIONES PARA EL FILTRADO
-    public void RemoverNoCoincidentes(IEnumerable<Cargo> filteredData)
+    public void RemoverNoCoincidentes(IEnumerable<Premio> filteredData)
     {
-        for (int i = cargos.Count - 1; i >= 0; i--)
+        for (int i = premios.Count - 1; i >= 0; i--)
         {
-            var item = cargos[i];
+            var item = premios[i];
             if (!filteredData.Contains(item))
             {
-                cargos.Remove(item);
+                premios.Remove(item);
             }
         }
     }
 
-    public void RecuperarLista(IEnumerable<Cargo> filteredData)
+    public void RecuperarLista(IEnumerable<Premio> filteredData)
     {
         foreach (var item in filteredData)
         {
-            if (!cargos.Contains(item))
+            if (!premios.Contains(item))
             {
                 try
                 {
-                    cargos.Insert(item.orden - 1, item);
+                    int orden = filteredData.ToList().IndexOf(item);
+                    premios.Insert(orden, item);
                 }
                 catch (ArgumentOutOfRangeException) { }
             }
         }
-    }
-
-    public async void ActualizarPosiciones(List<Cargo> ordenados)
-    {
-
-        for (int i = 0; i < ordenados.Count; i++)
-        {
-            ordenados[i].orden = i + 1;
-
-        }
-        // await CargarPremios();
     }
 }

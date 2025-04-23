@@ -44,6 +44,7 @@ public sealed partial class RodillosPage : Page
         slideVelocidad.Value = config.RotulacionSettings.VelocidadRodillo;
     }
 
+    //TREE VIEW
     private void treeRodillo_DragOver(object sender, DragEventArgs e)
     {
         // Evita el reordenamiento de elementos dentro del TreeView

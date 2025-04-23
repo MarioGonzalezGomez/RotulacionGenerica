@@ -18,12 +18,28 @@ public class TreeViewTemplateSelector : DataTemplateSelector
     {
         get; set;
     }
+    public DataTemplate PremioTemplate
+    {
+        get; set;
+    }
+    public DataTemplate NominadoTemplate
+    {
+        get; set;
+    }
 
     protected override DataTemplate SelectTemplateCore(object item)
     {
         if (item is Cargo)
         {
             return CargoTemplate;
+        }
+        else if (item is Premio)
+        {
+            return PremioTemplate;
+        }
+        else if (item is Nominado)
+        {
+            return NominadoTemplate;
         }
         else if (item is Persona)
         {

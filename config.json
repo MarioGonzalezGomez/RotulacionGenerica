@@ -19,7 +19,7 @@
     "RutaRodillo": "C:\\TrabajoIPF\\2025\\AppGenerica\\Control\\RODILLO.txt",
     "TipoRodillo": "Vertical",
     "VelocidadRodillo": 300,
-    "RutaPremios": "C:\\TrabajoIPF\\2025\\AppGenerica\\Control\\RODILLO.txt"
+    "RutaPremios": "C:\\TrabajoIPF\\2025\\AppGenerica\\Control\\PREMIOS.txt"
   },
   "PestanasActivas": {
     "Rotulos": true,

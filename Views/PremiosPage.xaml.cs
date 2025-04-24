@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
+using Generico_Front.Config;
 using Generico_Front.Controllers.Data;
 using Generico_Front.Models;
 using Generico_Front.ViewModels;
@@ -37,6 +38,20 @@ public sealed partial class PremiosPage : Page
         ViewModel.CargarPremios();
         treePremios.ItemsSource = ViewModel.premios;
         txtRuta.Text = config.RotulacionSettings.RutaPremios;
+        EstadoInicialBotonera();
+    }
+    private void EstadoInicialBotonera()
+    {
+        btnCategoria.Visibility = config.RotulacionSettings.BtnCategoria ? Visibility.Visible : Visibility.Collapsed;
+        CategoriaCheckBox.IsChecked = config.RotulacionSettings.BtnCategoria;
+        btnNominados.Visibility = config.RotulacionSettings.BtnNominados ? Visibility.Visible : Visibility.Collapsed;
+        NominadosCheckBox.IsChecked = config.RotulacionSettings.BtnNominados;
+        btnGafas.Visibility = config.RotulacionSettings.BtnGafas ? Visibility.Visible : Visibility.Collapsed;
+        GafasCheckBox.IsChecked = config.RotulacionSettings.BtnGafas;
+        btnEntregadores.Visibility = config.RotulacionSettings.BtnEntregadores ? Visibility.Visible : Visibility.Collapsed;
+        EntregadoresCheckBox.IsChecked = config.RotulacionSettings.BtnEntregadores;
+        btnGanador.Visibility = config.RotulacionSettings.BtnGanador ? Visibility.Visible : Visibility.Collapsed;
+        GanadorCheckBox.IsChecked = config.RotulacionSettings.BtnGanador;
     }
 
     //TREE VIEW
@@ -89,6 +104,7 @@ public sealed partial class PremiosPage : Page
             headerInfo2.Visibility = Visibility.Collapsed;
             txtRecoge.Visibility = Visibility.Collapsed;
         }
+        txtGanador.Visibility = Visibility.Collapsed;
     }
     private void MostrarDetallesNominado(Nominado nominado)
     {
@@ -210,11 +226,13 @@ public sealed partial class PremiosPage : Page
         {
             stckEditior0.Visibility = Visibility.Visible;
             stckEditior1.Visibility = Visibility.Visible;
+            gridBotonesDisponibles.Visibility = Visibility.Visible;
         }
         else
         {
             stckEditior0.Visibility = Visibility.Collapsed;
             stckEditior1.Visibility = Visibility.Collapsed;
+            gridBotonesDisponibles.Visibility = Visibility.Collapsed;
         }
     }
 
@@ -275,7 +293,7 @@ public sealed partial class PremiosPage : Page
         await AbrirFicheroYRefrescarUI(config.RotulacionSettings.RutaPremios);
 
     }
-    public async Task AbrirFicheroYRefrescarUI(string rutaFichero)
+    public async Task AbrirFicheroYRefrescarUI(string rutaFichero, bool recargar=true)
     {
         if (!File.Exists(rutaFichero))
         {
@@ -305,6 +323,78 @@ public sealed partial class PremiosPage : Page
         }
     }
 
+    private async void btnInfo_Click(object sender, RoutedEventArgs e)
+    {
+        string filePath = System.IO.Path.Combine(AppContext.BaseDirectory, "Resources", "InfoPremios.txt");
+        await AbrirFicheroYRefrescarUI(filePath);
+    }
+    //BOTONES DISPONIBLES
+    private void CategoriaCheckBox_Checked(object sender, RoutedEventArgs e)
+    {
+        btnCategoria.Visibility = Visibility.Visible;
+        config.RotulacionSettings.BtnCategoria = true;
+        Config.Config.SaveConfig(config);
+    }
+    private void CategoriaCheckBox_Unchecked(object sender, RoutedEventArgs e)
+    {
+        btnCategoria.Visibility = Visibility.Collapsed;
+        config.RotulacionSettings.BtnCategoria = false;
+        Config.Config.SaveConfig(config);
+    }
+
+    private void NominadosCheckBox_Checked(object sender, RoutedEventArgs e)
+    {
+        btnNominados.Visibility = Visibility.Visible;
+        config.RotulacionSettings.BtnNominados = true;
+        Config.Config.SaveConfig(config);
+    }
+    private void NominadosCheckBox_Unchecked(object sender, RoutedEventArgs e)
+    {
+        btnNominados.Visibility = Visibility.Collapsed;
+        config.RotulacionSettings.BtnNominados = false;
+        Config.Config.SaveConfig(config);
+    }
+
+    private void GafasCheckBox_Checked(object sender, RoutedEventArgs e)
+    {
+        btnGafas.Visibility = Visibility.Visible;
+        config.RotulacionSettings.BtnGafas = true;
+        Config.Config.SaveConfig(config);
+    }
+    private void GafasCheckBox_Unchecked(object sender, RoutedEventArgs e)
+    {
+        btnGafas.Visibility = Visibility.Collapsed;
+        config.RotulacionSettings.BtnGafas = false;
+        Config.Config.SaveConfig(config);
+    }
+
+    private void EntregadoresCheckBox_Checked(object sender, RoutedEventArgs e)
+    {
+        btnEntregadores.Visibility = Visibility.Visible;
+        config.RotulacionSettings.BtnEntregadores = true;
+        Config.Config.SaveConfig(config);
+    }
+    private void EntregadoresCheckBox_Unchecked(object sender, RoutedEventArgs e)
+    {
+        btnEntregadores.Visibility = Visibility.Collapsed;
+        config.RotulacionSettings.BtnEntregadores = false;
+        Config.Config.SaveConfig(config);
+    }
+
+    private void GanadorCheckBox_Checked(object sender, RoutedEventArgs e)
+    {
+        btnGanador.Visibility = Visibility.Visible;
+        config.RotulacionSettings.BtnGanador = true;
+        Config.Config.SaveConfig(config);
+    }
+    private void GanadorCheckBox_Unchecked(object sender, RoutedEventArgs e)
+    {
+        btnGanador.Visibility = Visibility.Collapsed;
+        config.RotulacionSettings.BtnGanador = false;
+        Config.Config.SaveConfig(config);
+    }
+
+
     //METODOS DE LANZADO DE MENSAJES
     private async void AbrirTip()
     {
@@ -331,15 +421,29 @@ public sealed partial class PremiosPage : Page
     }
 
     //ACCIONES GRAPHICS (PLAY y STOP)
-    private void btnPlay_Click(object sender, RoutedEventArgs e)
+    private void btnCategoria_Click(object sender, RoutedEventArgs e)
     {
 
     }
 
-    private void btnStop_Click(object sender, RoutedEventArgs e)
+    private void btnNominados_Click(object sender, RoutedEventArgs e)
     {
 
     }
 
+    private void btnGafas_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void btnEntregadores_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void btnGanador_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
 
 }

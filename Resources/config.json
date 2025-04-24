@@ -16,10 +16,15 @@
   },
   "RotulacionSettings": {
     "VelocidadCrawl": 200,
-    "RutaRodillo": "C:\\TrabajoIPF\\2025\\AppGenerica\\Control\\RODILLO.txt",
+    "RutaRodillo": "",
     "TipoRodillo": "Vertical",
     "VelocidadRodillo": 300,
-    "RutaPremios": "C:\\TrabajoIPF\\2025\\AppGenerica\\Control\\PREMIOS.txt"
+    "RutaPremios": "",
+    "BtnCategoria": true,
+    "BtnNominados": true,
+    "BtnGafas": true,
+    "BtnEntregadores": true,
+    "BtnGanador": true
   },
   "PestanasActivas": {
     "Rotulos": true,
@@ -28,7 +33,7 @@
     "Faldones": true,
     "Premios": true,
     "Gafas": true,
-    "Varios": false,
+    "Varios": true,
     "Reset": true,
     "Mosca": true
   }

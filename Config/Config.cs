@@ -77,6 +77,26 @@ public class RotulacionSettings
     {
         get; set;
     }
+    public bool BtnCategoria
+    {
+        get; set;
+    }
+    public bool BtnNominados
+    {
+        get; set;
+    }
+    public bool BtnGafas
+    {
+        get; set;
+    }
+    public bool BtnEntregadores
+    {
+        get; set;
+    }
+    public bool BtnGanador
+    {
+        get; set;
+    }
 }
 
 public class PestanasActivas
@@ -143,6 +163,12 @@ public class Config
         get; set;
     }
 
+    private static readonly string appDataPath = Path.Combine(
+         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+         "WinUI3", "ApplicationData");
+
+    private static readonly string configFilePath = Path.Combine(appDataPath, "config.json");
+
     public Config()
     {
 
@@ -152,10 +178,31 @@ public class Config
     {
         if (instance == null)
         {
-            string relativePath = Path.Combine(AppContext.BaseDirectory, "config.json");
-            instance = LoadConfig(relativePath);
+            instance = LoadConfig(configFilePath);
         }
         return instance;
+    }
+
+    //Comprobar si archivo config existe
+    public static void ConfigExists()
+    {
+        if (!File.Exists(configFilePath))
+        {
+            string sourcePath = Path.Combine(AppContext.BaseDirectory, "Resources", "config.json");
+
+            try
+            {
+                if (!Directory.Exists(appDataPath))
+                    Directory.CreateDirectory(appDataPath);
+
+                File.Copy(sourcePath, configFilePath);
+                Console.WriteLine("Archivo de configuración copiado a AppData.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al copiar el archivo de configuración: {ex.Message}");
+            }
+        }
     }
 
     // Método estático para cargar el JSON desde un archivo y deserializarlo
@@ -163,8 +210,17 @@ public class Config
     {
         try
         {
-            string jsonString = File.ReadAllText(filePath);
-            return JsonSerializer.Deserialize<Config>(jsonString);
+            // Verifica si el archivo existe antes de intentar cargarlo
+            if (File.Exists(filePath))
+            {
+                string jsonString = File.ReadAllText(filePath);
+                return JsonSerializer.Deserialize<Config>(jsonString);
+            }
+            else
+            {
+                Console.WriteLine("El archivo de configuración no existe.");
+                return null;
+            }
         }
         catch (Exception ex)
         {
@@ -177,9 +233,15 @@ public class Config
     {
         try
         {
-            string relativePath = Path.Combine(AppContext.BaseDirectory, "config.json");
+            // Verifica si la carpeta existe, si no, créala
+            string directory = Path.GetDirectoryName(configFilePath);
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
             string jsonString = JsonSerializer.Serialize(config, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(relativePath, jsonString);
+            File.WriteAllText(configFilePath, jsonString);
             Console.WriteLine("Archivo Config guardado exitosamente.");
             instance = config;
         }

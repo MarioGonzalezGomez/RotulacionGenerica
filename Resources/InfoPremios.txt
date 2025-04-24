@@ -1,0 +1,37 @@
+El formato para premios sencillos, con nombre de categoría,
+nominados y trabajos por los que han sido nominados es:
+
+Nombre Categoría 1
+Nominado 1 / Película 1
+Nominado 2 / Película 2
+Nominado 3 / Película 3
+Nominado 4 / Película 4
+
+Nombre Categoría 2
+Nominado 1 / Película 1
+Nominado 2 / Película 2
+Nominado 3 / Película 3
+Nominado 4 / Película 4
+
+...
+
+-Se utiliza la / para distinguir entre nombre y obra
+-La línea en blanco de separación se utiliza para distinguir
+entre una categoría y la siguiente.
+
+Podemos añadir funcionalidad extra con:
+# seguido del nombre, para identificar como entregador
+* seguido del nombre / obra para indicar que es el ganador
+si esto se sabia previo a la gala
+nombre / obra / nombre El segundo nombre se guardará como
+la persona que recoge el premio en nombre del nominado
+
+Vemos un ejemplo completo
+
+Mejor presentador de entretenimiento
+#Silvia Intxaurrondo
+#Marc Sala
+Chenoa / The Floor
+Aitor Albizua / Cifras y Letras
+David Broncano / La Revuelta
+*Jordi Hurtado / Saber y Ganar / Elisenda Roca

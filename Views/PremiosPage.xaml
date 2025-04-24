@@ -126,6 +126,7 @@
                     </Grid>
                 </StackPanel>
                 <StackPanel x:Name="stckEditior1" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Visibility="Collapsed">
+                    <Button x:Name="btnInfo" Content="i" Width="30" Height="30" Background="DodgerBlue" Foreground="White" CornerRadius="20" FontSize="20" Click="btnInfo_Click"/>
                     <Button  x:Name="btnModificarPremio" Margin="10,0,0,0" Click="btnModificarPremio_Click">
                         <SymbolIcon Symbol="Edit"/>
                     </Button>
@@ -141,6 +142,42 @@
                 </StackPanel>
             </Grid>
 
+        </Grid>
+        <Grid Grid.Column="2" Margin="20,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,20,0,0">
+                    <ToggleButton x:Name="btnCategoria" Content="CATEGORÍA" Click="btnCategoria_Click" Margin="0,0,0,0"/>
+                    <ToggleButton x:Name="btnNominados" Content="NOMINADOS" Click="btnNominados_Click" Margin="0,20,0,0"/>
+                    <ToggleButton x:Name="btnGafas" Content="NOMIDADOS EN GAFAS" Click="btnGafas_Click" Margin="0,20,0,0"/>
+                    <ToggleButton x:Name="btnEntregadores" Content="ENTREGADORES" Click="btnEntregadores_Click" Margin="0,20,0,0"/>
+                    <ToggleButton x:Name="btnGanador" Content="GANADOR" Click="btnGanador_Click" Margin="0,20,0,0"/>
+                    <TextBlock x:Name="txtGanadorBotonera" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,15,0,0"/>
+                </StackPanel>
+            </Grid>
+            <Grid x:Name="gridBotonesDisponibles"  Grid.Row="1" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="1" Grid.ColumnSpan="2" FontWeight="Bold" FontSize="14" Text="Botones disponibles"/>
+                <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" Margin="0,20,0,0">
+                    <CheckBox x:Name="CategoriaCheckBox" Content="Categoría"  Checked="CategoriaCheckBox_Checked"  Unchecked="CategoriaCheckBox_Unchecked"/>
+                    <CheckBox x:Name="NominadosCheckBox" Content="Nominados"  Checked="NominadosCheckBox_Checked"  Unchecked="NominadosCheckBox_Unchecked"/>
+                    <CheckBox x:Name="GafasCheckBox" Content="Nom Gafas"  Checked="GafasCheckBox_Checked"  Unchecked="GafasCheckBox_Unchecked"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1" Margin="0,20,0,0">
+                    <CheckBox x:Name="EntregadoresCheckBox" Content="Entregadores"  Checked="EntregadoresCheckBox_Checked"  Unchecked="EntregadoresCheckBox_Unchecked"/>
+                    <CheckBox x:Name="GanadorCheckBox" Content="Ganador"  Checked="GanadorCheckBox_Checked"  Unchecked="GanadorCheckBox_Unchecked"/>
+                </StackPanel>
+            </Grid>
         </Grid>
     </Grid>
 </Page>

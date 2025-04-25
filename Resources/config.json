@@ -1,7 +1,7 @@
 ﻿{
   "ApiOptions": {
     "BaseUri": "localhost",
-    "Port": "44302"
+    "Port": "5000"
   },
   "BrainStormOptions": {
     "Ip": "127.0.0.1",
@@ -21,6 +21,7 @@
     "VelocidadRodillo": 300,
     "RutaPremios": "",
     "BtnCategoria": true,
+    "BtnNominado": true,
     "BtnNominados": true,
     "BtnGafas": true,
     "BtnEntregadores": true,

@@ -21,7 +21,7 @@ class Cliente
     {
         config = Config.Config.GetInstance();
         _httpClient = new HttpClient();
-        _httpClient.BaseAddress = new Uri($"https://{config.ApiOptions.BaseUri}:{config.ApiOptions.Port}");
+        _httpClient.BaseAddress = new Uri($"http://{config.ApiOptions.BaseUri}:{config.ApiOptions.Port}");
         // Configuración de las cabeceras generales
         _httpClient.DefaultRequestHeaders.Accept.Clear();
         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

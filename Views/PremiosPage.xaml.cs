@@ -18,11 +18,19 @@ namespace Generico_Front.Views;
 public sealed partial class PremiosPage : Page
 {
 
-    Config.Config config;
+    private Config.Config config;
     public PremiosViewModel ViewModel
     {
         get;
     }
+    private object? selectedItem;
+
+    private bool inCategoria = false;
+    private bool inNominado = false;
+    private bool inLista = false;
+    private bool inGafas = false;
+    private bool inEntregadores = false;
+    private bool inGanador = false;
 
     public PremiosPage()
     {
@@ -44,6 +52,8 @@ public sealed partial class PremiosPage : Page
     {
         btnCategoria.Visibility = config.RotulacionSettings.BtnCategoria ? Visibility.Visible : Visibility.Collapsed;
         CategoriaCheckBox.IsChecked = config.RotulacionSettings.BtnCategoria;
+        grupoNominado.Visibility = config.RotulacionSettings.BtnNominado ? Visibility.Visible : Visibility.Collapsed;
+        NominadoCheckBox.IsChecked = config.RotulacionSettings.BtnNominado;
         btnNominados.Visibility = config.RotulacionSettings.BtnNominados ? Visibility.Visible : Visibility.Collapsed;
         NominadosCheckBox.IsChecked = config.RotulacionSettings.BtnNominados;
         btnGafas.Visibility = config.RotulacionSettings.BtnGafas ? Visibility.Visible : Visibility.Collapsed;
@@ -57,7 +67,7 @@ public sealed partial class PremiosPage : Page
     //TREE VIEW
     private void treePremios_SelectionChanged(TreeView sender, TreeViewSelectionChangedEventArgs args)
     {
-        var selectedItem = args.AddedItems.FirstOrDefault();
+        selectedItem = args.AddedItems.FirstOrDefault();
 
         if (selectedItem is Premio premio)
         {
@@ -293,7 +303,7 @@ public sealed partial class PremiosPage : Page
         await AbrirFicheroYRefrescarUI(config.RotulacionSettings.RutaPremios);
 
     }
-    public async Task AbrirFicheroYRefrescarUI(string rutaFichero, bool recargar=true)
+    public async Task AbrirFicheroYRefrescarUI(string rutaFichero, bool recargar = true)
     {
         if (!File.Exists(rutaFichero))
         {
@@ -339,6 +349,19 @@ public sealed partial class PremiosPage : Page
     {
         btnCategoria.Visibility = Visibility.Collapsed;
         config.RotulacionSettings.BtnCategoria = false;
+        Config.Config.SaveConfig(config);
+    }
+
+    private void NominadoCheckBox_Checked(object sender, RoutedEventArgs e)
+    {
+        grupoNominado.Visibility = Visibility.Visible;
+        config.RotulacionSettings.BtnNominado = true;
+        Config.Config.SaveConfig(config);
+    }
+    private void NominadoCheckBox_Unchecked(object sender, RoutedEventArgs e)
+    {
+        grupoNominado.Visibility = Visibility.Collapsed;
+        config.RotulacionSettings.BtnNominado = false;
         Config.Config.SaveConfig(config);
     }
 
@@ -407,6 +430,35 @@ public sealed partial class PremiosPage : Page
         Tip.IsOpen = false;
     }
 
+    public async void MostrarFlyoutEnBoton(string texto, ToggleButton boton, int duracionMs = 2000)
+    {
+        // Crear el contenido del flyout
+        var flyout = new Flyout
+        {
+            Content = new TextBlock
+            {
+                Text = texto,
+                Padding = new Thickness(10),
+                TextWrapping = TextWrapping.Wrap
+            },
+            Placement = FlyoutPlacementMode.Bottom
+        };
+
+        // Asignar el flyout al botón
+        FlyoutBase.SetAttachedFlyout(boton, flyout);
+
+        // Mostrarlo
+        FlyoutBase.ShowAttachedFlyout(boton);
+
+        // Esperar y luego cerrarlo (WinUI 3 no tiene método "Close", así que accedemos a la instancia abierta)
+        await Task.Delay(duracionMs);
+
+        if (flyout is Flyout actualFlyout && actualFlyout.IsOpen)
+        {
+            actualFlyout.Hide(); // Esta es la línea que lo cierra
+        }
+    }
+
     public async void ShowDialog(string titulo, string content)
     {
         ContentDialog dialog = new ContentDialog()
@@ -423,27 +475,183 @@ public sealed partial class PremiosPage : Page
     //ACCIONES GRAPHICS (PLAY y STOP)
     private void btnCategoria_Click(object sender, RoutedEventArgs e)
     {
+        Premio seleccionado = null;
 
+        if (inCategoria)
+        {
+            //SALE CATEGORIA
+            inCategoria = false;
+        }
+        else
+        {
+            if (selectedItem == null)
+            {
+                MostrarFlyoutEnBoton("No hay ninguna categoría seleccionada", btnCategoria);
+                btnCategoria.IsChecked = false;
+            }
+            else
+            {
+                if (selectedItem is Nominado)
+                {
+                    Nominado nominado = selectedItem as Nominado;
+                    seleccionado = ViewModel.allPremios.Find(pre => pre.nominados.Any(n => string.Equals(n.nombre, nominado.nombre)));
+                }
+                else
+                {
+                    seleccionado = selectedItem as Premio;
+                }
+                //IN con envio de info a BS
+                inCategoria = true;
+            }
+        }
+    }
+
+    private void btnNominado_Click(object sender, RoutedEventArgs e)
+    {
+        if (inNominado)
+        {
+            //ENCADENA NOMINADO
+            inNominado = true;
+            btnNominado.IsChecked = true;
+        }
+        else
+        {
+            if (selectedItem == null)
+            {
+                MostrarFlyoutEnBoton("No hay ninguna nominado seleccionado", btnNominado);
+                btnNominado.IsChecked = false;
+            }
+            else
+            {
+                if (selectedItem is Premio)
+                {
+                    MostrarFlyoutEnBoton("Debe seleccionar un nominado", btnNominado);
+                    btnNominado.IsChecked = false;
+                }
+                else
+                {
+                    //IN con envio de info a BS
+                    Nominado nominado = selectedItem as Nominado;
+
+                    inNominado = true;
+                }
+
+            }
+        }
+    }
+    private void btnNominadoSale_Click(object sender, RoutedEventArgs e)
+    {
+        if (inNominado)
+        {
+            //SALE
+            inNominado = false;
+            btnNominado.IsChecked = false;
+        }
     }
 
     private void btnNominados_Click(object sender, RoutedEventArgs e)
     {
+        Premio seleccionado = null;
 
+        if (inLista)
+        {
+            //SALE Lista de nominados
+            inLista = false;
+        }
+        else
+        {
+            if (selectedItem == null)
+            {
+                MostrarFlyoutEnBoton("No hay ninguna categoría seleccionada", btnNominados);
+                btnNominados.IsChecked = false;
+            }
+            else
+            {
+                if (selectedItem is Nominado)
+                {
+                    Nominado nominado = selectedItem as Nominado;
+                    seleccionado = ViewModel.allPremios.Find(pre => pre.nominados.Any(n => string.Equals(n.nombre, nominado.nombre)));
+                }
+                else
+                {
+                    seleccionado = selectedItem as Premio;
+                }
+                //IN con envio de info a BS
+                inLista = true;
+            }
+        }
     }
 
     private void btnGafas_Click(object sender, RoutedEventArgs e)
     {
+        Premio seleccionado = null;
 
+        if (inGafas)
+        {
+            //SALE Lista de nominados
+            inGafas = false;
+        }
+        else
+        {
+            if (selectedItem == null)
+            {
+                MostrarFlyoutEnBoton("No hay ninguna categoría seleccionada", btnGafas);
+                btnGafas.IsChecked = false;
+            }
+            else
+            {
+                if (selectedItem is Nominado)
+                {
+                    Nominado nominado = selectedItem as Nominado;
+                    seleccionado = ViewModel.allPremios.Find(pre => pre.nominados.Any(n => string.Equals(n.nombre, nominado.nombre)));
+                }
+                else
+                {
+                    seleccionado = selectedItem as Premio;
+                }
+                //IN con envio de info a BS
+                inGafas = true;
+            }
+        }
     }
 
     private void btnEntregadores_Click(object sender, RoutedEventArgs e)
     {
+        Premio seleccionado = null;
 
+        if (inEntregadores)
+        {
+            //SALE Lista de nominados
+            inEntregadores = false;
+        }
+        else
+        {
+            if (selectedItem == null)
+            {
+                MostrarFlyoutEnBoton("No hay ninguna categoría seleccionada", btnEntregadores);
+                btnEntregadores.IsChecked = false;
+            }
+            else
+            {
+                if (selectedItem is Nominado)
+                {
+                    Nominado nominado = selectedItem as Nominado;
+                    seleccionado = ViewModel.allPremios.Find(pre => pre.nominados.Any(n => string.Equals(n.nombre, nominado.nombre)));
+                }
+                else
+                {
+                    seleccionado = selectedItem as Premio;
+                }
+                //IN con envio de info a BS
+                inEntregadores = true;
+            }
+        }
     }
 
     private void btnGanador_Click(object sender, RoutedEventArgs e)
     {
 
     }
+
 
 }

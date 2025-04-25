@@ -81,6 +81,10 @@ public class RotulacionSettings
     {
         get; set;
     }
+    public bool BtnNominado
+    {
+        get; set;
+    }
     public bool BtnNominados
     {
         get; set;

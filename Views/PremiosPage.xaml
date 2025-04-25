@@ -149,9 +149,13 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,20,0,0">
-                    <ToggleButton x:Name="btnCategoria" Content="CATEGORÍA" Click="btnCategoria_Click" Margin="0,0,0,0"/>
-                    <ToggleButton x:Name="btnNominados" Content="NOMINADOS" Click="btnNominados_Click" Margin="0,20,0,0"/>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0,0,0">
+                    <ToggleButton x:Name="btnCategoria" Content="CATEGORÍA" Click="btnCategoria_Click" Margin="0,20,0,0"/>
+                    <StackPanel x:Name="grupoNominado"  Orientation="Horizontal" Margin="0,20,0,0">
+                        <ToggleButton x:Name="btnNominado" Content="NOMINADO" Click="btnNominado_Click"/>
+                        <Button x:Name="btnNominadoSale" Content="SALE" Click="btnNominadoSale_Click" Margin="15,0,0,0"></Button>
+                    </StackPanel>
+                    <ToggleButton x:Name="btnNominados" Content="LISTA NOMINADOS" Click="btnNominados_Click" Margin="0,20,0,0"/>
                     <ToggleButton x:Name="btnGafas" Content="NOMIDADOS EN GAFAS" Click="btnGafas_Click" Margin="0,20,0,0"/>
                     <ToggleButton x:Name="btnEntregadores" Content="ENTREGADORES" Click="btnEntregadores_Click" Margin="0,20,0,0"/>
                     <ToggleButton x:Name="btnGanador" Content="GANADOR" Click="btnGanador_Click" Margin="0,20,0,0"/>
@@ -170,10 +174,11 @@
                 <TextBlock Grid.Row="1" Grid.ColumnSpan="2" FontWeight="Bold" FontSize="14" Text="Botones disponibles"/>
                 <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" Margin="0,20,0,0">
                     <CheckBox x:Name="CategoriaCheckBox" Content="Categoría"  Checked="CategoriaCheckBox_Checked"  Unchecked="CategoriaCheckBox_Unchecked"/>
-                    <CheckBox x:Name="NominadosCheckBox" Content="Nominados"  Checked="NominadosCheckBox_Checked"  Unchecked="NominadosCheckBox_Unchecked"/>
-                    <CheckBox x:Name="GafasCheckBox" Content="Nom Gafas"  Checked="GafasCheckBox_Checked"  Unchecked="GafasCheckBox_Unchecked"/>
+                    <CheckBox x:Name="NominadoCheckBox" Content="Nominado"  Checked="NominadoCheckBox_Checked"  Unchecked="NominadoCheckBox_Unchecked"/>
+                    <CheckBox x:Name="NominadosCheckBox" Content="Lista Nominados"  Checked="NominadosCheckBox_Checked"  Unchecked="NominadosCheckBox_Unchecked"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1" Margin="0,20,0,0">
+                    <CheckBox x:Name="GafasCheckBox" Content="Nominados/Gafas"  Checked="GafasCheckBox_Checked"  Unchecked="GafasCheckBox_Unchecked"/>
                     <CheckBox x:Name="EntregadoresCheckBox" Content="Entregadores"  Checked="EntregadoresCheckBox_Checked"  Unchecked="EntregadoresCheckBox_Unchecked"/>
                     <CheckBox x:Name="GanadorCheckBox" Content="Ganador"  Checked="GanadorCheckBox_Checked"  Unchecked="GanadorCheckBox_Unchecked"/>
                 </StackPanel>

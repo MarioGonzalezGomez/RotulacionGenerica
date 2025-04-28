@@ -15,4 +15,14 @@ public class Rodillo
     {
         cargos = new List<Cargo>();
     }
+
+    public override string? ToString()
+    {
+        string result = "";
+        foreach (var cargo in cargos)
+        {
+            result += $"{cargo.ToString()}\n";
+        }
+        return result;
+    }
 }

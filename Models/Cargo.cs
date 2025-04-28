@@ -24,4 +24,14 @@ public class Cargo
     {
         personas = new List<Persona>();
     }
+
+    public override string? ToString()
+    {
+        string result = nombre;
+        foreach (var persona in personas)
+        {
+            result += $"\n{persona.nombre}";
+        }
+        return result;
+    }
 }

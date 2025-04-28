@@ -68,16 +68,18 @@ public sealed partial class PremiosPage : Page
     private void treePremios_SelectionChanged(TreeView sender, TreeViewSelectionChangedEventArgs args)
     {
         selectedItem = args.AddedItems.FirstOrDefault();
-
+        CambiarElementosVisibles(selectedItem);
         if (selectedItem is Premio premio)
         {
             // Acción para Premio
             MostrarDetallesPremio(premio);
+            MostrarPremioEdicion(premio);
         }
         else if (selectedItem is Nominado nominado)
         {
             // Acción para Nominado
             MostrarDetallesNominado(nominado);
+            MostrarNominadoEdicion(nominado);
         }
     }
     private void MostrarDetallesPremio(Premio premio)
@@ -116,6 +118,23 @@ public sealed partial class PremiosPage : Page
         }
         txtGanador.Visibility = Visibility.Collapsed;
     }
+    private void MostrarPremioEdicion(Premio premio)
+    {
+        boxNombre.Text = premio.nombre;
+        List<string> entregadores = new List<string>();
+        entregadores.Add("Añadir entregador");
+        entregadores.AddRange(premio.entregadores);
+        comboEntregadores.ItemsSource = entregadores;
+        comboEntregadores.SelectedIndex = premio.entregadores.Count > 0 ? 1 : 0;
+        if (premio.entregadores.Count == 0) { boxEntregadorOtrabajo.Text = ""; }
+        List<string> ganador = new List<string>();
+        ganador.Add("Sin ganador establecido");
+        ganador.AddRange(premio.nominados.Select(nom => nom.nombre));
+        comboGanador.ItemsSource = ganador;
+        comboGanador.SelectedIndex = premio.ganador != null ? ganador.IndexOf(premio.ganador.nombre) + 1 : 0;
+
+        boxEntregadorOtrabajo.Header = "Editar entregador";
+    }
     private void MostrarDetallesNominado(Nominado nominado)
     {
 
@@ -143,6 +162,53 @@ public sealed partial class PremiosPage : Page
             txtRecoge.Visibility = Visibility.Collapsed;
         }
         txtGanador.Visibility = nominado.ganador ? Visibility.Visible : Visibility.Collapsed;
+    }
+    private void MostrarNominadoEdicion(Nominado nominado)
+    {
+        boxNombre.Text = nominado.nombre;
+        boxEntregadorOtrabajo.Text = nominado.trabajo;
+        boxRecoge.Text = string.IsNullOrEmpty(nominado.recoge) ? "" : nominado.recoge;
+
+        boxEntregadorOtrabajo.Header = "Nominado por";
+    }
+    private void CambiarElementosVisibles(object objeto)
+    {
+        if (tggEditor.IsOn)
+        {
+            btnCategoria.Visibility = Visibility.Collapsed;
+            grupoNominado.Visibility = Visibility.Collapsed;
+            btnNominados.Visibility = Visibility.Collapsed;
+            btnGafas.Visibility = Visibility.Collapsed;
+            btnEntregadores.Visibility = Visibility.Collapsed;
+            btnGanador.Visibility = Visibility.Collapsed;
+
+            boxNombre.Visibility = Visibility.Visible;
+            grupoEntregador.Visibility = Visibility.Visible;
+            btnGuardar.Visibility = Visibility.Visible;
+            if (objeto is Premio)
+            {
+                comboGanador.Visibility = Visibility.Visible;
+                comboEntregadores.Visibility = Visibility.Visible;
+                boxRecoge.Visibility = Visibility.Collapsed;
+            }
+            if (objeto is Nominado)
+            {
+                boxRecoge.Visibility = Visibility.Visible;
+                comboGanador.Visibility = Visibility.Collapsed;
+                comboEntregadores.Visibility = Visibility.Collapsed;
+            }
+        }
+        else
+        {
+            boxNombre.Visibility = Visibility.Collapsed;
+            comboGanador.Visibility = Visibility.Collapsed;
+            comboEntregadores.Visibility = Visibility.Collapsed;
+            grupoEntregador.Visibility = Visibility.Collapsed;
+            boxRecoge.Visibility = Visibility.Collapsed;
+            btnGuardar.Visibility = Visibility.Collapsed;
+            EstadoInicialBotonera();
+        }
+
     }
     private void treePremios_DragOver(object sender, DragEventArgs e)
     {
@@ -237,12 +303,17 @@ public sealed partial class PremiosPage : Page
             stckEditior0.Visibility = Visibility.Visible;
             stckEditior1.Visibility = Visibility.Visible;
             gridBotonesDisponibles.Visibility = Visibility.Visible;
+            if (selectedItem != null)
+            {
+                CambiarElementosVisibles(selectedItem);
+            }
         }
         else
         {
             stckEditior0.Visibility = Visibility.Collapsed;
             stckEditior1.Visibility = Visibility.Collapsed;
             gridBotonesDisponibles.Visibility = Visibility.Collapsed;
+            CambiarElementosVisibles(selectedItem);
         }
     }
 
@@ -337,6 +408,36 @@ public sealed partial class PremiosPage : Page
     {
         string filePath = System.IO.Path.Combine(AppContext.BaseDirectory, "Resources", "InfoPremios.txt");
         await AbrirFicheroYRefrescarUI(filePath);
+    }
+
+    private void comboEntregadores_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (comboEntregadores.SelectedItem != null && comboEntregadores.SelectedIndex != 0)
+        {
+            boxEntregadorOtrabajo.Text = comboEntregadores.SelectedItem.ToString();
+            iconoAccionEntregador.Symbol = Symbol.Edit;
+        }
+        else {
+            iconoAccionEntregador.Symbol = Symbol.Add;
+        }
+    }
+    private void btnAccionEntregador_Click(object sender, RoutedEventArgs e)
+    {
+        if (comboEntregadores.SelectedItem != null && comboEntregadores.SelectedIndex != 0)
+        {
+            //EDITAR
+            Premio currentPremio = selectedItem as Premio;
+
+            currentPremio.entregadores.FirstOrDefault(e => string.Equals(e, comboEntregadores.Text));
+        }
+        else
+        {
+           //ADD
+        }
+    }
+    private void btnGuardar_Click(object sender, RoutedEventArgs e)
+    {
+
     }
     //BOTONES DISPONIBLES
     private void CategoriaCheckBox_Checked(object sender, RoutedEventArgs e)
@@ -652,6 +753,4 @@ public sealed partial class PremiosPage : Page
     {
 
     }
-
-
 }

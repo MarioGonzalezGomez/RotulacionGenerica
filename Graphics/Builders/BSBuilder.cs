@@ -49,7 +49,8 @@ public class BSBuilder
     public string FaldonEntra(Faldon faldon)
     {
         string mensaje = "";
-        if (!string.IsNullOrEmpty(faldon.titulo.texto)) {
+        if (!string.IsNullOrEmpty(faldon.titulo.texto))
+        {
             mensaje += CambiaTexto("Faldon/Titular", faldon.titulo.texto);
         }
         mensaje += CambiaTexto($"Faldon/Txt", faldon.texto.texto);
@@ -97,11 +98,14 @@ public class BSBuilder
     {
         return Sale("Crawl");
     }
-    
+
     //CREDITOS-RODILLO
     public string RodilloEntra(Rodillo rodillo)
     {
-        return Entra("Rodillo");
+        string signal = EventBuild("Rodillo", "TEXT_TRAVEL_DURANTION_LIMIT", config.RotulacionSettings.VelocidadRodillo, 1);
+        signal += $"\n{CambiaTexto("Rodillo",rodillo.ToString())}";
+        signal += $"\n{Entra("Rodillo")}";
+        return signal;
     }
     public string RodilloSale()
     {

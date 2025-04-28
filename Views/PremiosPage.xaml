@@ -143,26 +143,51 @@
             </Grid>
 
         </Grid>
+        
         <Grid Grid.Column="2" Margin="20,0,0,0">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0,0,0">
-                    <ToggleButton x:Name="btnCategoria" Content="CATEGORÍA" Click="btnCategoria_Click" Margin="0,20,0,0"/>
-                    <StackPanel x:Name="grupoNominado"  Orientation="Horizontal" Margin="0,20,0,0">
-                        <ToggleButton x:Name="btnNominado" Content="NOMINADO" Click="btnNominado_Click"/>
-                        <Button x:Name="btnNominadoSale" Content="SALE" Click="btnNominadoSale_Click" Margin="15,0,0,0"></Button>
-                    </StackPanel>
-                    <ToggleButton x:Name="btnNominados" Content="LISTA NOMINADOS" Click="btnNominados_Click" Margin="0,20,0,0"/>
-                    <ToggleButton x:Name="btnGafas" Content="NOMIDADOS EN GAFAS" Click="btnGafas_Click" Margin="0,20,0,0"/>
-                    <ToggleButton x:Name="btnEntregadores" Content="ENTREGADORES" Click="btnEntregadores_Click" Margin="0,20,0,0"/>
-                    <ToggleButton x:Name="btnGanador" Content="GANADOR" Click="btnGanador_Click" Margin="0,20,0,0"/>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="20,0,0,0">
+                    <ToggleButton x:Name="btnCategoria" Content="CATEGORÍA" HorizontalAlignment="Stretch" Click="btnCategoria_Click" Margin="0,20,0,0"/>
+                    <Grid x:Name="grupoNominado" Margin="0,20,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="0.6*"/>
+                        </Grid.ColumnDefinitions>
+                        <ToggleButton x:Name="btnNominado" Grid.Column="0" Content="NOMINADO" HorizontalAlignment="Stretch" Click="btnNominado_Click"/>
+                        <Button x:Name="btnNominadoSale" Grid.Column="1" Content="SALE" HorizontalAlignment="Stretch" Click="btnNominadoSale_Click" Margin="15,0,0,0"></Button>
+                    </Grid>
+                    <ToggleButton x:Name="btnNominados" Content="LISTA NOMINADOS" HorizontalAlignment="Stretch" Click="btnNominados_Click" Margin="0,20,0,0"/>
+                    <ToggleButton x:Name="btnGafas" Content="NOMIDADOS EN GAFAS" HorizontalAlignment="Stretch" Click="btnGafas_Click" Margin="0,20,0,0"/>
+                    <ToggleButton x:Name="btnEntregadores" Content="ENTREGADORES" HorizontalAlignment="Stretch" Click="btnEntregadores_Click" Margin="0,20,0,0"/>
+                    <ToggleButton x:Name="btnGanador" Content="GANADOR" HorizontalAlignment="Stretch" Click="btnGanador_Click" Margin="0,20,0,0"/>
                     <TextBlock x:Name="txtGanadorBotonera" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,15,0,0"/>
+                    
+                    <TextBox x:Name="boxNombre" Header="Nombre Categoría" HorizontalAlignment="Stretch" Visibility="Collapsed"/>
+                    <ComboBox x:Name="comboGanador" Header="Ganador" PlaceholderText="Ganador" HorizontalAlignment="Stretch"  Visibility="Collapsed" Margin="0,15,0,0"/>
+                    <ComboBox x:Name="comboEntregadores" Header="Entregadores" PlaceholderText="Entregadores" SelectionChanged="comboEntregadores_SelectionChanged" HorizontalAlignment="Stretch"  Visibility="Collapsed" Margin="0,15,0,0"/>
+                    <Grid x:Name="grupoEntregador" Margin="0,20,0,0" Visibility="Collapsed">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="0.2*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="boxEntregadorOtrabajo" Grid.Column="0" Header="Nominación por" Margin="0,0,5,0"/>
+                        <Button  x:Name="btnAccionEntregador" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="btnAccionEntregador_Click">
+                            <SymbolIcon x:Name="iconoAccionEntregador" Symbol="Add"/>
+                        </Button>
+                    </Grid>
+                    <TextBox x:Name="boxRecoge" Header="Recoge" HorizontalAlignment="Stretch" Visibility="Collapsed" Margin="0,15,0,0"/>
+                    <Button  x:Name="btnGuardar" HorizontalAlignment="Right" Visibility="Collapsed" Click="btnGuardar_Click" Margin="0,15,0,0">
+                        <SymbolIcon Symbol="Save"/>
+                    </Button>
                 </StackPanel>
             </Grid>
-            <Grid x:Name="gridBotonesDisponibles"  Grid.Row="1" Visibility="Collapsed">
+            <TextBox Grid.Row="1" Header="Línea adicional" VerticalAlignment="Bottom" Margin="0,0,0,30"></TextBox>
+            <Grid x:Name="gridBotonesDisponibles"  Grid.Row="2" Visibility="Collapsed" Margin="0,0,0,23">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>

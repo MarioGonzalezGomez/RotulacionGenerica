@@ -88,24 +88,46 @@ public class PremioController
     }
 
 
-    public void SavePremio(string filePath, Premio premio)
+    public void SavePremios(string filePath, List<Premio> premios)
     {
         try
         {
-            using (var writer = new StreamWriter(filePath, false, Encoding.UTF8)) // Forzar UTF-8
+            using (StreamWriter writer = new StreamWriter(filePath, false, Encoding.UTF8))
             {
-                // foreach (var cargo in premio.cargos)
-                //{
-                //    writer.WriteLine(cargo.nombre); // Escribir el nombre del cargo
-                //    foreach (var persona in cargo.personas)
-                //    {
-                //        writer.WriteLine($" {persona.nombre}"); // Indentar los nombres de personas
-                //    }
-                //    writer.WriteLine(); // Separador entre cargos
-                //}
+                foreach (var premio in premios)
+                {
+                    writer.WriteLine(premio.nombre);
+
+                    // Entregadores (líneas que empiezan por #)
+                    if (premio.entregadores != null)
+                    {
+                        foreach (var entregador in premio.entregadores)
+                        {
+                            if (!string.IsNullOrEmpty(entregador))
+                                writer.WriteLine($"#{entregador}");
+                        }
+                    }
+
+                    // Nominados
+                    if (premio.nominados != null)
+                    {
+                        foreach (var nominado in premio.nominados)
+                        {
+                            string linea = !string.IsNullOrWhiteSpace(nominado.recoge)
+                            ? $"{nominado.nombre} / {nominado.trabajo} / {nominado.recoge}"
+                            : $"{nominado.nombre} / {nominado.trabajo}";
+
+                            linea = nominado.ganador ? "*" + linea : linea;
+
+                            writer.WriteLine(linea);
+                        }
+                    }
+
+                    writer.WriteLine(); // Línea en blanco para separar premios
+                }
             }
 
-            Console.WriteLine("Archivo guardado exitosamente en UTF-8.");
+            Console.WriteLine("Archivo de premios guardado correctamente.");
         }
         catch (Exception ex)
         {

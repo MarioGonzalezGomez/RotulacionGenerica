@@ -167,20 +167,20 @@
                     <ToggleButton x:Name="btnGanador" Content="GANADOR" HorizontalAlignment="Stretch" Click="btnGanador_Click" Margin="0,20,0,0"/>
                     <TextBlock x:Name="txtGanadorBotonera" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,15,0,0"/>
                     
-                    <TextBox x:Name="boxNombre" Header="Nombre Categoría" HorizontalAlignment="Stretch" Visibility="Collapsed"/>
-                    <ComboBox x:Name="comboGanador" Header="Ganador" PlaceholderText="Ganador" HorizontalAlignment="Stretch"  Visibility="Collapsed" Margin="0,15,0,0"/>
+                    <TextBox x:Name="boxNombre" Header="Nombre Categoría" HorizontalAlignment="Stretch" LostFocus="boxNombre_LostFocus" Visibility="Collapsed"/>
+                    <ComboBox x:Name="comboGanador" Header="Ganador" PlaceholderText="Ganador" HorizontalAlignment="Stretch" SelectionChanged="comboGanador_SelectionChanged"  Visibility="Collapsed" Margin="0,15,0,0"/>
                     <ComboBox x:Name="comboEntregadores" Header="Entregadores" PlaceholderText="Entregadores" SelectionChanged="comboEntregadores_SelectionChanged" HorizontalAlignment="Stretch"  Visibility="Collapsed" Margin="0,15,0,0"/>
                     <Grid x:Name="grupoEntregador" Margin="0,20,0,0" Visibility="Collapsed">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="0.2*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox x:Name="boxEntregadorOtrabajo" Grid.Column="0" Header="Nominación por" Margin="0,0,5,0"/>
+                        <TextBox x:Name="boxEntregadorOtrabajo" Grid.Column="0" Header="Nominación por" LostFocus="boxEntregadorOtrabajo_LostFocus" Margin="0,0,5,0"/>
                         <Button  x:Name="btnAccionEntregador" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="btnAccionEntregador_Click">
                             <SymbolIcon x:Name="iconoAccionEntregador" Symbol="Add"/>
                         </Button>
                     </Grid>
-                    <TextBox x:Name="boxRecoge" Header="Recoge" HorizontalAlignment="Stretch" Visibility="Collapsed" Margin="0,15,0,0"/>
+                    <TextBox x:Name="boxRecoge" Header="Recoge" HorizontalAlignment="Stretch" LostFocus="boxRecoge_LostFocus" Visibility="Collapsed" Margin="0,15,0,0"/>
                     <Button  x:Name="btnGuardar" HorizontalAlignment="Right" Visibility="Collapsed" Click="btnGuardar_Click" Margin="0,15,0,0">
                         <SymbolIcon Symbol="Save"/>
                     </Button>

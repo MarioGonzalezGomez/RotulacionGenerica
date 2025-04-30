@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Globalization;
 using System.Text.Json;
 using Generico_Front.Config;
 using Generico_Front.Controllers.Data;
@@ -32,6 +33,8 @@ public sealed partial class PremiosPage : Page
     private bool inEntregadores = false;
     private bool inGanador = false;
 
+    private List<Premio> editada;
+
     public PremiosPage()
     {
         ViewModel = App.GetService<PremiosViewModel>();
@@ -43,7 +46,9 @@ public sealed partial class PremiosPage : Page
     //ACCIONES EN LAS LISTAS
     private void IniciarListas()
     {
+        editada = new List<Premio>();
         ViewModel.CargarPremios();
+        editada.AddRange(ViewModel.allPremios);
         treePremios.ItemsSource = ViewModel.premios;
         txtRuta.Text = config.RotulacionSettings.RutaPremios;
         EstadoInicialBotonera();
@@ -104,6 +109,7 @@ public sealed partial class PremiosPage : Page
         {
             headerInfo.Visibility = Visibility.Collapsed;
         }
+        boxNombre.Header = "Nombre Categoría";
         headerInfo2.Text = "Ganador";
         if (premio.ganador != null)
         {
@@ -131,8 +137,7 @@ public sealed partial class PremiosPage : Page
         ganador.Add("Sin ganador establecido");
         ganador.AddRange(premio.nominados.Select(nom => nom.nombre));
         comboGanador.ItemsSource = ganador;
-        comboGanador.SelectedIndex = premio.ganador != null ? ganador.IndexOf(premio.ganador.nombre) + 1 : 0;
-
+        comboGanador.SelectedIndex = premio.ganador != null ? ganador.IndexOf(premio.ganador.nombre) : 0;
         boxEntregadorOtrabajo.Header = "Editar entregador";
     }
     private void MostrarDetallesNominado(Nominado nominado)
@@ -143,7 +148,7 @@ public sealed partial class PremiosPage : Page
         {
             textBox.Visibility = Visibility.Collapsed;
         }
-
+        boxNombre.Header = "Nombre";
         headerInfo.Text = "Nominado por:";
         txtInfo1.Text = nominado.trabajo;
         headerInfo.Visibility = Visibility.Visible;
@@ -189,13 +194,26 @@ public sealed partial class PremiosPage : Page
             {
                 comboGanador.Visibility = Visibility.Visible;
                 comboEntregadores.Visibility = Visibility.Visible;
+                btnAccionEntregador.Visibility = Visibility.Visible;
                 boxRecoge.Visibility = Visibility.Collapsed;
+
             }
             if (objeto is Nominado)
             {
                 boxRecoge.Visibility = Visibility.Visible;
                 comboGanador.Visibility = Visibility.Collapsed;
                 comboEntregadores.Visibility = Visibility.Collapsed;
+                btnAccionEntregador.Visibility = Visibility.Collapsed;
+            }
+
+            if (objeto is null)
+            {
+                txtInfo1.Visibility = Visibility.Collapsed;
+                txtInfo2.Visibility = Visibility.Collapsed;
+                txtInfo3.Visibility = Visibility.Collapsed;
+                txtInfo4.Visibility = Visibility.Collapsed;
+                txtInfo5.Visibility = Visibility.Collapsed;
+                txtInfo6.Visibility = Visibility.Collapsed;
             }
         }
         else
@@ -208,7 +226,6 @@ public sealed partial class PremiosPage : Page
             btnGuardar.Visibility = Visibility.Collapsed;
             EstadoInicialBotonera();
         }
-
     }
     private void treePremios_DragOver(object sender, DragEventArgs e)
     {
@@ -363,8 +380,9 @@ public sealed partial class PremiosPage : Page
             Config.Config.SaveConfig(config);
             ViewModel.CargarPremios();
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            ShowDialog("Error", ex.ToString());
             throw;
         }
     }
@@ -410,6 +428,38 @@ public sealed partial class PremiosPage : Page
         await AbrirFicheroYRefrescarUI(filePath);
     }
 
+    private void comboGanador_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (comboGanador.SelectedItem != null)
+        {
+            Premio currentPremio = selectedItem as Premio;
+            Premio aEditar = editada.FirstOrDefault(p => string.Equals(p.nombre, currentPremio.nombre));
+
+            if (aEditar != null)
+            {
+                if (comboGanador.SelectedIndex == 0)
+                {
+                    // Ningún ganador
+                    aEditar.ganador = null;
+                    foreach (var item in aEditar.nominados)
+                    {
+                        item.ganador = false;
+                    }
+                }
+                else
+                {
+                    // Establecer ganador
+                    Nominado nominado = aEditar.nominados.FirstOrDefault(nom => string.Equals(nom.nombre, comboGanador.SelectedItem.ToString()));
+                    aEditar.ganador = nominado;
+                    foreach (var item in aEditar.nominados)
+                    {
+                        item.ganador = (item == aEditar.ganador);
+                    }
+                }
+            }
+        }
+    }
+
     private void comboEntregadores_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (comboEntregadores.SelectedItem != null && comboEntregadores.SelectedIndex != 0)
@@ -417,28 +467,132 @@ public sealed partial class PremiosPage : Page
             boxEntregadorOtrabajo.Text = comboEntregadores.SelectedItem.ToString();
             iconoAccionEntregador.Symbol = Symbol.Edit;
         }
-        else {
+        else
+        {
             iconoAccionEntregador.Symbol = Symbol.Add;
         }
     }
     private void btnAccionEntregador_Click(object sender, RoutedEventArgs e)
     {
-        if (comboEntregadores.SelectedItem != null && comboEntregadores.SelectedIndex != 0)
+        if (comboEntregadores.SelectedItem != null)
         {
-            //EDITAR
             Premio currentPremio = selectedItem as Premio;
-
-            currentPremio.entregadores.FirstOrDefault(e => string.Equals(e, comboEntregadores.Text));
-        }
-        else
-        {
-           //ADD
+            Premio aEditar = editada.FirstOrDefault(p => string.Equals(p.nombre, currentPremio.nombre));
+            if (comboEntregadores.SelectedIndex != 0)
+            {
+                //EDITAR
+                if (aEditar != null)
+                {
+                    int index = aEditar.entregadores.FindIndex(e => string.Equals(e, comboEntregadores.Text));
+                    if (index != -1)
+                    {
+                        aEditar.entregadores[index] = boxEntregadorOtrabajo.Text;
+                    }
+                }
+            }
+            else
+            {
+                //ADD
+                if (aEditar != null)
+                {
+                    aEditar.entregadores.Add(boxEntregadorOtrabajo.Text);
+                }
+            }
         }
     }
-    private void btnGuardar_Click(object sender, RoutedEventArgs e)
+
+    private void boxNombre_LostFocus(object sender, RoutedEventArgs e)
     {
+        if (!string.IsNullOrEmpty(boxNombre.Text))
+        {
+            if (selectedItem is Premio)
+            {
+                Premio currentPremio = selectedItem as Premio;
+                Premio aEditar = editada.FirstOrDefault(p => string.Equals(p.nombre, currentPremio.nombre));
+                aEditar.nombre = boxNombre.Text;
+            }
+            if (selectedItem is Nominado)
+            {
+                Nominado currentNominado = selectedItem as Nominado;
+                string nombreAntiguo = currentNominado.nombre;
+                string nuevoNombre = boxNombre.Text;
 
+                foreach (var premio in editada)
+                {
+                    foreach (var nominado in premio.nominados)
+                    {
+                        if (string.Equals(nominado.nombre, nombreAntiguo, StringComparison.OrdinalIgnoreCase))
+                        {
+                            nominado.nombre = nuevoNombre;
+                        }
+                    }
+                }
+            }
+        }
     }
+
+    private void boxEntregadorOtrabajo_LostFocus(object sender, RoutedEventArgs e)
+    {
+        if (selectedItem is Nominado)
+        {
+            Nominado currentNominado = selectedItem as Nominado;
+            string trabajoAntiguo = currentNominado.trabajo;
+            string nuevoTrabajo = boxEntregadorOtrabajo.Text;
+
+            foreach (var premio in editada)
+            {
+                foreach (var nominado in premio.nominados)
+                {
+                    if (string.Equals(nominado.trabajo, trabajoAntiguo, StringComparison.OrdinalIgnoreCase))
+                    {
+                        nominado.trabajo = nuevoTrabajo;
+                    }
+                }
+            }
+        }
+    }
+
+    private void boxRecoge_LostFocus(object sender, RoutedEventArgs e)
+    {
+        Nominado currentNominado = selectedItem as Nominado;
+        string recogeAntiguo = currentNominado.recoge;
+        string nuevoRecoge = boxRecoge.Text;
+
+        foreach (var premio in editada)
+        {
+            foreach (var nominado in premio.nominados)
+            {
+                if (string.Equals(nominado.recoge, recogeAntiguo, StringComparison.OrdinalIgnoreCase))
+                {
+                    nominado.recoge = nuevoRecoge;
+                }
+            }
+        }
+    }
+
+    private async void btnGuardar_Click(object sender, RoutedEventArgs e)
+    {
+        var utimoSeleccionado = treePremios.SelectedItem;
+
+        await ViewModel.GuardarPremios(editada);
+        await ViewModel.CargarPremios();
+
+        if (utimoSeleccionado is Premio)
+        {
+            Premio ultimoPremio = utimoSeleccionado as Premio;
+            Premio selected = ViewModel.premios.FirstOrDefault(p => string.Equals(p.nombre, ultimoPremio.nombre));
+            treePremios.SelectedItem = selected;
+        }
+        if (utimoSeleccionado is Nominado)
+        {
+
+        }
+
+        Tip.Target = btnGuardar;
+        Tip.Title = "Guardado con éxito";
+        AbrirTip();
+    }
+
     //BOTONES DISPONIBLES
     private void CategoriaCheckBox_Checked(object sender, RoutedEventArgs e)
     {

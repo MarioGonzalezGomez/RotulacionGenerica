@@ -47,9 +47,9 @@ public partial class PremiosViewModel : ObservableRecipient
     }
 
     [RelayCommand]
-    public async Task GuardarPremio(Premio premio)
+    public async Task GuardarPremios(List<Premio> premios)
     {
-        dataController.SavePremio(config.RotulacionSettings.RutaPremios, premio);
+        dataController.SavePremios(config.RotulacionSettings.RutaPremios, premios);
     }
 
 

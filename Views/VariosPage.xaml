@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:controls="communitytoo"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:Models="using:Generico_Front.Models" 
     xmlns:viewmodels="using:Generico_Front.ViewModels" xmlns:muxc="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -20,32 +21,165 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="1" Margin="10,10,0,20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="0.9*"/>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="0.4*"/>
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="2" Margin="0,10,0,0">
+        <Border BorderBrush="Gray"
+                BorderThickness="1"
+                CornerRadius="6"
+                Margin="10"
+                Padding="10">
+
+            <!-- Contenido -->
+            <Grid Grid.Column="0" Margin="0,0,0,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0.3*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="btnPlay" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="50" MaxHeight="100" Margin="0,0,10,0" Click="btnPlay_Click">
-                    <Button.Content>
-                        <FontIcon x:Name="iconPlay" Glyph="&#xE768;" FontFamily="Segoe MDL2 Assets" FontSize="40" Foreground="Green"/>
-                    </Button.Content>
-                </Button>
-                <Button x:Name="btnStop" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="50" MaxHeight="100"  Margin="10,0,0,0" Click="btnStop_Click">
-                    <Button.Content>
-                        <FontIcon Glyph="&#xE71A;" FontFamily="Segoe MDL2 Assets" FontSize="35" Foreground="#FFB22222"/>
-                    </Button.Content>
-                </Button>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.2*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="0.4*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Manejo de tiempos"
+                FontWeight="Bold"
+                FontSize="16"
+                Margin="0,0,0,10"
+                Grid.ColumnSpan="2"/>
+
+                <ListBox x:Name="listBoxTiempos" Grid.Column="0"  Grid.Row="1" Margin="0,15,0,0" SelectionChanged="listBoxTiempos_SelectionChanged">
+                    <x:String>Reloj</x:String>
+                    <x:String>Fecha</x:String>
+                    <x:String>Crono</x:String>
+                </ListBox>
+                <ToggleSwitch x:Name="tggEditor" Grid.ColumnSpan="2" Grid.Row="0" HorizontalAlignment="Left" Margin="0,15,0,0" OffContent="Editar Off" OnContent="Editar On" IsOn="True" Toggled="tggEditor_Toggled"/>
+                <StackPanel x:Name="stckEdicion" Grid.Column="1" Grid.Row="1" Orientation="Vertical" Margin="15,15,0,0">
+                    <ToggleButton x:Name="tggActual" HorizontalAlignment="Stretch" Content="HORA DEL SISTEMA" Margin="0,0,0,20"/>
+                    <ComboBox x:Name="cmbBoxEditor"
+                    DisplayMemberPath="DisplayName"
+                    SelectedValuePath="Id"
+                    HorizontalAlignment="Stretch"
+                    SelectionChanged="cmbBoxEditor_SelectionChanged"/>
+
+                    <DatePicker x:Name="datePicker" HorizontalAlignment="Stretch" SelectedDateChanged="datePicker_SelectedDateChanged"/>
+                    <TimePicker x:Name="timePicker" HorizontalAlignment="Stretch" Margin="0,25,0,0"/>
+                    <StackPanel x:Name="stckCronoPicker" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5" Margin="0,25,0,0">
+
+                        <NumberBox x:Name="boxHoras"
+                        Header="H"
+                        Value="0"
+                        Minimum="0"
+                        Maximum="23"
+                        Width="50"/>
+
+                        <NumberBox x:Name="boxMinutos"
+                        Header="M"
+                        Value="0"
+                        Minimum="0"
+                        Maximum="59"
+                        Width="50"/>
+
+                        <NumberBox x:Name="boxSegundos"
+                        Header="S"
+                        Value="0"
+                        Minimum="0"
+                        Maximum="59"
+                        Width="50"/>
+                    </StackPanel>
+                    <StackPanel x:Name="stckBotoneraCrono" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,30,0,0">
+                        <Button  x:Name="btnResetCrono" Click="btnResetCrono_Click">
+                            <SymbolIcon Symbol="Refresh"/>
+                        </Button>
+                        <Button  x:Name="btnPlayCrono" Margin="20,0,0,0" Click="btnPlayCrono_Click">
+                            <SymbolIcon Symbol="Play"/>
+                        </Button>
+                        <Button  x:Name="btnPauseCrono" Margin="20,0,0,0" Click="btnPauseCrono_Click">
+                            <SymbolIcon Symbol="Pause"/>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+                <Grid Grid.ColumnSpan="2" Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="btnPlayTiempos" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="50" MaxHeight="100" Margin="0,0,10,0" Click="btnPlayTiempos_Click">
+                        <Button.Content>
+                            <FontIcon x:Name="iconPlay" Glyph="&#xE768;" FontFamily="Segoe MDL2 Assets" FontSize="40" Foreground="Green"/>
+                        </Button.Content>
+                    </Button>
+                    <Button x:Name="btnStopTiempos" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="50" MaxHeight="100"  Margin="10,0,0,0" Click="btnStopTiempos_Click">
+                        <Button.Content>
+                            <FontIcon Glyph="&#xE71A;" FontFamily="Segoe MDL2 Assets" FontSize="35" Foreground="#FFB22222"/>
+                        </Button.Content>
+                    </Button>
+                </Grid>
             </Grid>
-        </Grid>
+        </Border>
+
+        <Border Grid.Column="1"
+         BorderBrush="Gray"
+         BorderThickness="1"
+         CornerRadius="6"
+         Margin="10"
+         Padding="10">
+
+            <!-- Contenido -->
+            <Grid Grid.Column="0" Margin="0,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.6*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.2*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="0.4*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Localizaciones"
+                FontWeight="Bold"
+                FontSize="16"
+                Margin="0,0,0,10"
+                Grid.ColumnSpan="2"/>
+
+                <ListView x:Name="listLocalizaciones" Grid.Column="0"  Grid.Row="1" Margin="0,15,0,0" SelectionChanged="listLocalizaciones_SelectionChanged"></ListView>
+                <ToggleSwitch x:Name="tggEditorLocalizaciones" Grid.ColumnSpan="2" Grid.Row="0" HorizontalAlignment="Left" Margin="0,15,0,0" OffContent="Editar Off" OnContent="Editar On" IsOn="True" Toggled="tggEditorLocalizaciones_Toggled"/>
+                <StackPanel x:Name="stckEdicionLocalizaciones" Grid.Column="1" Grid.Row="1" Orientation="Vertical" Margin="15,15,0,0">
+
+                    <StackPanel x:Name="stckBotoneraEdicionLocalizaciones" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,30,0,0">
+                        <Button  x:Name="btnDeleteLocalizacion" Click="btnDeleteLocalizacion_Click">
+                            <SymbolIcon Symbol="Delete"/>
+                        </Button>
+                        <Button  x:Name="btnEditLocalizacion" Margin="20,0,0,0" Click="btnEditLocalizacion_Click">
+                            <SymbolIcon Symbol="Play"/>
+                        </Button>
+                        <Button  x:Name="btnAddLozalizacion" Margin="20,0,0,0" Click="btnAddLozalizacion_Click">
+                            <SymbolIcon Symbol="Pause"/>
+                        </Button>
+                    </StackPanel>
+
+                </StackPanel>
+                <Grid Grid.ColumnSpan="2" Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="btnPlayLocalizacion" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="50" MaxHeight="100" Margin="0,0,10,0" Click="btnPlayLocalizacion_Click">
+                        <Button.Content>
+                            <FontIcon Glyph="&#xE768;" FontFamily="Segoe MDL2 Assets" FontSize="40" Foreground="Green"/>
+                        </Button.Content>
+                    </Button>
+                    <Button x:Name="btnStopLocalizacion" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="50" MaxHeight="100"  Margin="10,0,0,0" Click="btnStopLocalizacion_Click">
+                        <Button.Content>
+                            <FontIcon Glyph="&#xE71A;" FontFamily="Segoe MDL2 Assets" FontSize="35" Foreground="#FFB22222"/>
+                        </Button.Content>
+                    </Button>
+                </Grid>
+            </Grid>
+        </Border>
+
     </Grid>
 </Page>
     

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Generico_Front.Controllers.Data;
 using Generico_Front.Graphics.Builders;
 using Generico_Front.Graphics.Conexion;
+using Generico_Front.Models;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Generico_Front.Controllers.Graphics.BrainStorm;
 public class VariosController
@@ -28,5 +30,32 @@ public class VariosController
         }
         return instance;
     }
+   
+    //TIEMPOS
+    public void EntraReloj(DateTime hora)
+    {
+        conexion.EnviarMensaje(builder.RelojEntra(hora));
+    }
+    public void SaleReloj()
+    {
+        conexion.EnviarMensaje(builder.RelojSale());
+    }
 
+    public void EntraFecha(DateTime fecha)
+    {
+        conexion.EnviarMensaje(builder.FechaEntra(fecha));
+    }
+    public void SaleFecha()
+    {
+        conexion.EnviarMensaje(builder.FechaSale());
+    }
+
+    public void EntraCrono(string tipo, TimeSpan crono)
+    {
+        conexion.EnviarMensaje(builder.CronoEntra(tipo, crono));
+    }
+    public void SaleCrono()
+    {
+        conexion.EnviarMensaje(builder.CronoSale());
+    }
 }

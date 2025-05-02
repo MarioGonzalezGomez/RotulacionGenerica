@@ -103,13 +103,51 @@ public class BSBuilder
     public string RodilloEntra(Rodillo rodillo)
     {
         string signal = EventBuild("Rodillo", "TEXT_TRAVEL_DURANTION_LIMIT", config.RotulacionSettings.VelocidadRodillo, 1);
-        signal += $"\n{CambiaTexto("Rodillo",rodillo.ToString())}";
+        signal += $"\n{CambiaTexto("Rodillo", rodillo.ToString())}";
         signal += $"\n{Entra("Rodillo")}";
         return signal;
     }
     public string RodilloSale()
     {
         return Sale("Rodillo");
+    }
+
+    //VARIOS
+        //TIEMPOS
+    public string RelojEntra(DateTime hora)
+    {
+        //Cargar tiempo con hora.Hour; hora.Minute...
+        string signal = "";
+        signal += $"\n{Entra("Reloj")}";
+        return signal;
+    }
+    public string RelojSale()
+    {
+        return Sale("Reloj");
+    }
+
+    public string FechaEntra(DateTime fecha)
+    {
+        //Cargarfecha
+        string signal = "";
+        signal += $"\n{Entra("Fecha")}";
+        return signal;
+    }
+    public string FechaSale()
+    {
+        return Sale("Fecha");
+    }
+
+    public string CronoEntra(string tipo, TimeSpan crono)
+    {
+        //Cargar crono y tipo de crono
+        string signal = "";
+        signal += $"\n{Entra("Fecha")}";
+        return signal;
+    }
+    public string CronoSale()
+    {
+        return Sale("Crono");
     }
 
     //MOSCA

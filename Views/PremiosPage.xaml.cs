@@ -8,6 +8,7 @@ using Generico_Front.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Shapes;
 using Windows.ApplicationModel.Contacts;
@@ -32,6 +33,8 @@ public sealed partial class PremiosPage : Page
     private bool inGafas = false;
     private bool inEntregadores = false;
     private bool inGanador = false;
+
+    private bool isPremio;
 
     private List<Premio> editada;
 
@@ -138,6 +141,8 @@ public sealed partial class PremiosPage : Page
         ganador.AddRange(premio.nominados.Select(nom => nom.nombre));
         comboGanador.ItemsSource = ganador;
         comboGanador.SelectedIndex = premio.ganador != null ? ganador.IndexOf(premio.ganador.nombre) : 0;
+        Grid.SetColumnSpan(boxEntregadorOtrabajo, 1);
+        boxEntregadorOtrabajo.Height = 60;
         boxEntregadorOtrabajo.Header = "Editar entregador";
     }
     private void MostrarDetallesNominado(Nominado nominado)
@@ -149,7 +154,7 @@ public sealed partial class PremiosPage : Page
             textBox.Visibility = Visibility.Collapsed;
         }
         boxNombre.Header = "Nombre";
-        headerInfo.Text = "Nominado por:";
+        headerInfo.Text = "Información complementaria:";
         txtInfo1.Text = nominado.trabajo;
         headerInfo.Visibility = Visibility.Visible;
         txtInfo1.Visibility = Visibility.Visible;
@@ -173,8 +178,9 @@ public sealed partial class PremiosPage : Page
         boxNombre.Text = nominado.nombre;
         boxEntregadorOtrabajo.Text = nominado.trabajo;
         boxRecoge.Text = string.IsNullOrEmpty(nominado.recoge) ? "" : nominado.recoge;
-
-        boxEntregadorOtrabajo.Header = "Nominado por";
+        Grid.SetColumnSpan(boxEntregadorOtrabajo, 2);
+        boxEntregadorOtrabajo.Height = 150;
+        boxEntregadorOtrabajo.Header = "Información complementaria";
     }
     private void CambiarElementosVisibles(object objeto)
     {
@@ -186,9 +192,11 @@ public sealed partial class PremiosPage : Page
             btnGafas.Visibility = Visibility.Collapsed;
             btnEntregadores.Visibility = Visibility.Collapsed;
             btnGanador.Visibility = Visibility.Collapsed;
-
+            btnAdd.Visibility = Visibility.Collapsed;
             boxNombre.Visibility = Visibility.Visible;
             grupoEntregador.Visibility = Visibility.Visible;
+            stckBotones.Visibility = Visibility.Visible;
+            btnEliminar.Visibility = Visibility.Visible;
             btnGuardar.Visibility = Visibility.Visible;
             if (objeto is Premio)
             {
@@ -223,7 +231,7 @@ public sealed partial class PremiosPage : Page
             comboEntregadores.Visibility = Visibility.Collapsed;
             grupoEntregador.Visibility = Visibility.Collapsed;
             boxRecoge.Visibility = Visibility.Collapsed;
-            btnGuardar.Visibility = Visibility.Collapsed;
+            stckBotones.Visibility = Visibility.Collapsed;
             EstadoInicialBotonera();
         }
     }
@@ -232,21 +240,70 @@ public sealed partial class PremiosPage : Page
         // Evita el reordenamiento de elementos dentro del TreeView
         e.AcceptedOperation = DataPackageOperation.None;
     }
-    private void treePremios_RightTapped(object sender, Microsoft.UI.Xaml.Input.RightTappedRoutedEventArgs e)
+    private void treePremios_RightTapped(object sender, RightTappedRoutedEventArgs e)
     {
-        var menu = new MenuFlyout();
+        var originalSource = e.OriginalSource as FrameworkElement;
+        if (originalSource == null) return;
 
-        // Opción para Desplegar Todos
-        var desplegarTodos = new MenuFlyoutItem { Text = "Desplegar todos" };
-        desplegarTodos.Click += DesplegarTodos_Click;
-        menu.Items.Add(desplegarTodos);
+        var container = FindParent<TreeViewItem>(originalSource);
 
-        // Opción para Replegar Todos
-        var replegarTodos = new MenuFlyoutItem { Text = "Replegar todos" };
-        replegarTodos.Click += ReplegarTodos_Click;
-        menu.Items.Add(replegarTodos);
+        if (container != null)
+        {
+            // Selecciona el ítem clicado
+            var item = container.DataContext;
+            if (item != null)
+            {
+                treePremios.SelectedItem = item;
+            }
 
-        menu.ShowAt(treePremios, e.GetPosition(treePremios));
+            // Crear menú contextual
+            var menu = new MenuFlyout();
+
+            var addNominado = new MenuFlyoutItem { Text = "Añadir nominado" };
+            addNominado.Click += AddNominado_Click;
+            menu.Items.Add(addNominado);
+
+            var desplegarTodos = new MenuFlyoutItem { Text = "Desplegar todos" };
+            desplegarTodos.Click += DesplegarTodos_Click;
+            menu.Items.Add(desplegarTodos);
+
+            var replegarTodos = new MenuFlyoutItem { Text = "Replegar todos" };
+            replegarTodos.Click += ReplegarTodos_Click;
+            menu.Items.Add(replegarTodos);
+
+            // ✅ Mostrar el menú en el TreeViewItem clicado
+            menu.ShowAt(container, e.GetPosition(container));
+
+            e.Handled = true; // Opcional: previene comportamiento extra no deseado
+        }
+    }
+    private T FindParent<T>(DependencyObject child) where T : DependencyObject
+    {
+        DependencyObject parent = VisualTreeHelper.GetParent(child);
+
+        while (parent != null && !(parent is T))
+        {
+            parent = VisualTreeHelper.GetParent(parent);
+        }
+
+        return parent as T;
+    }
+
+    private void AddNominado_Click(object sender, RoutedEventArgs e)
+    {
+        tggEditor.IsOn = true;
+        isPremio = false;
+        Nominado creado = new Nominado();
+        creado.nombre = "";
+        creado.trabajo = "";
+        creado.recoge = "";
+        creado.ganador = false;
+        CambiarElementosVisibles(creado);
+        MostrarDetallesNominado(creado);
+        MostrarNominadoEdicion(creado);
+        btnAdd.Visibility = Visibility.Visible;
+        btnEliminar.Visibility = Visibility.Collapsed;
+        btnGuardar.Visibility = Visibility.Collapsed;
     }
 
     private void DesplegarTodos_Click(object sender, RoutedEventArgs e)
@@ -481,6 +538,7 @@ public sealed partial class PremiosPage : Page
             if (comboEntregadores.SelectedIndex != 0)
             {
                 //EDITAR
+                boxEntregadorOtrabajo.Header = "Editar entregador";
                 if (aEditar != null)
                 {
                     int index = aEditar.entregadores.FindIndex(e => string.Equals(e, comboEntregadores.Text));
@@ -493,6 +551,7 @@ public sealed partial class PremiosPage : Page
             else
             {
                 //ADD
+                boxEntregadorOtrabajo.Header = "Añadir entregador";
                 if (aEditar != null)
                 {
                     aEditar.entregadores.Add(boxEntregadorOtrabajo.Text);
@@ -570,9 +629,71 @@ public sealed partial class PremiosPage : Page
         }
     }
 
+    private async void btnAdd_Click(object sender, RoutedEventArgs e)
+    {
+        var utimoSeleccionado = selectedItem;
+
+        if (string.IsNullOrEmpty(boxNombre.Text))
+        {
+            ShowDialog("Falta nombre", "Debe al menos rellenar el campo \"Nombre\" para añadir una nueva categoría");
+        }
+        else
+        {
+            if (isPremio)
+            {
+                //ADD PREMIO
+
+            }
+            else
+            {
+                //ADD NOMINADO
+                Premio ultimoPremio = utimoSeleccionado as Premio;
+                Premio selected = editada.FirstOrDefault(p => string.Equals(p.nombre, ultimoPremio.nombre));
+                Nominado nuevo = new Nominado();
+                nuevo.nombre = boxNombre.Text;
+                nuevo.trabajo = boxEntregadorOtrabajo.Text;
+                nuevo.ganador = false;
+                nuevo.recoge = boxRecoge.Text;
+                selected.nominados.Add(nuevo);
+            }
+            btnGuardar_Click(sender, e);
+        }
+    }
+    private void btnEliminar_Click(object sender, RoutedEventArgs e)
+    {
+        var utimoSeleccionado = selectedItem;
+
+        if (utimoSeleccionado is Premio)
+        {
+            Premio ultimoPremio = utimoSeleccionado as Premio;
+            Premio selected = editada.FirstOrDefault(p => string.Equals(p.nombre, ultimoPremio.nombre));
+            editada.Remove(selected);
+        }
+        if (utimoSeleccionado is Nominado)
+        {
+            Premio parent = treePremios.SelectedNode.Parent.Content as Premio;
+            Premio Pselected = editada.FirstOrDefault(p => string.Equals(p.nombre, parent.nombre));
+            Nominado ultimoNominado = utimoSeleccionado as Nominado;
+            Nominado Nselected = Pselected.nominados.FirstOrDefault(n => string.Equals(n.nombre, ultimoNominado.nombre));
+            Pselected.nominados.Remove(Nselected);
+        }
+        if (utimoSeleccionado == null)
+        {
+            ShowDialog("Seleccionar elemento", "No hay un elemento seleccionado para eliminarlo. Asegúrate de que está resaltado en la lista el elemento a borrar");
+        }
+        else
+        {
+            Tip.Target = btnEliminar;
+            Tip.Title = "Guarda para confirmar";
+            AbrirTip();
+        }
+
+    }
     private async void btnGuardar_Click(object sender, RoutedEventArgs e)
     {
-        var utimoSeleccionado = treePremios.SelectedItem;
+        var utimoSeleccionado = selectedItem;
+        var pruebaNodo = treePremios.SelectedNode.Parent.Content;
+        var ultimoNodo = treePremios.NodeFromContainer(treePremios.ContainerFromItem(selectedItem));
 
         await ViewModel.GuardarPremios(editada);
         await ViewModel.CargarPremios();
@@ -585,7 +706,13 @@ public sealed partial class PremiosPage : Page
         }
         if (utimoSeleccionado is Nominado)
         {
-
+            if (ultimoNodo.Parent != null)
+            {
+                Premio parent = ultimoNodo.Parent.Content as Premio;
+                Premio selected = ViewModel.premios.FirstOrDefault(p => string.Equals(p.nombre, parent.nombre));
+                treePremios.SelectedItem = selected;
+                treePremios.SelectedNode.IsExpanded = true;
+            }
         }
 
         Tip.Target = btnGuardar;
@@ -897,8 +1024,18 @@ public sealed partial class PremiosPage : Page
                 {
                     seleccionado = selectedItem as Premio;
                 }
-                //IN con envio de info a BS
-                inEntregadores = true;
+                if (seleccionado.entregadores.Count > 0)
+                {
+                    //IN con envio de info a BS
+                    inEntregadores = true;
+                }
+                else
+                {
+                    MostrarFlyoutEnBoton("Esta categoría no tiene entregadores asignados", btnEntregadores);
+                    btnEntregadores.IsChecked = false;
+                    inEntregadores = false;
+                }
+
             }
         }
     }
@@ -907,4 +1044,6 @@ public sealed partial class PremiosPage : Page
     {
 
     }
+
+
 }

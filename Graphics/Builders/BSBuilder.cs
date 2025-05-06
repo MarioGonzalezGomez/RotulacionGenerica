@@ -35,9 +35,12 @@ public class BSBuilder
         for (int i = 0; i < 4; i++)
         {
             string texto = i < rotulo.lineas.Count ? rotulo.lineas[i].texto : "";
-            mensaje += CambiaTexto($"Rotulo/linea0{i + 1}", texto);
+            mensaje += CambiaTexto($"Rotulo/Txt/Txt0{i + 1}", texto);
         }
-        mensaje += Entra("Rotulo");
+        mensaje += EventRunBuild($"Rotulo/numLineas/0{rotulo.lineas.Count}");
+        //TODO:Esto no es generico, sustituir por el comentado despues
+        //mensaje += Entra("Rotulo");
+        mensaje += EventRunBuild("Rotulo/Entra_Actuaciones");
 
         return mensaje;
     }
@@ -62,6 +65,7 @@ public class BSBuilder
     {
         return Sale("Faldon");
     }
+
     //CRAWL
     public string CrawlEntra(Crawl crawl)
     {
@@ -103,7 +107,7 @@ public class BSBuilder
     public string RodilloEntra(Rodillo rodillo)
     {
         string signal = EventBuild("Rodillo", "TEXT_TRAVEL_DURANTION_LIMIT", config.RotulacionSettings.VelocidadRodillo, 1);
-        signal += $"\n{CambiaTexto("Rodillo", rodillo.ToString())}";
+        signal += $"\n{CambiaTexto("Rodillo/Txt01", rodillo.ToString())}";
         signal += $"\n{Entra("Rodillo")}";
         return signal;
     }
@@ -112,8 +116,75 @@ public class BSBuilder
         return Sale("Rodillo");
     }
 
+    //PREMIOS
+    public string CategoriaEntra(Premio premio)
+    {
+        string mensaje = "";
+        mensaje += CambiaTexto($"Rotulo/Txt/Txt01", premio.nombre);
+        mensaje += EventRunBuild($"Rotulo/numLineas/01");
+        mensaje += Entra("Rotulo");
+
+        return mensaje;
+    }
+    public string CategoriaSale()
+    {
+        return Sale("Rotulo");
+    }
+
+    public string NominadoEntra(Premio premio, Nominado nominado)
+    {
+        string mensaje = "";
+        mensaje += CambiaTexto($"Rotulo/Txt/Txt01", premio.nombre);
+        mensaje += CambiaTexto($"Rotulo/Txt/Txt02", nominado.nombre);
+        mensaje += CambiaTexto($"Rotulo/Txt/Txt03", nominado.trabajo);
+        mensaje += EventRunBuild($"Rotulo/numLineas/03");
+        mensaje += Entra("Rotulo");
+
+        return mensaje;
+    }
+    public string NominadoSale()
+    {
+        return Sale("Rotulo");
+    }
+
+    public string EntregadoresEntra(Premio premio)
+    {
+        string mensaje = "";
+        mensaje += CambiaTexto($"Rotulo/Txt/Txt01", premio.nombre);
+        string entregadores = "";
+        foreach (string entregador in premio.entregadores)
+        {
+            entregadores += $"{entregador}\n";
+        }
+        mensaje += CambiaTexto($"Rotulo/Txt/Txt02", entregadores);
+        mensaje += EventRunBuild($"Rotulo/numLineas/02");
+        mensaje += Entra("Rotulo");
+
+        return mensaje;
+    }
+    public string EntregadoresSale()
+    {
+        return Sale("Rotulo");
+    }
+
+    public string GanadorEntra(Premio premio, Nominado nominado)
+    {
+        string mensaje = "";
+        mensaje += CambiaTexto($"Rotulo/Txt/Txt01", premio.nombre);
+        mensaje += CambiaTexto($"Rotulo/Txt/Txt02", nominado.nombre);
+        mensaje += CambiaTexto($"Rotulo/Txt/Txt03", nominado.trabajo);
+        mensaje += EventRunBuild($"Rotulo/numLineas/03");
+        mensaje += Entra("Rotulo");
+
+        return mensaje;
+    }
+    public string GanadorSale()
+    {
+        return Sale("Rotulo");
+    }
+
     //VARIOS
-        //TIEMPOS
+    //TIEMPOS
     public string RelojEntra(DateTime hora)
     {
         //Cargar tiempo con hora.Hour; hora.Minute...
@@ -159,6 +230,7 @@ public class BSBuilder
     {
         return Sale("Mosca");
     }
+
 
     //Mensajes comunes
     public string Reset()

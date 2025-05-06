@@ -862,6 +862,7 @@ public sealed partial class PremiosPage : Page
         if (inCategoria)
         {
             //SALE CATEGORIA
+            ViewModel.CategoriaSale();
             inCategoria = false;
         }
         else
@@ -883,6 +884,7 @@ public sealed partial class PremiosPage : Page
                     seleccionado = selectedItem as Premio;
                 }
                 //IN con envio de info a BS
+                ViewModel.CategoriaEntra(seleccionado);
                 inCategoria = true;
             }
         }
@@ -914,7 +916,8 @@ public sealed partial class PremiosPage : Page
                 {
                     //IN con envio de info a BS
                     Nominado nominado = selectedItem as Nominado;
-
+                    Premio seleccionado = ViewModel.allPremios.Find(pre => pre.nominados.Any(n => string.Equals(n.nombre, nominado.nombre)));
+                    ViewModel.NominadoEntra(seleccionado, nominado);
                     inNominado = true;
                 }
 
@@ -926,6 +929,7 @@ public sealed partial class PremiosPage : Page
         if (inNominado)
         {
             //SALE
+            ViewModel.NominadoSale();
             inNominado = false;
             btnNominado.IsChecked = false;
         }
@@ -1003,7 +1007,8 @@ public sealed partial class PremiosPage : Page
 
         if (inEntregadores)
         {
-            //SALE Lista de nominados
+            //SALE Lista de entregadores
+            ViewModel.EntregadoresSale();
             inEntregadores = false;
         }
         else
@@ -1027,6 +1032,7 @@ public sealed partial class PremiosPage : Page
                 if (seleccionado.entregadores.Count > 0)
                 {
                     //IN con envio de info a BS
+                    ViewModel.EntregadoresEntra(seleccionado);
                     inEntregadores = true;
                 }
                 else
@@ -1042,7 +1048,47 @@ public sealed partial class PremiosPage : Page
 
     private void btnGanador_Click(object sender, RoutedEventArgs e)
     {
+        if (inGanador)
+        {
+            ViewModel.GanadorSale();
+            inGanador = false;
+        }
+        else
+        {
+            if (selectedItem == null)
+            {
+                MostrarFlyoutEnBoton("No hay ninguna categoría seleccionada", btnGanador);
+                btnGanador.IsChecked = false;
+            }
+            else
+            {
+                if (selectedItem is Premio)
+                {
+                    Premio p = selectedItem as Premio;
+                    if (p.ganador != null)
+                    {
+                        ViewModel.GanadorEntra(p, p.ganador);
+                    }
+                    else
+                    {
+                        MostrarFlyoutEnBoton("No hay ganador por defecto\nSeleccione un \"nominado\"", btnGanador);
+                        btnGanador.IsChecked = false;
+                    }
 
+                }
+                else
+                {
+                    Nominado nominado = selectedItem as Nominado;
+                    Premio seleccionado = ViewModel.allPremios.Find(pre => pre.nominados.Any(n => string.Equals(n.nombre, nominado.nombre)));
+                    Premio editado = editada.FirstOrDefault(p => string.Equals(p.nombre, seleccionado.nombre));
+                    seleccionado.ganador = seleccionado.nominados.FirstOrDefault(n => string.Equals(n.nombre, nominado.nombre));
+                    editado.ganador = editado.nominados.FirstOrDefault(n => string.Equals(n.nombre, nominado.nombre));
+                    ViewModel.GanadorEntra(seleccionado, nominado);
+                    inGanador = true;
+                }
+
+            }
+        }
     }
 
 

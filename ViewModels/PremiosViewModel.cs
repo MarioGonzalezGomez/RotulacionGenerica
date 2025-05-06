@@ -81,4 +81,41 @@ public partial class PremiosViewModel : ObservableRecipient
             }
         }
     }
+
+    //ACCIONES GRAFICAS
+    public void CategoriaEntra(Premio premio)
+    {
+        graphicController.CategoriaEntra(premio);
+    }
+    public void CategoriaSale()
+    {
+        graphicController.CategoriaSale();
+    }
+
+    public void NominadoEntra(Premio premio, Nominado nominado)
+    {
+        graphicController.NominadoEntra(premio, nominado);
+    }
+    public void NominadoSale()
+    {
+        graphicController.NominadoSale();
+    }
+
+    public void EntregadoresEntra(Premio premio)
+    {
+        graphicController.EntregadoresEntra(premio);
+    }
+    public void EntregadoresSale()
+    {
+        graphicController.EntregadoresSale();
+    }
+
+    public void GanadorEntra(Premio premio, Nominado nominado)
+    {
+        graphicController.GanadorEntra(premio, nominado);
+    }
+    public void GanadorSale()
+    {
+        graphicController.GanadorSale();
+    }
 }

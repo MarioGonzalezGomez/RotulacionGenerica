@@ -23,6 +23,7 @@
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
     <AppxBundle>Never</AppxBundle>
     <PackageCertificateKeyFile>Generico_Front_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <AppxPackageDir>C:\TrabajoIPF\Ejecutable\</AppxPackageDir>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="config.json" />

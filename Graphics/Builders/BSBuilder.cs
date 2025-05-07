@@ -167,13 +167,30 @@ public class BSBuilder
         return Sale("Rotulo");
     }
 
+    //No Generico, adaptado para talia
     public string GanadorEntra(Premio premio, Nominado nominado)
     {
         string mensaje = "";
         mensaje += CambiaTexto($"Rotulo/Txt/Txt01", premio.nombre);
         mensaje += CambiaTexto($"Rotulo/Txt/Txt02", nominado.nombre);
         mensaje += CambiaTexto($"Rotulo/Txt/Txt03", nominado.trabajo);
-        mensaje += EventRunBuild($"Rotulo/numLineas/03");
+
+        if (premio.nombre.Length < 30 && nominado.nombre.Length < 22)
+        {
+            mensaje += EventRunBuild($"Rotulo/numLineas/01");
+        }
+        else if (premio.nombre.Length < 36 && nominado.nombre.Length < 30 && nominado.trabajo.Length < 91)
+        {
+            mensaje += EventRunBuild($"Rotulo/numLineas/02");
+        }
+        else if (premio.nombre.Length < 57 && nominado.nombre.Length < 37 && nominado.trabajo.Length < 121)
+        {
+            mensaje += EventRunBuild($"Rotulo/numLineas/03");
+        }
+        else
+        {
+            mensaje += EventRunBuild($"Rotulo/numLineas/04");
+        }
         mensaje += Entra("Rotulo");
 
         return mensaje;

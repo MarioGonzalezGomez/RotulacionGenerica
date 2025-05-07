@@ -192,7 +192,6 @@ public sealed partial class PremiosPage : Page
             btnGafas.Visibility = Visibility.Collapsed;
             btnEntregadores.Visibility = Visibility.Collapsed;
             btnGanador.Visibility = Visibility.Collapsed;
-            btnAdd.Visibility = Visibility.Collapsed;
             boxNombre.Visibility = Visibility.Visible;
             grupoEntregador.Visibility = Visibility.Visible;
             stckBotones.Visibility = Visibility.Visible;
@@ -289,21 +288,50 @@ public sealed partial class PremiosPage : Page
         return parent as T;
     }
 
-    private void AddNominado_Click(object sender, RoutedEventArgs e)
+    private async void AddNominado_Click(object sender, RoutedEventArgs e)
     {
-        tggEditor.IsOn = true;
-        isPremio = false;
-        Nominado creado = new Nominado();
-        creado.nombre = "";
-        creado.trabajo = "";
-        creado.recoge = "";
-        creado.ganador = false;
-        CambiarElementosVisibles(creado);
-        MostrarDetallesNominado(creado);
-        MostrarNominadoEdicion(creado);
-        btnAdd.Visibility = Visibility.Visible;
-        btnEliminar.Visibility = Visibility.Collapsed;
-        btnGuardar.Visibility = Visibility.Collapsed;
+        await MostrarDialogoConTextoAsync();
+    }
+
+    private async Task MostrarDialogoConTextoAsync()
+    {
+        // Crear TextBox
+        var inputTextBox = new TextBox
+        {
+            PlaceholderText = "Nombre del Nominado",
+            Margin = new Thickness(0, 10, 0, 0)
+        };
+
+        // Crear diálogo
+        var dialog = new ContentDialog
+        {
+            Title = "Introduce nombre",
+            Content = inputTextBox,
+            PrimaryButtonText = "Aceptar",
+            CloseButtonText = "Cancelar",
+            DefaultButton = ContentDialogButton.Primary,
+            XamlRoot = this.Content.XamlRoot
+        };
+
+        // Mostrar el diálogo
+        var result = await dialog.ShowAsync();
+
+        // Verificar si el usuario pulsó "Aceptar"
+        if (result == ContentDialogResult.Primary)
+        {
+            string textoIngresado = inputTextBox.Text;
+
+            // Aquí haces lo que quieras con el texto
+            Premio ultimoPremio = selectedItem as Premio;
+            Premio selected = editada.FirstOrDefault(p => string.Equals(p.nombre, ultimoPremio.nombre));
+            Nominado nuevo = new Nominado();
+            nuevo.nombre = textoIngresado;
+            selected.nominados.Add(nuevo);
+            await ViewModel.GuardarPremios(editada);
+            await ViewModel.CargarPremios();
+            editada.Clear();
+            editada.AddRange(ViewModel.allPremios);
+        }
     }
 
     private void DesplegarTodos_Click(object sender, RoutedEventArgs e)
@@ -1046,11 +1074,57 @@ public sealed partial class PremiosPage : Page
         }
     }
 
+    //private void btnGanador_Click(object sender, RoutedEventArgs e)
+    //{
+    //    if (inGanador)
+    //    {
+    //        ViewModel.GanadorSale();
+    //        inGanador = false;
+    //    }
+    //    else
+    //    {
+    //        if (selectedItem == null)
+    //        {
+    //            MostrarFlyoutEnBoton("No hay ninguna categoría seleccionada", btnGanador);
+    //            btnGanador.IsChecked = false;
+    //        }
+    //        else
+    //        {
+    //            if (selectedItem is Premio)
+    //            {
+    //                Premio p = selectedItem as Premio;
+    //                if (p.ganador != null)
+    //                {
+    //                    ViewModel.GanadorEntra(p, p.ganador);
+    //                }
+    //                else
+    //                {
+    //                    MostrarFlyoutEnBoton("No hay ganador por defecto\nSeleccione un \"nominado\"", btnGanador);
+    //                    btnGanador.IsChecked = false;
+    //                }
+    //
+    //            }
+    //            else
+    //            {
+    //                Nominado nominado = selectedItem as Nominado;
+    //                Premio seleccionado = ViewModel.allPremios.Find(pre => pre.nominados.Any(n => string.Equals(n.nombre, nominado.nombre)));
+    //                Premio editado = editada.FirstOrDefault(p => string.Equals(p.nombre, seleccionado.nombre));
+    //                seleccionado.ganador = seleccionado.nominados.FirstOrDefault(n => string.Equals(n.nombre, nominado.nombre));
+    //                editado.ganador = editado.nominados.FirstOrDefault(n => string.Equals(n.nombre, nominado.nombre));
+    //                ViewModel.GanadorEntra(seleccionado, nominado);
+    //                inGanador = true;
+    //            }
+    //
+    //        }
+    //    }
+    //}
+    //NO GENERICO PARA TALIA
     private void btnGanador_Click(object sender, RoutedEventArgs e)
     {
         if (inGanador)
         {
             ViewModel.GanadorSale();
+            btnGanador.Content = "ENTRA";
             inGanador = false;
         }
         else
@@ -1065,13 +1139,15 @@ public sealed partial class PremiosPage : Page
                 if (selectedItem is Premio)
                 {
                     Premio p = selectedItem as Premio;
-                    if (p.ganador != null)
+                    if (p.nominados.Count == 1)
                     {
-                        ViewModel.GanadorEntra(p, p.ganador);
+                        ViewModel.GanadorEntra(p, p.nominados[0]);
+                        inGanador = true;
+                        btnGanador.Content = "SALE";
                     }
                     else
                     {
-                        MostrarFlyoutEnBoton("No hay ganador por defecto\nSeleccione un \"nominado\"", btnGanador);
+                        MostrarFlyoutEnBoton("Seleccione un \"nominado\"", btnGanador);
                         btnGanador.IsChecked = false;
                     }
 
@@ -1084,12 +1160,12 @@ public sealed partial class PremiosPage : Page
                     seleccionado.ganador = seleccionado.nominados.FirstOrDefault(n => string.Equals(n.nombre, nominado.nombre));
                     editado.ganador = editado.nominados.FirstOrDefault(n => string.Equals(n.nombre, nominado.nombre));
                     ViewModel.GanadorEntra(seleccionado, nominado);
+                    btnGanador.Content = "SALE";
                     inGanador = true;
                 }
 
             }
         }
     }
-
 
 }

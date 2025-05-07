@@ -164,7 +164,7 @@
                     <ToggleButton x:Name="btnNominados" Content="LISTA NOMINADOS" HorizontalAlignment="Stretch" Click="btnNominados_Click" Margin="0,20,0,0"/>
                     <ToggleButton x:Name="btnGafas" Content="NOMIDADOS EN GAFAS" HorizontalAlignment="Stretch" Click="btnGafas_Click" Margin="0,20,0,0"/>
                     <ToggleButton x:Name="btnEntregadores" Content="ENTREGADORES" HorizontalAlignment="Stretch" Click="btnEntregadores_Click" Margin="0,20,0,0"/>
-                    <ToggleButton x:Name="btnGanador" Content="GANADOR" HorizontalAlignment="Stretch" Click="btnGanador_Click" Margin="0,20,0,0"/>
+                    <ToggleButton x:Name="btnGanador" Content="ENTRA" HorizontalAlignment="Stretch" Click="btnGanador_Click" Margin="0,20,0,0"/>
                     <TextBlock x:Name="txtGanadorBotonera" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,15,0,0"/>
 
                     <TextBox x:Name="boxNombre" Header="Nombre Categoría" HorizontalAlignment="Stretch" LostFocus="boxNombre_LostFocus" Visibility="Collapsed"/>
@@ -182,9 +182,6 @@
                     </Grid>
                     <TextBox x:Name="boxRecoge" Header="Recoge" HorizontalAlignment="Stretch" LostFocus="boxRecoge_LostFocus" Visibility="Collapsed" Margin="0,15,0,0"/>
                     <StackPanel x:Name="stckBotones" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="Collapsed" Margin="0,15,0,0">
-                        <Button  x:Name="btnAdd" Visibility="Collapsed" Click="btnAdd_Click">
-                            <SymbolIcon Symbol="Add"/>
-                        </Button>
                         <Button  x:Name="btnEliminar" Click="btnEliminar_Click">
                             <SymbolIcon Symbol="Delete"/>
                         </Button>

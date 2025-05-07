@@ -26,6 +26,9 @@ public class Nominado
 
     public Nominado()
     {
+        nombre = "";
+        trabajo = "";
+        recoge = "";
         ganador = false;
     }
 

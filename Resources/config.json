@@ -18,7 +18,7 @@
     "VelocidadCrawl": 200,
     "RutaRodillo": "",
     "TipoRodillo": "Vertical",
-    "VelocidadRodillo": 300,
+    "VelocidadRodillo": 120,
     "RutaPremios": "",
     "BtnCategoria": true,
     "BtnNominado": true,

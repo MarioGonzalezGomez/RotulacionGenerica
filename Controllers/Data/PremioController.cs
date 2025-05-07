@@ -66,7 +66,7 @@ public class PremioController
                         var nominado = new Nominado
                         {
                             nombre = partes.ElementAtOrDefault(0)?.Trim(),
-                            trabajo = partes.ElementAtOrDefault(1)?.Trim(),
+                            trabajo = partes.ElementAtOrDefault(1)?.Trim().Replace("..", "\r"),
                             recoge = partes.ElementAtOrDefault(2)?.Trim()
                         };
                         if (esGanador)
@@ -113,9 +113,14 @@ public class PremioController
                     {
                         foreach (var nominado in premio.nominados)
                         {
+                            string infoAdicional = "";
+                            if (!string.IsNullOrEmpty(nominado.trabajo))
+                            {
+                                infoAdicional = nominado.trabajo.Replace("\r", "..");
+                            }
                             string linea = !string.IsNullOrWhiteSpace(nominado.recoge)
-                            ? $"{nominado.nombre} / {nominado.trabajo} / {nominado.recoge}"
-                            : $"{nominado.nombre} / {nominado.trabajo}";
+                            ? $"{nominado.nombre} / {infoAdicional} / {nominado.recoge}"
+                            : $"{nominado.nombre} / {infoAdicional}";
 
                             linea = nominado.ganador ? "*" + linea : linea;
 

@@ -41,7 +41,7 @@ public sealed partial class RodillosPage : Page
         cmbTipos.ItemsSource = ViewModel.Tipos;
         cmbTiposEdicion.ItemsSource = ViewModel.Tipos;
         cmbTipos.SelectedItem = ViewModel.Tipos.FirstOrDefault(t => t.descripcion.Equals(config.RotulacionSettings.TipoRodillo));
-        slideVelocidad.Value = config.RotulacionSettings.VelocidadRodillo;
+        boxVelocidad.Text = config.RotulacionSettings.VelocidadRodillo.ToString();
     }
 
     //TREE VIEW
@@ -250,7 +250,7 @@ public sealed partial class RodillosPage : Page
             Tipo seleccionado = (Tipo)cmbTipos.SelectedValue;
             config.RotulacionSettings.TipoRodillo = seleccionado.descripcion;
         }
-        config.RotulacionSettings.VelocidadRodillo = (int)slideVelocidad.Value;
+        config.RotulacionSettings.VelocidadRodillo = int.Parse(boxVelocidad.Text);
 
         Config.Config.SaveConfig(config);
 

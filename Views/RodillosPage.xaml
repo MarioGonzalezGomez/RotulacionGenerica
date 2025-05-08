@@ -94,7 +94,7 @@
                 <ComboBox x:Name="cmbTipos" Grid.Row="2" HorizontalAlignment="Stretch" SelectionChanged="cmbTipos_SelectionChanged"  Header="Tipo de rodillo" Visibility="Collapsed"/>
                 <StackPanel x:Name="stckVelocidad" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Stretch" Visibility="Collapsed">
                     <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="0,7,20,0">Velocidad</TextBlock>
-                    <Slider x:Name="slideVelocidad" Width="200" Minimum="0" Maximum="300" StepFrequency="10" SmallChange="10" Value="100"/>
+                    <TextBox x:Name="boxVelocidad"/>
                 </StackPanel>
 
                 <StackPanel x:Name="stckBotonera" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="Collapsed">

@@ -368,12 +368,14 @@ public sealed partial class RodillosPage : Page
     //ACCIONES GRAPHICS (PLAY y STOP)
     private void btnPlay_Click(object sender, RoutedEventArgs e)
     {
-
+        Rodillo r = new Rodillo();
+        r.cargos = ViewModel.cargos.ToList();
+        ViewModel.Entra(r);
     }
 
     private void btnStop_Click(object sender, RoutedEventArgs e)
     {
-
+        ViewModel.Sale();
     }
 
 }

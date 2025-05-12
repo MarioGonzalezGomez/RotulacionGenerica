@@ -21,7 +21,7 @@ public class Rodillo
         string result = "";
         foreach (var cargo in cargos)
         {
-            result += $"{cargo.ToString()}\n";
+            result += $"{cargo.ToString()}\\n\\n";
         }
         return result;
     }

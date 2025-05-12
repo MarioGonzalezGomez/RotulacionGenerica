@@ -146,6 +146,7 @@ public class PestanasActivas
 public class Config
 {
     private static Config? instance = null;
+
     public ApiOptions ApiOptions
     {
         get; set;
@@ -168,82 +169,139 @@ public class Config
     }
 
     private static readonly string appDataPath = Path.Combine(
-         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-         "WinUI3", "ApplicationData");
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+        "WinUI3", "ApplicationData");
 
     private static readonly string configFilePath = Path.Combine(appDataPath, "config.json");
 
     public Config()
     {
-
     }
 
+    // Método para obtener la instancia y cargar el archivo de configuración
     public static Config GetInstance()
     {
         if (instance == null)
         {
+            // Asegurarse de que el archivo de configuración exista antes de cargarlo
+            ConfigExists();
             instance = LoadConfig(configFilePath);
         }
         return instance;
     }
 
-    //Comprobar si archivo config existe
+    // Método para comprobar si el archivo de configuración existe, si no lo copia
     public static void ConfigExists()
     {
-        if (!File.Exists(configFilePath))
+        try
         {
-            string sourcePath = Path.Combine(AppContext.BaseDirectory, "Resources", "config.json");
-
-            try
+            if (!File.Exists(configFilePath))
             {
                 if (!Directory.Exists(appDataPath))
                     Directory.CreateDirectory(appDataPath);
 
-                File.Copy(sourcePath, configFilePath);
-                Console.WriteLine("Archivo de configuración copiado a AppData.");
+                var defaultConfig = GetDefaultConfig();
+                string json = JsonSerializer.Serialize(defaultConfig, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(configFilePath, json);
+
+                Console.WriteLine("Archivo de configuración por defecto creado en AppData.");
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error al copiar el archivo de configuración: {ex.Message}");
-            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al crear el archivo de configuración por defecto: {ex.Message}");
         }
     }
 
-    // Método estático para cargar el JSON desde un archivo y deserializarlo
+    public static Config GetDefaultConfig()
+    {
+        return new Config
+        {
+            ApiOptions = new ApiOptions
+            {
+                BaseUri = "localhost",
+                Port = "5000"
+            },
+            BrainStormOptions = new BrainStormOptions
+            {
+                Ip = "127.0.0.1",
+                Database = "dbs1",
+                Port = "5123",
+                Auto_Connection = "0"
+            },
+            PrimeOptions = new PrimeOptions
+            {
+                Ip = "127.0.0.1",
+                Port = "8080",
+                Auto_Connection = "0"
+            },
+            RotulacionSettings = new RotulacionSettings
+            {
+                VelocidadCrawl = 200,
+                RutaRodillo = "",
+                TipoRodillo = "Vertical",
+                VelocidadRodillo = 120,
+                RutaPremios = "",
+                BtnCategoria = true,
+                BtnNominado = true,
+                BtnNominados = true,
+                BtnGafas = true,
+                BtnEntregadores = true,
+                BtnGanador = true
+            },
+            PestanasActivas = new PestanasActivas
+            {
+                Rotulos = true,
+                Crawls = true,
+                Creditos = true,
+                Faldones = true,
+                Premios = true,
+                Gafas = true,
+                Varios = true,
+                Reset = true,
+                Mosca = true
+            }
+        };
+    }
+
+    // Método estático para cargar la configuración desde el archivo JSON
     public static Config LoadConfig(string filePath)
     {
         try
         {
-            // Verifica si el archivo existe antes de intentar cargarlo
             if (File.Exists(filePath))
             {
+                // Leer el archivo y deserializar el JSON
                 string jsonString = File.ReadAllText(filePath);
                 return JsonSerializer.Deserialize<Config>(jsonString);
             }
             else
             {
-                Console.WriteLine("El archivo de configuración no existe.");
-                return null;
+                Console.WriteLine("El archivo de configuración no existe en la ruta esperada.");
+                return null;  // Retornar null si no existe el archivo
             }
         }
         catch (Exception ex)
         {
+            // Capturar cualquier error durante la carga del archivo
             Console.WriteLine($"Error al cargar el archivo Config: {ex.Message}");
             return null;
         }
     }
 
+    // Método para guardar la configuración actual en el archivo
     public static void SaveConfig(Config config)
     {
         try
         {
-            // Verifica si la carpeta existe, si no, créala
+            // Verificar si la carpeta de destino existe, si no, crearla
             string directory = Path.GetDirectoryName(configFilePath);
             if (!Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
             }
 
+            // Serializar el objeto y guardarlo en el archivo
             string jsonString = JsonSerializer.Serialize(config, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(configFilePath, jsonString);
             Console.WriteLine("Archivo Config guardado exitosamente.");
@@ -251,6 +309,7 @@ public class Config
         }
         catch (Exception ex)
         {
+            // Manejo de excepciones en caso de fallo al guardar el archivo
             Console.WriteLine($"Error al guardar el archivo Config: {ex.Message}");
         }
     }

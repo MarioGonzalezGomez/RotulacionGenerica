@@ -1,4 +1,5 @@
-﻿using Generico_Front.Activation;
+﻿using System.Diagnostics;
+using Generico_Front.Activation;
 using Generico_Front.Contracts.Services;
 using Generico_Front.Core.Contracts.Services;
 using Generico_Front.Core.Services;
@@ -11,12 +12,14 @@ using Generico_Front.Views;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
+using Windows.Storage.Pickers;
+using WinRT.Interop;
 
 namespace Generico_Front;
 
-// To learn more about WinUI 3, see https://docs.microsoft.com/windows/apps/winui/winui3/.
 public partial class App : Application
 {
+    private Process backendProcess;
     // The .NET Generic Host provides dependency injection, configuration, logging, and other services.
     // https://docs.microsoft.com/dotnet/core/extensions/generic-host
     // https://docs.microsoft.com/dotnet/core/extensions/dependency-injection
@@ -101,14 +104,17 @@ public partial class App : Application
 
     private void App_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
     {
-        // TODO: Log and handle exceptions as appropriate.
-        // https://docs.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.application.unhandledexception.
+        File.WriteAllText($"C:\\TrabajoIPF\\Logs\\error{e.Exception.TargetSite}.log", $"Excepción no controlada: {e.Exception.Message}\n{e.Exception.StackTrace}");
+        e.Handled = true;
     }
 
     protected async override void OnLaunched(LaunchActivatedEventArgs args)
     {
-        base.OnLaunched(args);
+       base.OnLaunched(args);
 
         await App.GetService<IActivationService>().ActivateAsync(args);
     }
+
+   
+
 }

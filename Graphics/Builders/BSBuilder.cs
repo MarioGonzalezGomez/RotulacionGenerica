@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,12 +36,25 @@ public class BSBuilder
         for (int i = 0; i < 4; i++)
         {
             string texto = i < rotulo.lineas.Count ? rotulo.lineas[i].texto : "";
-            mensaje += CambiaTexto($"Rotulo/Txt/Txt0{i + 1}", texto);
+            if (i == 0)
+            {
+                mensaje += CambiaTexto($"Rotulo/Txt0{i + 2}", texto);
+            }
+            else if (i == 1)
+            {
+                mensaje += CambiaTexto($"Rotulo/Txt0{i}", texto);
+            }
+            else {
+                mensaje += CambiaTexto($"Rotulo/Txt0{i + 1}", texto);
+            }
+           
         }
-        mensaje += EventRunBuild($"Rotulo/numLineas/0{rotulo.lineas.Count}");
+        mensaje += EventRunBuild($"Rotulo/numLineas/0{rotulo.lineas.Count}") + "\n";
+        mensaje += EventRunBuild($"Rotulo/Tipos/Actuaciones") + "\n";
         //TODO:Esto no es generico, sustituir por el comentado despues
         //mensaje += Entra("Rotulo");
-        mensaje += EventRunBuild("Rotulo/Entra_Actuaciones");
+        mensaje += EventRunBuild("Rotulo/Entra_Actuaciones") + "\n";
+        //mensaje += EventBuild("Rotulo", "OBJ_CULL", "False",1);
 
         return mensaje;
     }
@@ -106,7 +120,7 @@ public class BSBuilder
     //CREDITOS-RODILLO
     public string RodilloEntra(Rodillo rodillo)
     {
-        string signal = EventBuild("Rodillo", "TEXT_TRAVEL_DURANTION_LIMIT", config.RotulacionSettings.VelocidadRodillo, 1);
+        string signal = EventBuild("Rodillo/Txt01", "TEXT_TRAVEL_DURATION_LIMIT", config.RotulacionSettings.VelocidadRodillo, 1);
         signal += $"\n{CambiaTexto("Rodillo/Txt01", rodillo.ToString())}";
         signal += $"\n{Entra("Rodillo")}";
         return signal;
@@ -171,28 +185,51 @@ public class BSBuilder
     public string GanadorEntra(Premio premio, Nominado nominado)
     {
         string mensaje = "";
-        mensaje += CambiaTexto($"Rotulo/Txt/Txt01", premio.nombre);
-        mensaje += CambiaTexto($"Rotulo/Txt/Txt02", nominado.nombre);
-        mensaje += CambiaTexto($"Rotulo/Txt/Txt03", nominado.trabajo);
+        mensaje += CambiaTexto($"Rotulo/Txt01", premio.nombre) + "\n";
+        mensaje += CambiaTexto($"Rotulo/Txt02", nominado.nombre) + "\n";
+        mensaje += CambiaTexto($"Rotulo/Txt03", nominado.trabajo) + "\n";
 
-        if (premio.nombre.Length < 30 && nominado.nombre.Length < 22)
+        if (premio.nombre.Length < 30 && nominado.nombre.Length < 22 && string.IsNullOrEmpty(nominado.trabajo))
         {
-            mensaje += EventRunBuild($"Rotulo/numLineas/01");
+            mensaje += EventRunBuild($"Rotulo/numLineas/01") + "\n";
         }
         else if (premio.nombre.Length < 36 && nominado.nombre.Length < 30 && nominado.trabajo.Length < 91)
         {
-            mensaje += EventRunBuild($"Rotulo/numLineas/02");
+            mensaje += EventRunBuild($"Rotulo/numLineas/02") + "\n";
         }
         else if (premio.nombre.Length < 57 && nominado.nombre.Length < 37 && nominado.trabajo.Length < 121)
         {
-            mensaje += EventRunBuild($"Rotulo/numLineas/03");
+            mensaje += EventRunBuild($"Rotulo/numLineas/03") + "\n";
         }
         else
         {
-            mensaje += EventRunBuild($"Rotulo/numLineas/04");
+            mensaje += EventRunBuild($"Rotulo/numLineas/04") + "\n";
         }
-        mensaje += Entra("Rotulo");
 
+        if (string.IsNullOrEmpty(nominado.trabajo)) {
+            mensaje += EventRunBuild($"Rotulo/numLineas/excepcion01") + "\n";
+        }
+       
+       // if (premio.nombre.Length < 30) {
+       //     mensaje += EventBuild("Rotulo/Txt01", "TEXT_BLOCK_MAXSIZE", "(337.4,130.34)", 1) + "\n";
+       //     mensaje += EventBuild("Rotulo/Txt/Txt01", "OBJ_DISPLACEMENT[0]", 0, 1) + "\n";
+       // } else {
+       //     mensaje += EventBuild("Rotulo/Txt01", "TEXT_BLOCK_MAXSIZE", "(367.4, 140.34)", 1) + "\n";
+       //     mensaje += EventBuild("Rotulo/Txt/Txt01", "OBJ_DISPLACEMENT[0]", -19, 1) + "\n";
+       // }
+       //
+       // if (nominado.nombre.Length < 20)
+       // {
+       //     mensaje += EventBuild("Rotulo/Txt02", "TEXT_BLOCK_MAXSIZE", "(467, 40)", 1) + "\n";
+       //     mensaje += EventBuild("Rotulo/Txt/Txt03", "OBJ_DISPLACEMENT[2]", -18, 1) + "\n";
+       // }
+       // else {
+       //     mensaje += EventBuild("Rotulo/Txt02", "TEXT_BLOCK_MAXSIZE", "(467, 63)", 1) + "\n";
+       //     mensaje += EventBuild("Rotulo/Txt/Txt03", "OBJ_DISPLACEMENT[2]",-32, 1) + "\n";
+       // }
+
+        mensaje += EventRunBuild("Rotulo/Entra",0.2);
+      //  mensaje += EventBuild("Rotulo", "OBJ_CULL", "False", 1);
         return mensaje;
     }
     public string GanadorSale()

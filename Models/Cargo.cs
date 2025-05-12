@@ -30,7 +30,7 @@ public class Cargo
         string result = nombre;
         foreach (var persona in personas)
         {
-            result += $"\n{persona.nombre}";
+            result += $"\\n{persona.nombre}";
         }
         return result;
     }

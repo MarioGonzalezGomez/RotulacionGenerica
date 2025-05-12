@@ -11,9 +11,9 @@
   IgnorableNamespaces="uap rescap genTemplate">
 
   <Identity
-    Name="44588f33-927e-4173-95a4-8d9fe7e617b0"
+    Name="RotuladorGenericPackage"
     Publisher="CN=Transformacion Digital"
-    Version="1.0.0.0" />
+    Version="1.1.10.0" />
     
   <mp:PhoneIdentity PhoneProductId="44588f33-927e-4173-95a4-8d9fe7e617b0" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
     
@@ -34,8 +34,7 @@
 
   <Applications>
     <Application Id="App"
-      Executable="$targetnametoken$.exe"
-      EntryPoint="$targetentrypoint$">
+      Executable="$targetnametoken$.exe" EntryPoint="$targetentrypoint$">
       <uap:VisualElements
         DisplayName="RotuladorGenericoFront"
         Description="Parte visual de la aplicación de rotulación genérica"

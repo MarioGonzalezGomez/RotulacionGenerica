@@ -175,6 +175,10 @@ public partial class RotulosViewModel : ObservableRecipient
     {
         graphicController.Entra(rotulo);
     }
+    public void Encadena(Rotulo rotulo)
+    {
+        graphicController.Encadena(rotulo);
+    }
     public void Sale()
     {
         graphicController.Sale();

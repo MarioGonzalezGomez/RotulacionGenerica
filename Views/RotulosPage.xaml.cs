@@ -434,8 +434,15 @@ public sealed partial class RotulosPage : Page
     {
         if (seleccionado != null)
         {
-            ViewModel.Entra(seleccionado);
-            rotuloIn = true;
+            if (!rotuloIn)
+            {
+                ViewModel.Entra(seleccionado);
+                rotuloIn = true;
+            }
+            else
+            {
+                ViewModel.Encadena(seleccionado);
+            }
         }
     }
 

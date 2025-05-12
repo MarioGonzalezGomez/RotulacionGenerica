@@ -4,7 +4,7 @@
     <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <RootNamespace>Generico_Front</RootNamespace>
-    <ApplicationIcon>Assets/WindowIcon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\boton-de-play.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
      <Platforms>x86;x64;arm64</Platforms>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
@@ -20,7 +20,7 @@
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
-    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
     <AppxBundle>Never</AppxBundle>
@@ -29,12 +29,20 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="config.json" />
+    <None Remove="Resources\boton-de-play.ico" />
+    <None Remove="Resources\boton-de-play.png" />
     <None Remove="Resources\InfoPremios.txt" />
     <None Remove="Views\FaldonesPage.xaml" />
     <None Remove="Views\GafasPage.xaml" />
     <None Remove="Views\RodillosPage.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\boton-de-play.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\boton-de-play.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

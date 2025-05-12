@@ -36,26 +36,23 @@ public class BSBuilder
         for (int i = 0; i < 4; i++)
         {
             string texto = i < rotulo.lineas.Count ? rotulo.lineas[i].texto : "";
-            if (i == 0)
-            {
-                mensaje += CambiaTexto($"Rotulo/Txt0{i + 2}", texto);
-            }
-            else if (i == 1)
-            {
-                mensaje += CambiaTexto($"Rotulo/Txt0{i}", texto);
-            }
-            else {
-                mensaje += CambiaTexto($"Rotulo/Txt0{i + 1}", texto);
-            }
-           
+            mensaje += CambiaTexto($"Rotulo/Txt0{i + 1}", texto) + "\n";
         }
         mensaje += EventRunBuild($"Rotulo/numLineas/0{rotulo.lineas.Count}") + "\n";
-        mensaje += EventRunBuild($"Rotulo/Tipos/Actuaciones") + "\n";
-        //TODO:Esto no es generico, sustituir por el comentado despues
-        //mensaje += Entra("Rotulo");
-        mensaje += EventRunBuild("Rotulo/Entra_Actuaciones") + "\n";
-        //mensaje += EventBuild("Rotulo", "OBJ_CULL", "False",1);
-
+        mensaje += Entra("Rotulo");
+        return mensaje;
+    }
+    public string RotuloEncadena(Rotulo rotulo)
+    {
+        string mensaje = "";
+        mensaje += ItemGoBuild("Rotulo/Txt", "OBJ_CULL", "True", 0.5) + "\n";
+        for (int i = 0; i < 4; i++)
+        {
+            string texto = i < rotulo.lineas.Count ? rotulo.lineas[i].texto : "";
+            mensaje += CambiaTexto($"Rotulo/Txt0{i + 1}", texto) + "\n";
+        }
+        mensaje += EventRunBuild($"Rotulo/numLineas/0{rotulo.lineas.Count}", 0.5) + "\n";
+        mensaje += ItemGoBuild("Rotulo/Txt", "OBJ_CULL", "False", 0.5, 0.6) + "\n";
         return mensaje;
     }
     public string RotuloSale()
@@ -181,7 +178,6 @@ public class BSBuilder
         return Sale("Rotulo");
     }
 
-    //No Generico, adaptado para talia
     public string GanadorEntra(Premio premio, Nominado nominado)
     {
         string mensaje = "";
@@ -206,30 +202,14 @@ public class BSBuilder
             mensaje += EventRunBuild($"Rotulo/numLineas/04") + "\n";
         }
 
-        if (string.IsNullOrEmpty(nominado.trabajo)) {
+        if (string.IsNullOrEmpty(nominado.trabajo))
+        {
             mensaje += EventRunBuild($"Rotulo/numLineas/excepcion01") + "\n";
         }
-       
-       // if (premio.nombre.Length < 30) {
-       //     mensaje += EventBuild("Rotulo/Txt01", "TEXT_BLOCK_MAXSIZE", "(337.4,130.34)", 1) + "\n";
-       //     mensaje += EventBuild("Rotulo/Txt/Txt01", "OBJ_DISPLACEMENT[0]", 0, 1) + "\n";
-       // } else {
-       //     mensaje += EventBuild("Rotulo/Txt01", "TEXT_BLOCK_MAXSIZE", "(367.4, 140.34)", 1) + "\n";
-       //     mensaje += EventBuild("Rotulo/Txt/Txt01", "OBJ_DISPLACEMENT[0]", -19, 1) + "\n";
-       // }
-       //
-       // if (nominado.nombre.Length < 20)
-       // {
-       //     mensaje += EventBuild("Rotulo/Txt02", "TEXT_BLOCK_MAXSIZE", "(467, 40)", 1) + "\n";
-       //     mensaje += EventBuild("Rotulo/Txt/Txt03", "OBJ_DISPLACEMENT[2]", -18, 1) + "\n";
-       // }
-       // else {
-       //     mensaje += EventBuild("Rotulo/Txt02", "TEXT_BLOCK_MAXSIZE", "(467, 63)", 1) + "\n";
-       //     mensaje += EventBuild("Rotulo/Txt/Txt03", "OBJ_DISPLACEMENT[2]",-32, 1) + "\n";
-       // }
 
-        mensaje += EventRunBuild("Rotulo/Entra",0.2);
-      //  mensaje += EventBuild("Rotulo", "OBJ_CULL", "False", 1);
+
+
+        mensaje += EventRunBuild("Rotulo/Entra");
         return mensaje;
     }
     public string GanadorSale()
@@ -348,6 +328,11 @@ public class BSBuilder
             setOgo = "itemgo('";
         }
         return $"{setOgo}<{_bd}>{objeto}','{propiedad}');";
+    }
+
+    private string ItemGoBuild(string objeto, string propiedad, string values, double tiempo, double delay = 0.0)
+    {
+        return $"itemgo('<{_bd}>{objeto}','{propiedad}', {values}, {tiempo}, {delay});";
     }
 
     private string EventRunBuild(string objeto, double delay = 0.0)

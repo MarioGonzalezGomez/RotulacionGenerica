@@ -35,6 +35,11 @@ public class RotuloController
         conexion.EnviarMensaje(builder.RotuloEntra(rotulo));
     }
 
+    public void Encadena(Rotulo rotulo)
+    {
+        conexion.EnviarMensaje(builder.RotuloEncadena(rotulo));
+    }
+
     public void Sale()
     {
         conexion.EnviarMensaje(builder.RotuloSale());

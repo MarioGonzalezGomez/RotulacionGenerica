@@ -18,9 +18,9 @@ public partial class VariosViewModel : ObservableRecipient
         dataController = Controllers.Data.LocalizacionController.GetInstance();
         graphicController = VariosController.GetInstance();
         config = Config.Config.GetInstance();
-        Localizaciones = new List<Localizacion>();
+        Localizaciones = new ObservableCollection<Localizacion>();
     }
-    public List<Localizacion> Localizaciones;
+    public ObservableCollection<Localizacion> Localizaciones;
 
     // Comando para cargar la lista de localizacions
     [RelayCommand]
@@ -72,7 +72,7 @@ public partial class VariosViewModel : ObservableRecipient
         await CargarLocalizaciones();
     }
 
-    //Acciones Gráficas
+    //Acciones Gráficas Reloj
     public void EntraReloj(DateTime hora)
     {
         graphicController.EntraReloj(hora);
@@ -100,12 +100,13 @@ public partial class VariosViewModel : ObservableRecipient
         graphicController.SaleCrono();
     }
 
+    //Localizador
     public void EntraLocalizacion(Localizacion localizacion)
     {
-        //graphicController.Entra(localizacion);
+        graphicController.EntraLocalizacion(localizacion);
     }
     public void SaleLocalizacion()
     {
-        // graphicController.Sale();
+        graphicController.SaleLocalizacion();
     }
 }

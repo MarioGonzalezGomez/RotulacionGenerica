@@ -30,9 +30,36 @@ public class RodilloController
         return instance;
     }
 
-    public void Entra(Rodillo rodillo)
+    public void Entra(Rodillo rodillo, string tipo)
     {
+        switch (tipo)
+        {
+            case "Vertical":
+                conexion.EnviarMensaje(builder.RodilloEntra(rodillo));
+                break;
+            case "Horizontal":
+                //TODO: Meter datos extra desde config
+                EnviarRodilloAsync(rodillo, 2, 4, 1);
+                break;
+            case "Paginado":
+                conexion.EnviarMensaje(builder.RodilloEntraPaginado(rodillo));
+                break;
+            default:
+                break;
+        }
+
         conexion.EnviarMensaje(builder.RodilloEntra(rodillo));
+    }
+
+    public async Task EnviarRodilloAsync(Rodillo rodillo, int columnas, int maxLinesPerBloque, double tiempo = 1.0)
+    {
+        var señales = builder.RodilloEntraHorizontal(rodillo, columnas, maxLinesPerBloque);
+
+        foreach (var señal in señales)
+        {
+            conexion.EnviarMensaje(señal);
+            await Task.Delay((int)(tiempo * 1000));
+        }
     }
 
     public void Sale()

@@ -122,6 +122,91 @@ public class BSBuilder
         signal += $"\n{Entra("Rodillo")}";
         return signal;
     }
+    public List<string> RodilloEntraHorizontal(Rodillo rodillo, int columnas = 2, int maxLinesPerBloque = 4)
+    {
+        List<string> señales = new List<string>();
+        int linesPerTanda = columnas * maxLinesPerBloque;
+        //TODO: Pasar a configuración
+        double tiempoEntreBloques = 0.5;
+
+        // 1. Preparar todas las líneas
+        List<string> lineas = new List<string>();
+        foreach (Cargo c in rodillo.cargos)
+        {
+            if (c.personas.Count == 0)
+            {
+                lineas.Add($"{c.nombre}\n");
+            }
+            else
+            {
+                foreach (Persona p in c.personas)
+                {
+                    lineas.Add($"{c.nombre}  \\f<Titular>{p.nombre}\\f");
+                }
+            }
+        }
+
+        // 2. Dividir en tandas de bloques
+        List<List<string>> tandas = new List<List<string>>();
+        int totalTandas = (int)Math.Ceiling(lineas.Count / (double)linesPerTanda);
+
+        for (int t = 0; t < totalTandas; t++)
+        {
+            List<string> bloques = new List<string>();
+            for (int b = 0; b < columnas; b++)
+                bloques.Add("");
+
+            for (int i = 0; i < linesPerTanda; i++)
+            {
+                int index = t * linesPerTanda + i;
+                if (index >= lineas.Count) break;
+
+                int bloqueIndex = i / maxLinesPerBloque;
+                bloques[bloqueIndex] += lineas[index];
+            }
+
+            tandas.Add(bloques);
+        }
+
+        // 3. Construir las señales alternadas
+        bool primeraTanda = true;
+        for (int i = 0; i < tandas.Count; i++)
+        {
+            var bloques = tandas[i];
+            string señal = "";
+
+            for (int j = 0; j < columnas; j++)
+            {
+                int bloqueId = (primeraTanda ? j + 1 : columnas + j + 1);
+                string ruta = $"Rodillo/Txt{bloqueId.ToString("D2")}";
+                señal += $"\n{CambiaTexto(ruta, bloques[j])}\n";
+            }
+
+            // Entra solo en la primera llamada
+            if (i == 0)
+            {
+                señal += $"\n{Entra("Rodillo")}";
+            }
+            else
+            {
+                string evento = primeraTanda ? "Rodillo/Encadena/02" : "Rodillo/Encadena/01";
+                señal += $"\n{EventRunBuild(evento, tiempoEntreBloques)}";
+            }
+
+            señales.Add(señal);
+            primeraTanda = !primeraTanda;
+        }
+
+        return señales;
+    }
+
+
+    //TODO
+    public string RodilloEntraPaginado(Rodillo rodillo)
+    {
+        return "";
+    }
+
     public string RodilloSale()
     {
         return Sale("Rodillo");
@@ -253,6 +338,18 @@ public class BSBuilder
     public string CronoSale()
     {
         return Sale("Crono");
+    }
+
+    //Adaptar para auqellos que tengan texto
+    public string LocalizacionEntra(Localizacion local)
+    {
+        // local.principal
+        // local.secundario
+        return Entra("Directos");
+    }
+    public string LocalizacionSale()
+    {
+        return Sale("Directos");
     }
 
     //MOSCA

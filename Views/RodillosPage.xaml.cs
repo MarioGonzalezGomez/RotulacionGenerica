@@ -370,7 +370,8 @@ public sealed partial class RodillosPage : Page
     {
         Rodillo r = new Rodillo();
         r.cargos = ViewModel.cargos.ToList();
-        ViewModel.Entra(r);
+        string tipo = config.RotulacionSettings.TipoRodillo;
+        ViewModel.Entra(r, tipo);
     }
 
     private void btnStop_Click(object sender, RoutedEventArgs e)

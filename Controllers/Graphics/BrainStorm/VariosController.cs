@@ -30,7 +30,7 @@ public class VariosController
         }
         return instance;
     }
-   
+
     //TIEMPOS
     public void EntraReloj(DateTime hora)
     {
@@ -57,5 +57,15 @@ public class VariosController
     public void SaleCrono()
     {
         conexion.EnviarMensaje(builder.CronoSale());
+    }
+
+    //LOCALIZACIONES
+    public void EntraLocalizacion(Localizacion localizacion)
+    {
+        conexion.EnviarMensaje(builder.LocalizacionEntra(localizacion));
+    }
+    public void SaleLocalizacion()
+    {
+        conexion.EnviarMensaje(builder.LocalizacionSale());
     }
 }

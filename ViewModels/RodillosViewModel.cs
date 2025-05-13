@@ -136,9 +136,9 @@ public partial class RodillosViewModel : ObservableRecipient
 
 
     //Acciones Gráficas
-    public void Entra(Rodillo rodillo)
+    public void Entra(Rodillo rodillo, string tipo)
     {
-        graphicController.Entra(rodillo);
+        graphicController.Entra(rodillo, tipo);
     }
     public void Sale()
     {

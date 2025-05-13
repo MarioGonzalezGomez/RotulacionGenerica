@@ -14,7 +14,50 @@
     </Page.DataContext>
 
     <Page.Resources>
+        <DataTemplate x:Key="LocalizacionesListViewTemplate" x:DataType="Models:Localizacion">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.ContextFlyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="Editar" Click="MenuFlyoutEditar_Click"/>
+                        <MenuFlyoutItem Text="Borrar" Foreground="#f54048" Click="MenuFlyoutBorrar_Click"/>
+                    </MenuFlyout>
+                </Grid.ContextFlyout>
 
+                <Ellipse x:Name="Ellipse"
+                    Grid.RowSpan="2"
+                    Width="12"
+                    Height="12"
+                    Margin="0,0,0,0"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Fill="{ThemeResource SystemControlBackgroundBaseMediumBrush}" />
+
+                <TextBlock Grid.Column="1"
+                    Grid.RowSpan="2"
+                    Text="{x:Bind principal}"
+                    x:Phase="1"
+                    Style="{ThemeResource BaseTextBlockStyle}"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    Margin="15,0,0,0"/>
+
+                <TextBlock Grid.Column="2"
+                    Grid.Row="0"
+                    Text="{x:Bind secundario}"
+                    x:Phase="2"
+                    Style="{ThemeResource BaseTextBlockStyle}"
+                    FontSize="12"
+                    Margin="25,28,0,0"/>
+            </Grid>
+        </DataTemplate>
     </Page.Resources>
 
     <Grid x:Name="ContentArea">
@@ -143,19 +186,36 @@
                 Margin="0,0,0,10"
                 Grid.ColumnSpan="2"/>
 
-                <ListView x:Name="listLocalizaciones" Grid.Column="0"  Grid.Row="1" Margin="0,15,0,0" SelectionChanged="listLocalizaciones_SelectionChanged"></ListView>
+                <ListView
+                    x:Name="listLocalizaciones"
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Margin="0,15,0,0"
+                    ItemTemplate="{StaticResource LocalizacionesListViewTemplate}"
+                    BorderThickness="1"
+                    BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    SelectionMode="Single"
+                    CanDragItems="True"
+                    SelectionChanged="listLocalizaciones_SelectionChanged"
+                    DragItemsCompleted="listLocalizaciones_DragItemsCompleted"
+                    CanReorderItems="True"
+                    AllowDrop="True"
+                    RightTapped="listLocalizaciones_RightTapped"/>
                 <ToggleSwitch x:Name="tggEditorLocalizaciones" Grid.ColumnSpan="2" Grid.Row="0" HorizontalAlignment="Left" Margin="0,15,0,0" OffContent="Editar Off" OnContent="Editar On" IsOn="True" Toggled="tggEditorLocalizaciones_Toggled"/>
                 <StackPanel x:Name="stckEdicionLocalizaciones" Grid.Column="1" Grid.Row="1" Orientation="Vertical" Margin="15,15,0,0">
-
+                    <TextBox x:Name="boxPrincipalLocalizacion" Header="Texto principal" HorizontalAlignment="Stretch"/>
+                    <TextBox x:Name="boxSecundariolLocalizacion" Header="Secundario" HorizontalAlignment="Stretch"/>
                     <StackPanel x:Name="stckBotoneraEdicionLocalizaciones" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,30,0,0">
                         <Button  x:Name="btnDeleteLocalizacion" Click="btnDeleteLocalizacion_Click">
                             <SymbolIcon Symbol="Delete"/>
                         </Button>
                         <Button  x:Name="btnEditLocalizacion" Margin="20,0,0,0" Click="btnEditLocalizacion_Click">
-                            <SymbolIcon Symbol="Play"/>
+                            <SymbolIcon Symbol="Edit"/>
                         </Button>
                         <Button  x:Name="btnAddLozalizacion" Margin="20,0,0,0" Click="btnAddLozalizacion_Click">
-                            <SymbolIcon Symbol="Pause"/>
+                            <SymbolIcon Symbol="Add"/>
                         </Button>
                     </StackPanel>
 
@@ -179,7 +239,15 @@
                 </Grid>
             </Grid>
         </Border>
-
+        <muxc:TeachingTip x:Name="Tip"
+               Title="Añadido con éxito"
+               CloseButtonContent="Salir"
+               Closed="Tip_Closed"
+               IsLightDismissEnabled="True">
+            <muxc:TeachingTip.IconSource>
+                <SymbolIconSource Symbol="Accept"  Foreground="Green"/>
+            </muxc:TeachingTip.IconSource>
+        </muxc:TeachingTip>
     </Grid>
 </Page>
     

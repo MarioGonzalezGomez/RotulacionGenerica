@@ -20,6 +20,8 @@ public sealed partial class VariosPage : Page
     private Config.Config config;
     public DateTimeOffset DefaultDate { get; set; } = DateTimeOffset.Now;
 
+    private Localizacion localizacionSeleccionada;
+
     public VariosViewModel ViewModel
     {
         get;
@@ -37,6 +39,8 @@ public sealed partial class VariosPage : Page
     {
         listBoxTiempos.SelectedIndex = 0;
         tggEditor.IsOn = true;
+        listLocalizaciones.ItemsSource = ViewModel.Localizaciones;
+        ViewModel.CargarLocalizaciones();
     }
 
     //MOSTRAR MENSAJES
@@ -51,6 +55,17 @@ public sealed partial class VariosPage : Page
         };
 
         await dialog.ShowAsync();
+    }
+
+    private async void AbrirTip()
+    {
+        Tip.IsOpen = true;
+        await Task.Delay(1500);
+        Tip.IsOpen = false;
+    }
+    private void Tip_Closed(TeachingTip sender, TeachingTipClosedEventArgs args)
+    {
+        Tip.IsOpen = false;
     }
 
     //TIEMPOS
@@ -218,31 +233,110 @@ public sealed partial class VariosPage : Page
         }
     }
 
-    private void listLocalizaciones_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
 
-    }
-
+    //LOCALIZACIONES
     private void tggEditorLocalizaciones_Toggled(object sender, RoutedEventArgs e)
     {
 
     }
+    private void listLocalizaciones_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
+    {
+        var ordenado = sender.Items.Cast<Localizacion>().ToList();
+        ViewModel.ActualizarPosiciones(ordenado);
+    }
+    private void listLocalizaciones_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (listLocalizaciones.SelectedItem != null)
+        {
+            localizacionSeleccionada = listLocalizaciones.SelectedItem as Localizacion;
+            boxPrincipalLocalizacion.Text = localizacionSeleccionada.principal;
+            boxSecundariolLocalizacion.Text = localizacionSeleccionada.secundario;
+        }
+    }
+    private void listLocalizaciones_RightTapped(object sender, Microsoft.UI.Xaml.Input.RightTappedRoutedEventArgs e)
+    {
+        var clickedItem = ((FrameworkElement)e.OriginalSource).DataContext;
+
+        if (clickedItem != null)
+        {
+            listLocalizaciones.SelectedItem = clickedItem;
+        }
+    }
+    private void MenuFlyoutEditar_Click(object sender, RoutedEventArgs e)
+    {
+        if (!tggEditorLocalizaciones.IsOn)
+        {
+            tggEditorLocalizaciones.IsOn = true;
+        }
+    }
+
+    private void MenuFlyoutBorrar_Click(object sender, RoutedEventArgs e)
+    {
+        if (listLocalizaciones.SelectedItem != null)
+        {
+            Localizacion actual = listLocalizaciones.SelectedItem as Localizacion;
+            EliminarLocalizacion(actual);
+        }
+    }
 
     private void btnDeleteLocalizacion_Click(object sender, RoutedEventArgs e)
     {
-
+        if (listLocalizaciones.SelectedItem != null)
+        {
+            Localizacion selected = listLocalizaciones.SelectedItem as Localizacion;
+            EliminarLocalizacion(selected);
+        }
+    }
+    private async void EliminarLocalizacion(Localizacion localizacion)
+    {
+        Tip.Target = btnDeleteLocalizacion;
+        Tip.Title = "Eliminada";
+        await ViewModel.EliminarLocalizacion(localizacion);
+        AbrirTip();
     }
 
     private void btnEditLocalizacion_Click(object sender, RoutedEventArgs e)
     {
-
+        if (listLocalizaciones.SelectedItem != null)
+        {
+            Localizacion actual = listLocalizaciones.SelectedItem as Localizacion;
+            Localizacion modificada = new Localizacion();
+            modificada.id = actual.id;
+            modificada.posicion = actual.posicion;
+            modificada.principal = boxPrincipalLocalizacion.Text;
+            modificada.secundario = boxSecundariolLocalizacion.Text;
+            EditarLocalizacion(modificada);
+        }
+    }
+    private async void EditarLocalizacion(Localizacion localizacion)
+    {
+        Tip.Target = btnEditLocalizacion;
+        Tip.Title = "Editada con éxito";
+        await ViewModel.GuardarLocalizacion(localizacion);
+        AbrirTip();
     }
 
     private void btnAddLozalizacion_Click(object sender, RoutedEventArgs e)
     {
-
+        if (!string.IsNullOrEmpty(boxPrincipalLocalizacion.Text))
+        {
+            Localizacion nueva = new Localizacion();
+            nueva.id = 0;
+            nueva.posicion = ViewModel.Localizaciones.Count > 0 ? ViewModel.Localizaciones.Max(l => l.posicion) : 0;
+            nueva.principal = boxPrincipalLocalizacion.Text.Trim();
+            nueva.secundario = boxSecundariolLocalizacion.Text.Trim();
+            GuardarLocalizacion(nueva);
+        }
+    }
+    private async void GuardarLocalizacion(Localizacion localizacion)
+    {
+        Tip.Target = btnAddLozalizacion;
+        Tip.Title = "Guardado";
+        await ViewModel.GuardarLocalizacion(localizacion);
+        AbrirTip();
     }
 
+    //ACCIONES DE LOCALIZACIONES
     private void btnPlayLocalizacion_Click(object sender, RoutedEventArgs e)
     {
 
@@ -252,12 +346,5 @@ public sealed partial class VariosPage : Page
     {
 
     }
-
-
-
-
-
-
-    //LOCALIZACIONES
 
 }

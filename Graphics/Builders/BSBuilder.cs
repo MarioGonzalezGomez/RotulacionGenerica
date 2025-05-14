@@ -122,12 +122,12 @@ public class BSBuilder
         signal += $"\n{Entra("Rodillo")}";
         return signal;
     }
-    public List<string> RodilloEntraHorizontal(Rodillo rodillo, int columnas = 2, int maxLinesPerBloque = 4)
+    public List<string> RodilloEntraHorizontal(Rodillo rodillo, int columnas = 2, int maxLinesPerBloque = 4, double tiempo = 1.0)
     {
         List<string> señales = new List<string>();
         int linesPerTanda = columnas * maxLinesPerBloque;
         //TODO: Pasar a configuración
-        double tiempoEntreBloques = 0.5;
+        double tiempoEntreBloques = tiempo / 2;
 
         // 1. Preparar todas las líneas
         List<string> lineas = new List<string>();
@@ -135,13 +135,13 @@ public class BSBuilder
         {
             if (c.personas.Count == 0)
             {
-                lineas.Add($"{c.nombre}\n");
+                lineas.Add($"{c.nombre}\\\\n");
             }
             else
             {
                 foreach (Persona p in c.personas)
                 {
-                    lineas.Add($"{c.nombre}  \\f<Titular>{p.nombre}\\f");
+                    lineas.Add($"{c.nombre}  \\\\f<Titular>{p.nombre}\\\\f\\\\n");
                 }
             }
         }
@@ -190,7 +190,7 @@ public class BSBuilder
             else
             {
                 string evento = primeraTanda ? "Rodillo/Encadena/02" : "Rodillo/Encadena/01";
-                señal += $"\n{EventRunBuild(evento, tiempoEntreBloques)}";
+                señal += $"\n{EventRunBuild(evento, 0)}";
             }
 
             señales.Add(señal);
@@ -199,7 +199,6 @@ public class BSBuilder
 
         return señales;
     }
-
 
     //TODO
     public string RodilloEntraPaginado(Rodillo rodillo)

@@ -339,12 +339,12 @@ public sealed partial class VariosPage : Page
     //ACCIONES DE LOCALIZACIONES
     private void btnPlayLocalizacion_Click(object sender, RoutedEventArgs e)
     {
-
+        ViewModel.EntraLocalizacion(localizacionSeleccionada);
     }
 
     private void btnStopLocalizacion_Click(object sender, RoutedEventArgs e)
     {
-
+        ViewModel.SaleLocalizacion();
     }
 
 }

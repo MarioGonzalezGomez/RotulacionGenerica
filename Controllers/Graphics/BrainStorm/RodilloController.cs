@@ -39,7 +39,7 @@ public class RodilloController
                 break;
             case "Horizontal":
                 //TODO: Meter datos extra desde config
-                EnviarRodilloAsync(rodillo, 2, 4, 1);
+                EnviarRodilloAsync(rodillo, 2, 4, 5);
                 break;
             case "Paginado":
                 conexion.EnviarMensaje(builder.RodilloEntraPaginado(rodillo));
@@ -47,13 +47,11 @@ public class RodilloController
             default:
                 break;
         }
-
-        conexion.EnviarMensaje(builder.RodilloEntra(rodillo));
     }
 
     public async Task EnviarRodilloAsync(Rodillo rodillo, int columnas, int maxLinesPerBloque, double tiempo = 1.0)
     {
-        var señales = builder.RodilloEntraHorizontal(rodillo, columnas, maxLinesPerBloque);
+        var señales = builder.RodilloEntraHorizontal(rodillo, columnas, maxLinesPerBloque, tiempo);
 
         foreach (var señal in señales)
         {

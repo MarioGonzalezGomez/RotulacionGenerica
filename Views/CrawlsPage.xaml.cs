@@ -30,7 +30,7 @@ public sealed partial class CrawlsPage : Page
 
     private bool playLista = false;
     private Crawl seleccionado = null;
-    private bool crawlIn = false;
+    private static bool crawlIn = false;
 
     private Config.Config config;
 

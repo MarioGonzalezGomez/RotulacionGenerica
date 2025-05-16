@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Generico_Front.Models;
 using Newtonsoft.Json.Linq;
+using Windows.Foundation.Collections;
 using Windows.System.Threading.Core;
 
 namespace Generico_Front.Graphics.Builders;
@@ -47,14 +48,13 @@ public class BSBuilder
     public string RotuloEncadena(Rotulo rotulo)
     {
         string mensaje = "";
-        mensaje += ItemGoBuild("Rotulo/Txt", "OBJ_CULL", "True", 0.5) + "\n";
+        mensaje += Encadena("Rotulo") + "\n";
         for (int i = 0; i < 4; i++)
         {
             string texto = i < rotulo.lineas.Count ? rotulo.lineas[i].texto : "";
-            mensaje += CambiaTexto($"Rotulo/Txt0{i + 1}", texto) + "\n";
+            mensaje += CambiaTextoDelay($"Rotulo/Txt0{i + 1}", texto, 0.45) + "\n";
         }
         mensaje += EventRunBuild($"Rotulo/numLineas/0{rotulo.lineas.Count}", 0.5) + "\n";
-        mensaje += ItemGoBuild("Rotulo/Txt", "OBJ_CULL", "False", 0.5, 0.6) + "\n";
         return mensaje;
     }
     public string RotuloSale()
@@ -77,13 +77,12 @@ public class BSBuilder
     public string FaldonEncadena(Faldon faldon)
     {
         string mensaje = "";
-        mensaje += ItemGoBuild("Rotulo/Txt", "OBJ_CULL", "True", 0.5) + "\n";
+        mensaje += Encadena("Faldon") + "\n";
         if (!string.IsNullOrEmpty(faldon.titulo.texto))
         {
-            mensaje += CambiaTexto("Faldon/Titular", faldon.titulo.texto);
+            mensaje += CambiaTextoDelay("Faldon/Titular", faldon.titulo.texto, 0.45);
         }
-        mensaje += CambiaTexto($"Faldon/Txt", faldon.texto.texto);
-        mensaje += ItemGoBuild("Rotulo/Txt", "OBJ_CULL", "False", 0.5, 0.6) + "\n";
+        mensaje += CambiaTextoDelay($"Faldon/Txt", faldon.texto.texto, 0.45);
         return mensaje;
     }
     public string FaldonSale()
@@ -226,7 +225,6 @@ public class BSBuilder
 
         return señales;
     }
-
 
     //TODO
     public string RodilloEntraPaginado(Rodillo rodillo)
@@ -374,12 +372,11 @@ public class BSBuilder
         signal += CambiaTexto("Localizador/Txt01", local.principal) + "\n";
         signal += CambiaTexto("Localizador/Txt02", local.secundario) + "\n";
         signal += Entra("Localizador");
-
         return signal;
     }
     public string LocalizacionSale()
     {
-        return Sale("Directos");
+        return Sale("Localizador");
     }
 
     //MOSCA
@@ -414,6 +411,10 @@ public class BSBuilder
     private string CambiaTexto(string objeto, string texto)
     {
         return EventBuild(objeto, "TEXT_STRING", $"'{texto}'", 1);
+    }
+    private string CambiaTextoDelay(string objeto, string texto, double delay)
+    {
+        return $"itemgo('<{_bd}>{objeto}','TEXT_STRING', '{texto}', 0, {delay});";
     }
 
     //CONSTRUCTORES

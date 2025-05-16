@@ -17,7 +17,7 @@ public sealed partial class RotulosPage : Page
         get;
     }
     private Rotulo? seleccionado = null;
-    private bool rotuloIn = false;
+    private static bool rotuloIn = false;
 
     public RotulosPage()
     {

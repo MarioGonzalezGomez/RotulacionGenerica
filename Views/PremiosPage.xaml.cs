@@ -27,12 +27,12 @@ public sealed partial class PremiosPage : Page
     }
     private object? selectedItem;
 
-    private bool inCategoria = false;
-    private bool inNominado = false;
-    private bool inLista = false;
-    private bool inGafas = false;
-    private bool inEntregadores = false;
-    private bool inGanador = false;
+    private static bool inCategoria = false;
+    private static bool inNominado = false;
+    private static bool inLista = false;
+    private static bool inGafas = false;
+    private static bool inEntregadores = false;
+    private static bool inGanador = false;
 
     private bool isPremio;
 

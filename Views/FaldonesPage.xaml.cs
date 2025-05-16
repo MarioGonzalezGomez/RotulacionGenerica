@@ -24,7 +24,7 @@ public sealed partial class FaldonesPage : Page
     }
 
     private Faldon seleccionado = null;
-    private bool faldonIn = false;
+    private static bool faldonIn = false;
 
     //ACCIONES EN LAS LISTAS
     private void IniciarListas()

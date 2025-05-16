@@ -165,6 +165,10 @@ public partial class FaldonesViewModel : ObservableRecipient
     {
         graphicController.Entra(faldon);
     }
+    public void Encadena(Faldon faldon)
+    {
+        graphicController.Encadena(faldon);
+    }
     public void Sale()
     {
         graphicController.Sale();

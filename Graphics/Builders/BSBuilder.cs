@@ -74,6 +74,18 @@ public class BSBuilder
 
         return mensaje;
     }
+    public string FaldonEncadena(Faldon faldon)
+    {
+        string mensaje = "";
+        mensaje += ItemGoBuild("Rotulo/Txt", "OBJ_CULL", "True", 0.5) + "\n";
+        if (!string.IsNullOrEmpty(faldon.titulo.texto))
+        {
+            mensaje += CambiaTexto("Faldon/Titular", faldon.titulo.texto);
+        }
+        mensaje += CambiaTexto($"Faldon/Txt", faldon.texto.texto);
+        mensaje += ItemGoBuild("Rotulo/Txt", "OBJ_CULL", "False", 0.5, 0.6) + "\n";
+        return mensaje;
+    }
     public string FaldonSale()
     {
         return Sale("Faldon");

@@ -392,8 +392,16 @@ public sealed partial class FaldonesPage : Page
     {
         if (seleccionado != null)
         {
-            ViewModel.Entra(seleccionado);
-            faldonIn = true;
+            if (!faldonIn)
+            {
+                ViewModel.Entra(seleccionado);
+                faldonIn = true;
+            }
+            else
+            {
+                ViewModel.Encadena(seleccionado);
+            }
+
         }
     }
 

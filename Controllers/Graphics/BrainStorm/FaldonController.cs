@@ -34,6 +34,11 @@ public class FaldonController
         conexion.EnviarMensaje(builder.FaldonEntra(faldon));
     }
 
+    public void Encadena(Faldon faldon)
+    {
+        conexion.EnviarMensaje(builder.FaldonEncadena(faldon));
+    }
+
     public void Sale()
     {
         conexion.EnviarMensaje(builder.FaldonSale());

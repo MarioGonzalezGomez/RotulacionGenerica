@@ -57,7 +57,6 @@ public sealed partial class VariosPage : Page
         await dialog.ShowAsync();
     }
 
-
     private async void AbrirTip()
     {
         Tip.IsOpen = true;
@@ -238,7 +237,12 @@ public sealed partial class VariosPage : Page
     //LOCALIZACIONES
     private void tggEditorLocalizaciones_Toggled(object sender, RoutedEventArgs e)
     {
-
+        if (stckBotoneraEdicionLocalizaciones != null)
+        {
+            stckBotoneraEdicionLocalizaciones.Visibility = tggEditorLocalizaciones.IsOn ? Visibility.Visible : Visibility.Collapsed;
+            boxPrincipalLocalizacion.Visibility = tggEditorLocalizaciones.IsOn ? Visibility.Visible : Visibility.Collapsed;
+            boxSecundariolLocalizacion.Visibility = tggEditorLocalizaciones.IsOn ? Visibility.Visible : Visibility.Collapsed;
+        }
     }
     private void listLocalizaciones_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
     {

@@ -39,6 +39,7 @@ public class BSBuilder
             mensaje += CambiaTexto($"Rotulo/Txt0{i + 1}", texto) + "\n";
         }
         mensaje += EventRunBuild($"Rotulo/numLineas/0{rotulo.lineas.Count}") + "\n";
+        mensaje += EventRunBuild($"Rotulo/Tipos/{rotulo.tipo.descripcion}") + "\n";
         mensaje += Entra("Rotulo");
         return mensaje;
     }
@@ -122,13 +123,10 @@ public class BSBuilder
         signal += $"\n{Entra("Rodillo")}";
         return signal;
     }
-    public List<string> RodilloEntraHorizontal(Rodillo rodillo, int columnas = 2, int maxLinesPerBloque = 4, double tiempo = 1.0)
+    public List<string> RodilloEntraHorizontal(Rodillo rodillo, int columnas = 2, int maxLinesPerBloque = 4)
     {
         List<string> señales = new List<string>();
-        int linesPerTanda = columnas * maxLinesPerBloque;
-        //TODO: Pasar a configuración
-        double tiempoEntreBloques = tiempo / 2;
-
+        bool entra = true;
         // 1. Preparar todas las líneas
         List<string> lineas = new List<string>();
         foreach (Cargo c in rodillo.cargos)
@@ -141,51 +139,67 @@ public class BSBuilder
             {
                 foreach (Persona p in c.personas)
                 {
-                    lineas.Add($"{c.nombre}  \\\\f<Titular>{p.nombre}\\\\f\\\\n");
+                    string linea = $"{c.nombre}  \\\\f<Titular>{p.nombre}\\\\f\\\\n";
+                    lineas.Add(linea);
                 }
             }
         }
 
-        // 2. Dividir en tandas de bloques
-        List<List<string>> tandas = new List<List<string>>();
-        int totalTandas = (int)Math.Ceiling(lineas.Count / (double)linesPerTanda);
+        // 2. Dividir en bloques considerando líneas dobles
+        int lineaActual = 0;
+        bool primeraTanda = true;
 
-        for (int t = 0; t < totalTandas; t++)
+        while (lineaActual < lineas.Count)
         {
             List<string> bloques = new List<string>();
+            List<int> lineasUsadas = new List<int>();
+
             for (int b = 0; b < columnas; b++)
-                bloques.Add("");
-
-            for (int i = 0; i < linesPerTanda; i++)
             {
-                int index = t * linesPerTanda + i;
-                if (index >= lineas.Count) break;
-
-                int bloqueIndex = i / maxLinesPerBloque;
-                bloques[bloqueIndex] += lineas[index];
+                bloques.Add("");
+                lineasUsadas.Add(0);
             }
 
-            tandas.Add(bloques);
-        }
+            int bloqueActual = 0;
 
-        // 3. Construir las señales alternadas
-        bool primeraTanda = true;
-        for (int i = 0; i < tandas.Count; i++)
-        {
-            var bloques = tandas[i];
+            while (bloqueActual < columnas && lineaActual < lineas.Count)
+            {
+                string linea = lineas[lineaActual];
+                bool esDoble = linea.Contains("#");
+                int peso = esDoble ? 2 : 1;
+
+                if (lineasUsadas[bloqueActual] + peso <= maxLinesPerBloque)
+                {
+                    string lineaLimpia = esDoble ? linea.Replace("#", "") : linea;
+                    bloques[bloqueActual] += lineaLimpia;
+
+                    if (esDoble)
+                    {
+                        bloques[bloqueActual] += "\\\\n"; // Segunda línea visual en blanco
+                    }
+
+                    lineasUsadas[bloqueActual] += peso;
+                    lineaActual++;
+                }
+                else
+                {
+                    bloqueActual++;
+                }
+            }
+
+            // 3. Construir señal
             string señal = "";
-
             for (int j = 0; j < columnas; j++)
             {
                 int bloqueId = (primeraTanda ? j + 1 : columnas + j + 1);
                 string ruta = $"Rodillo/Txt{bloqueId.ToString("D2")}";
-                señal += $"\n{CambiaTexto(ruta, bloques[j])}\n";
+                señal += $"\n{CambiaTexto(ruta, bloques[j].Replace("#", ""))}\n";
             }
 
-            // Entra solo en la primera llamada
-            if (i == 0)
+            if (entra)
             {
                 señal += $"\n{Entra("Rodillo")}";
+                entra = false;
             }
             else
             {
@@ -199,6 +213,7 @@ public class BSBuilder
 
         return señales;
     }
+
 
     //TODO
     public string RodilloEntraPaginado(Rodillo rodillo)

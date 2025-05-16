@@ -57,6 +57,7 @@ public sealed partial class VariosPage : Page
         await dialog.ShowAsync();
     }
 
+
     private async void AbrirTip()
     {
         Tip.IsOpen = true;

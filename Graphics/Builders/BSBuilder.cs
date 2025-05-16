@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Generico_Front.Models;
 using Newtonsoft.Json.Linq;
+using Windows.System.Threading.Core;
 
 namespace Generico_Front.Graphics.Builders;
 public class BSBuilder
@@ -357,9 +358,12 @@ public class BSBuilder
     //Adaptar para auqellos que tengan texto
     public string LocalizacionEntra(Localizacion local)
     {
-        // local.principal
-        // local.secundario
-        return Entra("Directos");
+        string signal = "";
+        signal += CambiaTexto("Localizador/Txt01", local.principal) + "\n";
+        signal += CambiaTexto("Localizador/Txt02", local.secundario) + "\n";
+        signal += Entra("Localizador");
+
+        return signal;
     }
     public string LocalizacionSale()
     {

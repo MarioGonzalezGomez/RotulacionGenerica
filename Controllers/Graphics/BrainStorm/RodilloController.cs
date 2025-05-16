@@ -39,6 +39,9 @@ public class RodilloController
             case "Vertical":
                 conexion.EnviarMensaje(builder.RodilloEntra(rodillo));
                 break;
+            case "VerticalDestacado":
+                conexion.EnviarMensaje(builder.RodilloEntraDestacadoNombre(rodillo));
+                break;
             case "Horizontal":
                 //TODO: Meter datos extra desde config
                 EnviarRodilloAsync(rodillo, 2, 4);

@@ -135,6 +135,13 @@ public class BSBuilder
         signal += $"\n{Entra("Rodillo")}";
         return signal;
     }
+    public string RodilloEntraDestacadoNombre(Rodillo rodillo)
+    {
+        string signal = EventBuild("Rodillo/Txt01", "TEXT_TRAVEL_DURATION_LIMIT", config.RotulacionSettings.VelocidadRodillo, 1);
+        signal += $"\n{CambiaTexto("Rodillo/Txt01", rodillo.ToStringDestacadoNombre())}";
+        signal += $"\n{Entra("Rodillo")}";
+        return signal;
+    }
     public List<string> RodilloEntraHorizontal(Rodillo rodillo, int columnas = 2, int maxLinesPerBloque = 4)
     {
         List<string> señales = new List<string>();

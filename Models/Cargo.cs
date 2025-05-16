@@ -34,4 +34,13 @@ public class Cargo
         }
         return result;
     }
+    public string ToStringDestacadoNombre()
+    {
+        string result = nombre;
+        foreach (var persona in personas)
+        {
+            result += $"\\n\\\\f<Titular>{persona.nombre}\\\\f";
+        }
+        return result;
+    }
 }

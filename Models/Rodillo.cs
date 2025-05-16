@@ -25,4 +25,14 @@ public class Rodillo
         }
         return result;
     }
+
+    public string ToStringDestacadoNombre()
+    {
+        string result = "";
+        foreach (var cargo in cargos)
+        {
+            result += $"{cargo.ToStringDestacadoNombre()}\\n\\n";
+        }
+        return result;
+    }
 }

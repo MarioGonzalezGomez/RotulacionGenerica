@@ -344,7 +344,16 @@ public sealed partial class VariosPage : Page
     //ACCIONES DE LOCALIZACIONES
     private void btnPlayLocalizacion_Click(object sender, RoutedEventArgs e)
     {
-        ViewModel.EntraLocalizacion(localizacionSeleccionada);
+        if (localizacionSeleccionada != null)
+        {
+            ViewModel.EntraLocalizacion(localizacionSeleccionada);
+        }
+        else
+        {
+            Tip.Target = btnPlayLocalizacion;
+            Tip.Title = "Seleccione un localizador";
+            AbrirTip();
+        }
     }
 
     private void btnStopLocalizacion_Click(object sender, RoutedEventArgs e)

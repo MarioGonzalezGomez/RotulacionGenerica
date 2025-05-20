@@ -69,6 +69,7 @@
                     <RowDefinition Height="0.5*"/>
                     <RowDefinition Height="0.3*"/>
                     <RowDefinition Height="0.3*"/>
+                    <RowDefinition Height="0.2*"/>
 
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Horizontal">
@@ -93,11 +94,22 @@
 
                 <ComboBox x:Name="cmbTipos" Grid.Row="2" HorizontalAlignment="Stretch" SelectionChanged="cmbTipos_SelectionChanged"  Header="Tipo de rodillo" Visibility="Collapsed"/>
                 <StackPanel x:Name="stckVelocidad" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Stretch" Visibility="Collapsed">
-                    <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="0,7,20,0">Velocidad</TextBlock>
-                    <TextBox x:Name="boxVelocidad"/>
+                    <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="0,7,20,0">Tiempo total</TextBlock>
+                    <NumberBox x:Name="boxVelocidad" Height="35" VerticalAlignment="Top"/>
                 </StackPanel>
-
-                <StackPanel x:Name="stckBotonera" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="Collapsed">
+                <StackPanel x:Name="stckHorizontal" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Stretch" Visibility="Visible">
+                    <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="0,7,39,0">Columnas</TextBlock>
+                    <ComboBox SelectedIndex="0" Height="35">
+                        <x:String>1</x:String>
+                        <x:String>2</x:String>
+                        <x:String>3</x:String>
+                        <x:String>4</x:String>
+                        <x:String>5</x:String>
+                    </ComboBox>
+                    <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="20,7,20,0">Líneas</TextBlock>
+                    <NumberBox x:Name="boxLineas" Height="35" VerticalAlignment="Top"/>
+                </StackPanel>
+                <StackPanel x:Name="stckBotonera" Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="Collapsed">
                     <Button  x:Name="btnModificar" Click="btnModificar_Click">
                         <SymbolIcon Symbol="Edit"/>
                     </Button>

@@ -24,7 +24,7 @@ public sealed partial class SubtituladoPage : Page
     }
 
     private string selected;
-    private bool 
+    private static bool subtituloIn = false;
     public SubtituladoPage()
     {
         ViewModel = App.GetService<SubtituladoViewModel>();
@@ -38,6 +38,15 @@ public sealed partial class SubtituladoPage : Page
         ViewModel.CargarSubtitulos();
         LVSubtitulos.ItemsSource = ViewModel.Subtitulos;
         txtRuta.Text = config.RotulacionSettings.RutaSubtitulos;
+    }
+
+    //LISTA
+    private void LVSubtitulos_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (LVSubtitulos.SelectedIndex != -1)
+        {
+            selected = LVSubtitulos.SelectedItem.ToString();
+        }
     }
 
     //FILTRADO
@@ -205,16 +214,24 @@ public sealed partial class SubtituladoPage : Page
     //ACCIONES GRAPHICS (PLAY y STOP)
     private void btnPlay_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(selected)) {
-
-            ViewModel.Entra(selected);
+        if (!string.IsNullOrEmpty(selected))
+        {
+            if (subtituloIn)
+            {
+                ViewModel.Encadena(selected);
+            }
+            else
+            {
+                ViewModel.Entra(selected);
+            }
+            LVSubtitulos.SelectedIndex++;
         }
-        
     }
 
     private void btnStop_Click(object sender, RoutedEventArgs e)
     {
         ViewModel.Sale();
     }
+
 
 }

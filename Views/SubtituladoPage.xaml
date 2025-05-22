@@ -30,7 +30,8 @@
             Grid.RowSpan="3"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            SelectionMode="Single"></ListView>
+            SelectionMode="Single"
+            SelectionChanged="LVSubtitulos_SelectionChanged"/>
 
         <Grid Grid.Column="1" Margin="10,10,0,20">
             <Grid.RowDefinitions>
@@ -107,6 +108,7 @@
                 </Button>
             </Grid>
         </Grid>
+        
         <muxc:TeachingTip x:Name="Tip"
         CloseButtonContent="Salir"
         Closed="Tip_Closed"

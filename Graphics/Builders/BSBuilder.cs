@@ -334,6 +334,26 @@ public class BSBuilder
         return Sale("Rotulo");
     }
 
+    //SUBTITULADO
+    public string SubtituloEntra(string subtitulo)
+    {
+        string mensaje = "";
+        mensaje += CambiaTexto($"Subtitulos/Txt0", subtitulo) + "\n";
+        mensaje += Entra("Subtitulos");
+        return mensaje;
+    }
+    public string SubtituloEncadena(string subtitulo)
+    {
+        string mensaje = "";
+        mensaje += Encadena("Subtitulo") + "\n";
+        mensaje += CambiaTexto($"Subtitulos/Txt0", subtitulo) + "\n";
+        return mensaje;
+    }
+    public string SubtituloSale()
+    {
+        return Sale("Subtitulos");
+    }
+
     //VARIOS
     //TIEMPOS
     public string RelojEntra(DateTime hora)

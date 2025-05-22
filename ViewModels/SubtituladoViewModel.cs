@@ -75,12 +75,16 @@ public partial class SubtituladoViewModel : ObservableRecipient
 
 
     //Acciones Gráficas
-    public void Entra(List<string> subtitulos)
+    public void Entra(string subtitulo)
     {
-        //graphicController.Entra(subtitulos);
+        graphicController.Entra(subtitulo);
+    }
+    public void Encadena(string subtitulo)
+    {
+        graphicController.Encadena(subtitulo);
     }
     public void Sale()
     {
-        // graphicController.Sale();
+        graphicController.Sale();
     }
 }

@@ -69,6 +69,14 @@ public class RotulacionSettings
     {
         get; set;
     }
+    public int ColumnasRodillo
+    {
+        get; set;
+    }
+    public int LineasPorBloque
+    {
+        get; set;
+    }
     public int VelocidadRodillo
     {
         get; set;
@@ -240,6 +248,8 @@ public class Config
                 VelocidadCrawl = 200,
                 RutaRodillo = "",
                 TipoRodillo = "Vertical",
+                ColumnasRodillo = 2,
+                LineasPorBloque =4,
                 VelocidadRodillo = 120,
                 RutaPremios = "",
                 BtnCategoria = true,

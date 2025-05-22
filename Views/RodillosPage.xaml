@@ -97,9 +97,9 @@
                     <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="0,7,20,0">Tiempo total</TextBlock>
                     <NumberBox x:Name="boxVelocidad" Height="35" VerticalAlignment="Top"/>
                 </StackPanel>
-                <StackPanel x:Name="stckHorizontal" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Stretch" Visibility="Visible">
+                <StackPanel x:Name="stckHorizontal" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Stretch" Visibility="Collapsed">
                     <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="0,7,39,0">Columnas</TextBlock>
-                    <ComboBox SelectedIndex="0" Height="35">
+                    <ComboBox x:Name="boxColumnas" SelectedIndex="0" Height="35">
                         <x:String>1</x:String>
                         <x:String>2</x:String>
                         <x:String>3</x:String>

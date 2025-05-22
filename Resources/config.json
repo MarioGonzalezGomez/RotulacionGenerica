@@ -18,6 +18,8 @@
     "VelocidadCrawl": 200,
     "RutaRodillo": "",
     "TipoRodillo": "Vertical",
+    "ColumnasRodillo": 2,
+    "LineasPorBloque": 4,
     "VelocidadRodillo": 120,
     "RutaPremios": "",
     "BtnCategoria": true,

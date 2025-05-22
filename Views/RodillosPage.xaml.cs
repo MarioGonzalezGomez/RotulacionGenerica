@@ -42,6 +42,8 @@ public sealed partial class RodillosPage : Page
         cmbTiposEdicion.ItemsSource = ViewModel.Tipos;
         cmbTipos.SelectedItem = ViewModel.Tipos.FirstOrDefault(t => t.descripcion.Equals(config.RotulacionSettings.TipoRodillo));
         boxVelocidad.Text = config.RotulacionSettings.VelocidadRodillo.ToString();
+        boxColumnas.SelectedIndex = config.RotulacionSettings.ColumnasRodillo - 1;
+        boxLineas.Text = config.RotulacionSettings.LineasPorBloque.ToString();
     }
 
     //TREE VIEW
@@ -129,6 +131,11 @@ public sealed partial class RodillosPage : Page
             cmbTipos.Visibility = Visibility.Visible;
             stckVelocidad.Visibility = Visibility.Visible;
             stckBotonera.Visibility = Visibility.Visible;
+            if (cmbTipos.SelectedItem != null)
+            {
+                Tipo seleccionado = (Tipo)cmbTipos.SelectedValue;
+                stckHorizontal.Visibility = seleccionado.descripcion.Equals("Horizontal") ? Visibility.Visible : Visibility.Collapsed;
+            }
         }
         else
         {
@@ -137,6 +144,7 @@ public sealed partial class RodillosPage : Page
             cmbTipos.Visibility = Visibility.Collapsed;
             stckVelocidad.Visibility = Visibility.Collapsed;
             stckBotonera.Visibility = Visibility.Collapsed;
+            stckHorizontal.Visibility = Visibility.Collapsed;
         }
     }
 
@@ -205,6 +213,8 @@ public sealed partial class RodillosPage : Page
         {
             Tipo seleccionado = (Tipo)cmbTipos.SelectedValue;
             config.RotulacionSettings.TipoRodillo = seleccionado.descripcion;
+            if (tggEditor.IsOn)
+                stckHorizontal.Visibility = seleccionado.descripcion.Equals("Horizontal") ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 
@@ -249,8 +259,15 @@ public sealed partial class RodillosPage : Page
         {
             Tipo seleccionado = (Tipo)cmbTipos.SelectedValue;
             config.RotulacionSettings.TipoRodillo = seleccionado.descripcion;
+
+            if (seleccionado.descripcion.Equals("Horizontal"))
+            {
+                config.RotulacionSettings.ColumnasRodillo = int.Parse(boxColumnas.SelectedValue.ToString());
+                config.RotulacionSettings.LineasPorBloque = string.IsNullOrEmpty(boxLineas.Text) ? config.RotulacionSettings.LineasPorBloque : int.Parse(boxLineas.Text);
+            }
         }
         config.RotulacionSettings.VelocidadRodillo = int.Parse(boxVelocidad.Text);
+
 
         Config.Config.SaveConfig(config);
 

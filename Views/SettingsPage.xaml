@@ -68,6 +68,7 @@
                     <CheckBox x:Name="CreditosCheckBox" Content="Créditos"  Checked="CreditosCheckBox_Checked"  Unchecked="CreditosCheckBox_Unchecked"/>
                     <CheckBox x:Name="FaldonesCheckBox" Content="Faldones"  Checked="FaldonesCheckBox_Checked"  Unchecked="FaldonesCheckBox_Unchecked"/>
                     <CheckBox x:Name="PremiosCheckBox" Content="Premios"  Checked="PremiosCheckBox_Checked"  Unchecked="PremiosCheckBox_Unchecked"/>
+                    <CheckBox x:Name="SubtituladoCheckBox" Content="Subtitulado"  Checked="SubtituladoCheckBox_Checked"  Unchecked="SubtituladoCheckBox_Unchecked"/>
                     <CheckBox x:Name="GafasCheckBox" Content="Gafas" Checked="GafasCheckBox_Checked" Unchecked="GafasCheckBox_Unchecked"/>
                     <CheckBox x:Name="VariosCheckBox" Content="Varios"  Checked="VariosCheckBox_Checked"  Unchecked="VariosCheckBox_Unchecked"/>
                 </StackPanel>

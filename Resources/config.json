@@ -27,7 +27,8 @@
     "BtnNominados": true,
     "BtnGafas": true,
     "BtnEntregadores": true,
-    "BtnGanador": true
+    "BtnGanador": true,
+    "RutaSubtitulado": ""
   },
   "PestanasActivas": {
     "Rotulos": true,
@@ -35,6 +36,7 @@
     "Creditos": true,
     "Faldones": true,
     "Premios": true,
+    "Subtitulado": true,
     "Gafas": true,
     "Varios": true,
     "Reset": true,

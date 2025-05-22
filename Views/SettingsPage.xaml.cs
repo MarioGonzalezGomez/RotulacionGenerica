@@ -30,6 +30,7 @@ public sealed partial class SettingsPage : Page
         CreditosCheckBox.IsChecked = config.PestanasActivas.Creditos;
         FaldonesCheckBox.IsChecked = config.PestanasActivas.Faldones;
         PremiosCheckBox.IsChecked = config.PestanasActivas.Premios;
+        SubtituladoCheckBox.IsChecked = config.PestanasActivas.Subtitulado;
         GafasCheckBox.IsChecked = config.PestanasActivas.Gafas;
         VariosCheckBox.IsChecked = config.PestanasActivas.Varios;
         ResetCheckBox.IsChecked = config.PestanasActivas.Reset;
@@ -105,28 +106,42 @@ public sealed partial class SettingsPage : Page
         Config.Config.SaveConfig(config);
     }
 
-    private void GafasCheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void SubtituladoCheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
         ShellPage.instance.UpdateWindows(5, true);
+        config.PestanasActivas.Subtitulado = true;
+        Config.Config.SaveConfig(config);
+    }
+
+    private void SubtituladoCheckBox_Unchecked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        ShellPage.instance.UpdateWindows(5, false);
+        config.PestanasActivas.Subtitulado = false;
+        Config.Config.SaveConfig(config);
+    }
+
+    private void GafasCheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        ShellPage.instance.UpdateWindows(6, true);
         config.PestanasActivas.Gafas = true;
         Config.Config.SaveConfig(config);
     }
     private void GafasCheckBox_Unchecked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-        ShellPage.instance.UpdateWindows(5, false);
+        ShellPage.instance.UpdateWindows(6, false);
         config.PestanasActivas.Gafas = false;
         Config.Config.SaveConfig(config);
     }
 
     private void VariosCheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-        ShellPage.instance.UpdateWindows(6, true);
+        ShellPage.instance.UpdateWindows(7, true);
         config.PestanasActivas.Varios = true;
         Config.Config.SaveConfig(config);
     }
     private void VariosCheckBox_Unchecked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-        ShellPage.instance.UpdateWindows(6, false);
+        ShellPage.instance.UpdateWindows(7, false);
         config.PestanasActivas.Varios = false;
         Config.Config.SaveConfig(config);
     }

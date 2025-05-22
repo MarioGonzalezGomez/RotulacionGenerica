@@ -19,6 +19,7 @@ public class PageService : IPageService
         Configure<RodillosViewModel, RodillosPage>();
         Configure<FaldonesViewModel, FaldonesPage>();
         Configure<PremiosViewModel, PremiosPage>();
+        Configure<SubtituladoViewModel, SubtituladoPage>();
         Configure<GafasViewModel, GafasPage>();
         Configure<VariosViewModel, VariosPage>();
         Configure<SettingsViewModel, SettingsPage>();

@@ -109,6 +109,11 @@ public class RotulacionSettings
     {
         get; set;
     }
+    public string RutaSubtitulos
+    {
+        get; set;
+
+    }
 }
 
 public class PestanasActivas
@@ -130,6 +135,10 @@ public class PestanasActivas
         get; set;
     }
     public bool Premios
+    {
+        get; set;
+    }
+    public bool Subtitulado
     {
         get; set;
     }
@@ -249,7 +258,7 @@ public class Config
                 RutaRodillo = "",
                 TipoRodillo = "Vertical",
                 ColumnasRodillo = 2,
-                LineasPorBloque =4,
+                LineasPorBloque = 4,
                 VelocidadRodillo = 120,
                 RutaPremios = "",
                 BtnCategoria = true,
@@ -257,7 +266,8 @@ public class Config
                 BtnNominados = true,
                 BtnGafas = true,
                 BtnEntregadores = true,
-                BtnGanador = true
+                BtnGanador = true,
+                RutaSubtitulos = ""
             },
             PestanasActivas = new PestanasActivas
             {
@@ -266,6 +276,7 @@ public class Config
                 Creditos = true,
                 Faldones = true,
                 Premios = true,
+                Subtitulado = true,
                 Gafas = true,
                 Varios = true,
                 Reset = true,

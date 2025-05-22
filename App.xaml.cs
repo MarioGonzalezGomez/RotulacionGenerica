@@ -87,6 +87,8 @@ public partial class App : Application
             services.AddTransient<FaldonesPage>();
             services.AddTransient<PremiosPage>();
             services.AddTransient<PremiosViewModel>();
+            services.AddTransient<SubtituladoPage>();
+            services.AddTransient<SubtituladoViewModel>();
             services.AddTransient<GafasPage>();
             services.AddTransient<GafasViewModel>();
             services.AddTransient<VariosPage>();
@@ -110,11 +112,11 @@ public partial class App : Application
 
     protected async override void OnLaunched(LaunchActivatedEventArgs args)
     {
-       base.OnLaunched(args);
+        base.OnLaunched(args);
 
         await App.GetService<IActivationService>().ActivateAsync(args);
     }
 
-   
+
 
 }

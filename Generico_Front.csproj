@@ -77,6 +77,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Views\SubtituladoPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\GafasPage.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>

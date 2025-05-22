@@ -107,6 +107,7 @@ public sealed partial class ShellPage : Page
         ventanaCreditos.Visibility = config.PestanasActivas.Creditos ? Visibility.Visible : Visibility.Collapsed;
         ventanaFaldones.Visibility = config.PestanasActivas.Faldones ? Visibility.Visible : Visibility.Collapsed;
         ventanaPremios.Visibility = config.PestanasActivas.Premios ? Visibility.Visible : Visibility.Collapsed;
+        ventanaSubtitulado.Visibility = config.PestanasActivas.Subtitulado ? Visibility.Visible : Visibility.Collapsed;
         ventanaGafas.Visibility = config.PestanasActivas.Gafas ? Visibility.Visible : Visibility.Collapsed;
         ventanaVarios.Visibility = config.PestanasActivas.Varios ? Visibility.Visible : Visibility.Collapsed;
 
@@ -133,9 +134,12 @@ public sealed partial class ShellPage : Page
                 ventanaPremios.Visibility = activo ? Visibility.Visible : Visibility.Collapsed;
                 break;
             case 5:
-                ventanaGafas.Visibility = activo ? Visibility.Visible : Visibility.Collapsed;
+                ventanaSubtitulado.Visibility = activo ? Visibility.Visible : Visibility.Collapsed;
                 break;
             case 6:
+                ventanaGafas.Visibility = activo ? Visibility.Visible : Visibility.Collapsed;
+                break;
+            case 7:
                 ventanaVarios.Visibility = activo ? Visibility.Visible : Visibility.Collapsed;
                 break;
         }

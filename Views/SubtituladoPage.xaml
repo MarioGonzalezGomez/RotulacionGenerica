@@ -1,0 +1,121 @@
+﻿<Page
+    x:Class="Generico_Front.Views.SubtituladoPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:Models="using:Generico_Front.Models" 
+    xmlns:viewmodels="using:Generico_Front.ViewModels" xmlns:muxc="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    mc:Ignorable="d">
+
+    <Page.DataContext>
+        <viewmodels:SubtituladoViewModel/>
+    </Page.DataContext>
+
+    <Page.Resources>
+    </Page.Resources>
+
+    <Grid x:Name="ContentArea">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <ListView  
+            x:Name="LVSubtitulos" 
+            Margin="0,0,0,15"
+            Grid.Column="0"
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            SelectionMode="Single"></ListView>
+
+        <Grid Grid.Column="1" Margin="10,10,0,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.9*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="0.4*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.3*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock  Grid.Row="0" Style="{ThemeResource BaseTextBlockStyle}">Filtrar por...</TextBlock>
+                <TextBox x:Name="FiltradoPorTexto"  Grid.Row="1" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Texto" TextChanged="FiltradoPorTexto_TextChanged"/>
+                <TextBox x:Name="FiltradoPorPosicion"  Grid.Row="2" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Posicion" TextChanged="FiltradoPorPosicion_TextChanged"/>
+            </Grid>
+            
+            <Grid Grid.Row="1" Margin="0,10,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.2*"/>
+                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="0.3*"/>
+                    <RowDefinition Height="0.3*"/>
+                    <RowDefinition Height="0.2*"/>
+
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <ToggleSwitch x:Name="tggEditor" OffContent="Añadir/Editar Off" OnContent="Añadir/Editar On" IsOn="False" Toggled="tggEditor_Toggled"/>
+                    <HyperlinkButton  x:Name="linkAjustes" Content="Ajustar tipos" Margin="70,0,0,0" Click="AbrirPanelAjustes" Visibility="Collapsed"/>
+                </StackPanel>
+                <StackPanel x:Name="stckEditior0" Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Stretch" Visibility="Collapsed">
+                    <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="0,7,20,0">Selector de ruta</TextBlock>
+                    <Grid VerticalAlignment="Center" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="filePicker" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Stretch" Click="filePicker_Click">
+                            <Button.Content>
+                                <FontIcon Glyph="&#xEC50;" FontFamily="Segoe MDL2 Assets" FontSize="20"/>
+                            </Button.Content>
+                        </Button>
+                        <TextBox x:Name="txtRuta" Grid.Column="1" HorizontalAlignment="Stretch" Margin="10,0,0,0"/>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel x:Name="stckBotonera" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="Collapsed">
+                    <Button  x:Name="btnModificar" Click="btnModificar_Click">
+                        <SymbolIcon Symbol="Edit"/>
+                    </Button>
+                    <Button  x:Name="btnGuardar" Margin="10,0,0,0" Click="btnGuardar_Click">
+                        <SymbolIcon Symbol="Save"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+            
+            <Grid Grid.Row="2" Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="btnPlay" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="50" MaxHeight="100" Margin="0,0,10,0" Click="btnPlay_Click">
+                    <Button.Content>
+                        <FontIcon x:Name="iconPlay" Glyph="&#xE768;" FontFamily="Segoe MDL2 Assets" FontSize="40" Foreground="Green"/>
+                    </Button.Content>
+                </Button>
+                <Button x:Name="btnStop" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="50" MaxHeight="100"  Margin="10,0,0,0" Click="btnStop_Click">
+                    <Button.Content>
+                        <FontIcon Glyph="&#xE71A;" FontFamily="Segoe MDL2 Assets" FontSize="35" Foreground="#FFB22222"/>
+                    </Button.Content>
+                </Button>
+            </Grid>
+        </Grid>
+        <muxc:TeachingTip x:Name="Tip"
+        CloseButtonContent="Salir"
+        Closed="Tip_Closed"
+        IsLightDismissEnabled="True">
+            <muxc:TeachingTip.IconSource>
+                <SymbolIconSource Symbol="Accept"  Foreground="Green"/>
+            </muxc:TeachingTip.IconSource>
+        </muxc:TeachingTip>
+    </Grid>
+</Page>
+    
+

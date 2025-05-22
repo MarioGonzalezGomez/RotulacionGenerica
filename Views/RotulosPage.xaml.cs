@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Generico_Front.Controllers.Data;
 using Generico_Front.Models;
 using Generico_Front.ViewModels;
@@ -234,7 +235,17 @@ public sealed partial class RotulosPage : Page
                 nuevaLinea.texto = textLineas[i].Text;
                 modificado.lineas.Add(nuevaLinea);
             }
-            ModificarRotulo(modificado);
+            if (string.Equals(actual.tipo.descripcion, modificado.tipo.descripcion))
+            {
+                ModificarRotulo(modificado);
+            }
+            else
+            {
+                EliminarRotulo(actual);
+                modificado.id = 0;
+                GuardarRotuloNuevo(modificado);
+            }
+
         }
     }
     private async void ModificarRotulo(Rotulo modificado)

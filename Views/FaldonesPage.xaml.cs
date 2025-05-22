@@ -195,6 +195,17 @@ public sealed partial class FaldonesPage : Page
             modificado.texto.texto = txtCuerpo.Text;
 
             ModificarFaldon(modificado);
+
+            if (string.Equals(actual.tipo.descripcion, modificado.tipo.descripcion))
+            {
+                ModificarFaldon(modificado);
+            }
+            else
+            {
+                EliminarFaldon(actual);
+                modificado.id = 0;
+                GuardarFaldonNuevo(modificado);
+            }
         }
     }
     private async void ModificarFaldon(Faldon modificado)

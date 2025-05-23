@@ -70,6 +70,16 @@ public sealed partial class PremiosPage : Page
         EntregadoresCheckBox.IsChecked = config.RotulacionSettings.BtnEntregadores;
         btnGanador.Visibility = config.RotulacionSettings.BtnGanador ? Visibility.Visible : Visibility.Collapsed;
         GanadorCheckBox.IsChecked = config.RotulacionSettings.BtnGanador;
+        ComprobarIn();
+    }
+    private void ComprobarIn()
+    {
+        btnCategoria.IsChecked = inCategoria;
+        btnNominado.IsChecked = inNominado;
+        btnNominados.IsChecked = inLista;
+        btnGafas.IsChecked = inGafas;
+        btnEntregadores.IsChecked = inEntregadores;
+        btnGanador.IsChecked = inGanador;
     }
 
     //TREE VIEW
@@ -562,28 +572,39 @@ public sealed partial class PremiosPage : Page
         if (comboEntregadores.SelectedItem != null)
         {
             Premio currentPremio = selectedItem as Premio;
-            Premio aEditar = editada.FirstOrDefault(p => string.Equals(p.nombre, currentPremio.nombre));
-            if (comboEntregadores.SelectedIndex != 0)
+            if (currentPremio != null)
             {
-                //EDITAR
-                boxEntregadorOtrabajo.Header = "Editar entregador";
-                if (aEditar != null)
+                Premio aEditar = editada.FirstOrDefault(p => string.Equals(p.nombre, currentPremio.nombre));
+                if (comboEntregadores.SelectedIndex != 0)
                 {
-                    int index = aEditar.entregadores.FindIndex(e => string.Equals(e, comboEntregadores.Text));
-                    if (index != -1)
+                    //EDITAR
+                    boxEntregadorOtrabajo.Header = "Editar entregador";
+                    if (aEditar != null)
                     {
-                        aEditar.entregadores[index] = boxEntregadorOtrabajo.Text;
+                        int index = aEditar.entregadores.FindIndex(e => string.Equals(e, comboEntregadores.SelectedValue.ToString()));
+                        if (index != -1)
+                        {
+                            if (string.IsNullOrEmpty(boxEntregadorOtrabajo.Text))
+                            {
+                                aEditar.entregadores.RemoveAt(index);
+                            }
+                            else
+                            {
+                                aEditar.entregadores[index] = boxEntregadorOtrabajo.Text;
+                            }
+                        }
                     }
                 }
-            }
-            else
-            {
-                //ADD
-                boxEntregadorOtrabajo.Header = "Añadir entregador";
-                if (aEditar != null)
+                else
                 {
-                    aEditar.entregadores.Add(boxEntregadorOtrabajo.Text);
+                    //ADD
+                    boxEntregadorOtrabajo.Header = "Añadir entregador";
+                    if (aEditar != null)
+                    {
+                        aEditar.entregadores.Add(boxEntregadorOtrabajo.Text);
+                    }
                 }
+                GuardarYRefrescarLista();
             }
         }
     }
@@ -717,35 +738,42 @@ public sealed partial class PremiosPage : Page
         }
 
     }
-    private async void btnGuardar_Click(object sender, RoutedEventArgs e)
+    private void btnGuardar_Click(object sender, RoutedEventArgs e)
+    {
+        GuardarYRefrescarLista();
+    }
+    private async void GuardarYRefrescarLista()
     {
         var utimoSeleccionado = selectedItem;
-        var pruebaNodo = treePremios.SelectedNode.Parent.Content;
-        var ultimoNodo = treePremios.NodeFromContainer(treePremios.ContainerFromItem(selectedItem));
-
-        await ViewModel.GuardarPremios(editada);
-        await ViewModel.CargarPremios();
-
-        if (utimoSeleccionado is Premio)
+        if (utimoSeleccionado != null)
         {
-            Premio ultimoPremio = utimoSeleccionado as Premio;
-            Premio selected = ViewModel.premios.FirstOrDefault(p => string.Equals(p.nombre, ultimoPremio.nombre));
-            treePremios.SelectedItem = selected;
-        }
-        if (utimoSeleccionado is Nominado)
-        {
-            if (ultimoNodo.Parent != null)
+            var pruebaNodo = treePremios.SelectedNode.Parent.Content;
+            var ultimoNodo = treePremios.NodeFromContainer(treePremios.ContainerFromItem(selectedItem));
+
+            await ViewModel.GuardarPremios(editada);
+            await ViewModel.CargarPremios();
+
+            if (utimoSeleccionado is Premio)
             {
-                Premio parent = ultimoNodo.Parent.Content as Premio;
-                Premio selected = ViewModel.premios.FirstOrDefault(p => string.Equals(p.nombre, parent.nombre));
+                Premio ultimoPremio = utimoSeleccionado as Premio;
+                Premio selected = ViewModel.premios.FirstOrDefault(p => string.Equals(p.nombre, ultimoPremio.nombre));
                 treePremios.SelectedItem = selected;
-                treePremios.SelectedNode.IsExpanded = true;
             }
-        }
+            if (utimoSeleccionado is Nominado)
+            {
+                if (ultimoNodo.Parent != null)
+                {
+                    Premio parent = ultimoNodo.Parent.Content as Premio;
+                    Premio selected = ViewModel.premios.FirstOrDefault(p => string.Equals(p.nombre, parent.nombre));
+                    treePremios.SelectedItem = selected;
+                    treePremios.SelectedNode.IsExpanded = true;
+                }
+            }
 
-        Tip.Target = btnGuardar;
-        Tip.Title = "Guardado con éxito";
-        AbrirTip();
+            Tip.Target = btnGuardar;
+            Tip.Title = "Guardado con éxito";
+            AbrirTip();
+        }
     }
 
     //BOTONES DISPONIBLES
@@ -1074,57 +1102,11 @@ public sealed partial class PremiosPage : Page
         }
     }
 
-    //private void btnGanador_Click(object sender, RoutedEventArgs e)
-    //{
-    //    if (inGanador)
-    //    {
-    //        ViewModel.GanadorSale();
-    //        inGanador = false;
-    //    }
-    //    else
-    //    {
-    //        if (selectedItem == null)
-    //        {
-    //            MostrarFlyoutEnBoton("No hay ninguna categoría seleccionada", btnGanador);
-    //            btnGanador.IsChecked = false;
-    //        }
-    //        else
-    //        {
-    //            if (selectedItem is Premio)
-    //            {
-    //                Premio p = selectedItem as Premio;
-    //                if (p.ganador != null)
-    //                {
-    //                    ViewModel.GanadorEntra(p, p.ganador);
-    //                }
-    //                else
-    //                {
-    //                    MostrarFlyoutEnBoton("No hay ganador por defecto\nSeleccione un \"nominado\"", btnGanador);
-    //                    btnGanador.IsChecked = false;
-    //                }
-    //
-    //            }
-    //            else
-    //            {
-    //                Nominado nominado = selectedItem as Nominado;
-    //                Premio seleccionado = ViewModel.allPremios.Find(pre => pre.nominados.Any(n => string.Equals(n.nombre, nominado.nombre)));
-    //                Premio editado = editada.FirstOrDefault(p => string.Equals(p.nombre, seleccionado.nombre));
-    //                seleccionado.ganador = seleccionado.nominados.FirstOrDefault(n => string.Equals(n.nombre, nominado.nombre));
-    //                editado.ganador = editado.nominados.FirstOrDefault(n => string.Equals(n.nombre, nominado.nombre));
-    //                ViewModel.GanadorEntra(seleccionado, nominado);
-    //                inGanador = true;
-    //            }
-    //
-    //        }
-    //    }
-    //}
-    //NO GENERICO PARA TALIA
     private void btnGanador_Click(object sender, RoutedEventArgs e)
     {
         if (inGanador)
         {
             ViewModel.GanadorSale();
-            btnGanador.Content = "ENTRA";
             inGanador = false;
         }
         else
@@ -1139,15 +1121,13 @@ public sealed partial class PremiosPage : Page
                 if (selectedItem is Premio)
                 {
                     Premio p = selectedItem as Premio;
-                    if (p.nominados.Count == 1)
+                    if (p.ganador != null)
                     {
-                        ViewModel.GanadorEntra(p, p.nominados[0]);
-                        inGanador = true;
-                        btnGanador.Content = "SALE";
+                        ViewModel.GanadorEntra(p, p.ganador);
                     }
                     else
                     {
-                        MostrarFlyoutEnBoton("Seleccione un \"nominado\"", btnGanador);
+                        MostrarFlyoutEnBoton("No hay ganador por defecto\nSeleccione un \"nominado\"", btnGanador);
                         btnGanador.IsChecked = false;
                     }
 
@@ -1160,12 +1140,10 @@ public sealed partial class PremiosPage : Page
                     seleccionado.ganador = seleccionado.nominados.FirstOrDefault(n => string.Equals(n.nombre, nominado.nombre));
                     editado.ganador = editado.nominados.FirstOrDefault(n => string.Equals(n.nombre, nominado.nombre));
                     ViewModel.GanadorEntra(seleccionado, nominado);
-                    btnGanador.Content = "SALE";
                     inGanador = true;
                 }
 
             }
         }
     }
-
 }

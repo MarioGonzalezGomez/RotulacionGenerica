@@ -4,8 +4,8 @@
     <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <RootNamespace>Generico_Front</RootNamespace>
-    <ApplicationIcon>Resources\boton-de-play.ico</ApplicationIcon>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\WindowIcon.ico</ApplicationIcon>
+    <ApplicationManifest></ApplicationManifest>
      <Platforms>x86;x64;arm64</Platforms>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <PublishProfile>Properties\PublishProfiles\win10-$(Platform).pubxml</PublishProfile>
@@ -28,24 +28,22 @@
     <AppxPackageDir>C:\TrabajoIPF\Ejecutable\</AppxPackageDir>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Assets\icono.png" />
     <None Remove="config.json" />
-    <None Remove="Resources\boton-de-play.ico" />
-    <None Remove="Resources\boton-de-play.png" />
+    <None Remove="Resources\axolote.ico" />
     <None Remove="Resources\InfoPremios.txt" />
     <None Remove="Views\FaldonesPage.xaml" />
     <None Remove="Views\GafasPage.xaml" />
     <None Remove="Views\RodillosPage.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\boton-de-play.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\boton-de-play.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Content Include="Resources\axolote.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\icono.png" />
     <Content Include="Resources\InfoPremios.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -65,6 +63,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Generico_Front.Core\Generico_Front.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Assets\play.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Assets\WindowIcon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Update="appsettings.json">

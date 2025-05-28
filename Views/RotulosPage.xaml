@@ -13,25 +13,31 @@
     </Page.DataContext>
 
     <Page.Resources>
-        <DataTemplate x:Key="RotulosListViewTemplate" x:DataType="Models:Rotulo">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.ContextFlyout>
-                    <MenuFlyout>
-                        <MenuFlyoutItem Text="Editar" Click="MenuFlyoutEditar_Click"/>
-                        <MenuFlyoutItem Text="Borrar" Foreground="#f54048" Click="MenuFlyoutBorrar_Click"/>
-                    </MenuFlyout>
-                </Grid.ContextFlyout>
+        <ResourceDictionary>
+            
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ms-appx:///Microsoft.UI.Xaml/DensityStyles/Compact.xaml" />
+            </ResourceDictionary.MergedDictionaries>
 
-                <Ellipse x:Name="Ellipse"
+            <DataTemplate x:Key="RotulosListViewTemplate" x:DataType="Models:Rotulo">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.ContextFlyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem Text="Editar" Click="MenuFlyoutEditar_Click"/>
+                            <MenuFlyoutItem Text="Borrar" Foreground="#f54048" Click="MenuFlyoutBorrar_Click"/>
+                        </MenuFlyout>
+                    </Grid.ContextFlyout>
+
+                    <Ellipse x:Name="Ellipse"
                  Grid.RowSpan="2"
                  Width="32"
                  Height="32"
@@ -40,7 +46,7 @@
                  HorizontalAlignment="Center"
                  Fill="{ThemeResource SystemControlBackgroundBaseMediumBrush}" />
 
-                <TextBlock Grid.Column="1"
+                    <TextBlock Grid.Column="1"
                    Grid.RowSpan="2"
                    Text="{x:Bind posicion}"
                    x:Phase="1"
@@ -49,22 +55,23 @@
                    FontSize="20"
                    Margin="15,0,0,0"/>
 
-                <TextBlock Grid.Column="2"
+                    <TextBlock Grid.Column="2"
                    Grid.Row="0"
                    Text="{x:Bind lineas[0].texto}"
                    x:Phase="2"
                    Style="{ThemeResource BaseTextBlockStyle}"
                    FontSize="16"
                    Margin="15,15,0,0"/>
-                <TextBlock Grid.Column="2"
+                    <TextBlock Grid.Column="2"
                    Grid.Row="1"
                    Text="{x:Bind}"
                    x:Phase="2"
                    Style="{ThemeResource BaseTextBlockStyle}"
                    FontSize="12"
                    Margin="35,0,0,0"/>
-            </Grid>
-        </DataTemplate>
+                </Grid>
+            </DataTemplate>
+        </ResourceDictionary>
     </Page.Resources>
 
     <Grid x:Name="ContentArea">
@@ -98,19 +105,19 @@
         RightTapped="LVRotulos_RightTapped"/>
 
         <Button x:Name="BtnAddRotulo" Grid.Column="0" Grid.Row="2" Content="+" Width="40" Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Right"
-            Margin="0,0,12,25" Click="BtnAddRotulo_Click" Background="DodgerBlue" Foreground="White" CornerRadius="20" FontSize="24"/>
+            Margin="0,0,12,25" Click="BtnAddRotulo_Click" Background="DodgerBlue" Foreground="White" CornerRadius="20" FontSize="24" Visibility="Collapsed"/>
 
         <Grid Grid.Column="1" Grid.Row="0" Margin="10,0,0,0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="0.6*"/>
+                <RowDefinition Height="1*"/>
                 <RowDefinition Height="2*"/>
                 <RowDefinition Height="2*"/>
                 <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
-            <TextBlock  Grid.Row="0" Style="{ThemeResource BaseTextBlockStyle}">Filtrar por...</TextBlock>
-            <TextBox x:Name="FiltradoPorNombre"  Grid.Row="1" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Nombre" TextChanged="FiltradoPorNombre_TextChanged"/>
-            <TextBox x:Name="FiltradoPorCargo"  Grid.Row="2" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Cargo" TextChanged="FiltradoPorCargo_TextChanged"/>
-            <TextBox x:Name="FiltradoPorPosicion"  Grid.Row="3" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Posicion" TextChanged="FiltradoPorPosicion_TextChanged"/>
+            <ToggleSwitch x:Name="tggFiltrado" Grid.Row="0" OffContent="Filtrado Off" OnContent="Filtrado On" IsOn="False" Toggled="tggFiltrado_Toggled"/>
+            <TextBox x:Name="FiltradoPorNombre"  Grid.Row="1" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Nombre" Visibility="Collapsed" TextChanged="FiltradoPorNombre_TextChanged"/>
+            <TextBox x:Name="FiltradoPorCargo"  Grid.Row="2" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Cargo" Visibility="Collapsed" TextChanged="FiltradoPorCargo_TextChanged"/>
+            <TextBox x:Name="FiltradoPorPosicion"  Grid.Row="3" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Posicion" Visibility="Collapsed" TextChanged="FiltradoPorPosicion_TextChanged"/>
         </Grid>
 
         <Grid Grid.Column="1" Grid.Row="1" Margin="10,10,0,0">

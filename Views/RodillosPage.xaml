@@ -13,7 +13,7 @@
     </Page.DataContext>
 
     <Page.Resources>
-
+        
     </Page.Resources>
 
     <Grid x:Name="ContentArea">

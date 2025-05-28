@@ -4,9 +4,12 @@ using System.Threading.Tasks;
 using Generico_Front.Controllers.Data;
 using Generico_Front.Models;
 using Generico_Front.ViewModels;
+using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Shapes;
 using Windows.ApplicationModel.Contacts;
 
 namespace Generico_Front.Views;
@@ -34,7 +37,105 @@ public sealed partial class RotulosPage : Page
         LVRotulos.ItemsSource = ViewModel.Rotulos;
         ViewModel.CargarTipos();
         cmbTipos.ItemsSource = ViewModel.Tipos;
+        LVRotulos.ContainerContentChanging += LVRotulos_ContainerContentChanging;
         cmbTiposEditor.ItemsSource = ViewModel.Tipos;
+    }
+    private void LVRotulos_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+    {
+        if (args.ItemContainer is ListViewItem container && args.Item is Rotulo rotulo)
+        {
+            var ellipse = FindVisualChildByName<Ellipse>(container, "Ellipse");
+
+            if (ellipse != null)
+            {
+                Tipo actual = ViewModel.Tipos.FirstOrDefault(t => string.Equals(t.descripcion, rotulo.tipo.descripcion));
+                switch (ViewModel.Tipos.IndexOf(actual))
+                {
+                    case 0:
+                        ellipse.Fill = new SolidColorBrush(Colors.DarkGreen);
+                        break;
+                    case 1:
+                        ellipse.Fill = new SolidColorBrush(Colors.DarkBlue);
+                        break;
+                    case 2:
+                        ellipse.Fill = new SolidColorBrush(Colors.DarkGoldenrod);
+                        break;
+                    case 3:
+                        ellipse.Fill = new SolidColorBrush(Colors.DarkMagenta);
+                        break;
+                    case 4:
+                        ellipse.Fill = new SolidColorBrush(Colors.DarkRed);
+                        break;
+                    case 5:
+                        ellipse.Fill = new SolidColorBrush(Colors.DarkViolet);
+                        break;
+                    default:
+                        ellipse.Fill = new SolidColorBrush(Colors.Gray);
+                        break;
+                }
+            }
+        }
+    }
+
+
+    private void AdaptarColoresTipo()
+    {
+        foreach (var item in LVRotulos.Items)
+        {
+            // Obtiene el contenedor visual (ListViewItem) del item
+            var container = LVRotulos.ContainerFromItem(item) as ListViewItem;
+
+            if (container != null)
+            {
+                // Busca el Ellipse dentro del template visual del ListViewItem
+                var ellipse = FindVisualChildByName<Ellipse>(container, "Ellipse");
+
+                if (ellipse != null && item is Rotulo rotulo)
+                {
+                    // Aplica el color según alguna propiedad del rotulo
+
+                    switch (ViewModel.Tipos.IndexOf(rotulo.tipo))
+                    {
+                        case 0:
+                            ellipse.Fill = new SolidColorBrush(Colors.DarkGreen);
+                            break;
+                        case 1:
+                            ellipse.Fill = new SolidColorBrush(Colors.DarkBlue);
+                            break;
+                        case 2:
+                            ellipse.Fill = new SolidColorBrush(Colors.DarkGoldenrod);
+                            break;
+                        case 3:
+                            ellipse.Fill = new SolidColorBrush(Colors.DarkMagenta);
+                            break;
+                        case 4:
+                            ellipse.Fill = new SolidColorBrush(Colors.DarkRed);
+                            break;
+                        case 5:
+                            ellipse.Fill = new SolidColorBrush(Colors.DarkViolet);
+                            break;
+                        default:
+                            ellipse.Fill = new SolidColorBrush(Colors.Gray);
+                            break;
+                    }
+                }
+            }
+        }
+    }
+    private T FindVisualChildByName<T>(DependencyObject parent, string name) where T : FrameworkElement
+    {
+        int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
+        for (int i = 0; i < childrenCount; i++)
+        {
+            var child = VisualTreeHelper.GetChild(parent, i);
+            if (child is T typedChild && typedChild.Name == name)
+                return typedChild;
+
+            var result = FindVisualChildByName<T>(child, name);
+            if (result != null)
+                return result;
+        }
+        return null;
     }
 
     private void LVRotulos_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
@@ -89,6 +190,22 @@ public sealed partial class RotulosPage : Page
     }
 
     //OPCIONES DE FILTRADO
+
+    private void tggFiltrado_Toggled(object sender, RoutedEventArgs e)
+    {
+        if (tggFiltrado.IsOn)
+        {
+            FiltradoPorNombre.Visibility = Visibility.Visible;
+            FiltradoPorPosicion.Visibility = Visibility.Visible;
+            FiltradoPorCargo.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            FiltradoPorNombre.Visibility = Visibility.Collapsed;
+            FiltradoPorPosicion.Visibility = Visibility.Collapsed;
+            FiltradoPorCargo.Visibility = Visibility.Collapsed;
+        }
+    }
     private void FiltradoPorNombre_TextChanged(object sender, TextChangedEventArgs e)
     {
         var filtrada = ViewModel.allRotulos
@@ -465,4 +582,6 @@ public sealed partial class RotulosPage : Page
             rotuloIn = false;
         }
     }
+
+
 }

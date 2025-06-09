@@ -305,18 +305,29 @@ public sealed partial class PremiosPage : Page
 
     private async Task MostrarDialogoConTextoAsync()
     {
-        // Crear TextBox
-        var inputTextBox = new TextBox
+        // Crear los TextBoxes
+        var nombreTextBox = new TextBox
         {
             PlaceholderText = "Nombre del Nominado",
             Margin = new Thickness(0, 10, 0, 0)
         };
 
-        // Crear diálogo
+        var trabajoTextBox = new TextBox
+        {
+            PlaceholderText = "Trabajo por el que es nominado",
+            Margin = new Thickness(0, 10, 0, 0)
+        };
+
+        // Agruparlos en un StackPanel
+        var panel = new StackPanel();
+        panel.Children.Add(nombreTextBox);
+        panel.Children.Add(trabajoTextBox);
+
+        // Crear el diálogo
         var dialog = new ContentDialog
         {
-            Title = "Introduce nombre",
-            Content = inputTextBox,
+            Title = "Introduce datos del nominado",
+            Content = panel,
             PrimaryButtonText = "Aceptar",
             CloseButtonText = "Cancelar",
             DefaultButton = ContentDialogButton.Primary,
@@ -326,21 +337,23 @@ public sealed partial class PremiosPage : Page
         // Mostrar el diálogo
         var result = await dialog.ShowAsync();
 
-        // Verificar si el usuario pulsó "Aceptar"
+        // Si el usuario pulsa Aceptar
         if (result == ContentDialogResult.Primary)
         {
-            string textoIngresado = inputTextBox.Text;
+            string nombreIngresado = nombreTextBox.Text;
+            string trabajoIngresado = trabajoTextBox.Text;
 
-            // Aquí haces lo que quieras con el texto
             Premio ultimoPremio = selectedItem as Premio;
             Premio selected = editada.FirstOrDefault(p => string.Equals(p.nombre, ultimoPremio.nombre));
-            Nominado nuevo = new Nominado();
-            nuevo.nombre = textoIngresado;
+
+            Nominado nuevo = new Nominado
+            {
+                nombre = nombreIngresado,
+                trabajo = trabajoIngresado
+            };
+
             selected.nominados.Add(nuevo);
-            await ViewModel.GuardarPremios(editada);
-            await ViewModel.CargarPremios();
-            editada.Clear();
-            editada.AddRange(ViewModel.allPremios);
+            GuardarYRefrescarLista();
         }
     }
 
@@ -380,6 +393,22 @@ public sealed partial class PremiosPage : Page
     }
 
     //FILTRADO
+    private void tggFiltrado_Toggled(object sender, RoutedEventArgs e)
+    {
+        if (tggFiltrado.IsOn)
+        {
+            FiltradoPorPremio.Visibility = Visibility.Visible;
+            FiltradoPorPersona.Visibility = Visibility.Visible;
+            FiltradoPorPelicula.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            FiltradoPorPremio.Visibility = Visibility.Collapsed;
+            FiltradoPorPersona.Visibility = Visibility.Collapsed;
+            FiltradoPorPelicula.Visibility = Visibility.Collapsed;
+        }
+    }
+
     private void FiltradoPorPremio_TextChanged(object sender, TextChangedEventArgs e)
     {
         var filtrada = ViewModel.allPremios
@@ -710,31 +739,39 @@ public sealed partial class PremiosPage : Page
     }
     private void btnEliminar_Click(object sender, RoutedEventArgs e)
     {
-        var utimoSeleccionado = selectedItem;
+        try
+        {
+            var utimoSeleccionado = selectedItem;
 
-        if (utimoSeleccionado is Premio)
-        {
-            Premio ultimoPremio = utimoSeleccionado as Premio;
-            Premio selected = editada.FirstOrDefault(p => string.Equals(p.nombre, ultimoPremio.nombre));
-            editada.Remove(selected);
+            if (utimoSeleccionado is Premio)
+            {
+                Premio ultimoPremio = utimoSeleccionado as Premio;
+                Premio selected = editada.FirstOrDefault(p => string.Equals(p.nombre, ultimoPremio.nombre));
+                editada.Remove(selected);
+            }
+            if (utimoSeleccionado is Nominado)
+            {
+                Premio parent = treePremios.SelectedNode.Parent.Content as Premio;
+                Premio Pselected = editada.FirstOrDefault(p => string.Equals(p.nombre, parent.nombre));
+                Nominado ultimoNominado = utimoSeleccionado as Nominado;
+                Nominado Nselected = Pselected.nominados.FirstOrDefault(n => string.Equals(n.nombre, ultimoNominado.nombre));
+                Pselected.nominados.Remove(Nselected);
+            }
+            if (utimoSeleccionado == null)
+            {
+                ShowDialog("Seleccionar elemento", "No hay un elemento seleccionado para eliminarlo. Asegúrate de que está resaltado en la lista el elemento a borrar");
+            }
+            else
+            {
+                GuardarYRefrescarLista();
+                Tip.Target = btnEliminar;
+                Tip.Title = "Eliminado";
+                AbrirTip();
+            }
         }
-        if (utimoSeleccionado is Nominado)
+        catch (Exception ex)
         {
-            Premio parent = treePremios.SelectedNode.Parent.Content as Premio;
-            Premio Pselected = editada.FirstOrDefault(p => string.Equals(p.nombre, parent.nombre));
-            Nominado ultimoNominado = utimoSeleccionado as Nominado;
-            Nominado Nselected = Pselected.nominados.FirstOrDefault(n => string.Equals(n.nombre, ultimoNominado.nombre));
-            Pselected.nominados.Remove(Nselected);
-        }
-        if (utimoSeleccionado == null)
-        {
-            ShowDialog("Seleccionar elemento", "No hay un elemento seleccionado para eliminarlo. Asegúrate de que está resaltado en la lista el elemento a borrar");
-        }
-        else
-        {
-            Tip.Target = btnEliminar;
-            Tip.Title = "Guarda para confirmar";
-            AbrirTip();
+            ShowDialog("Error no manejado", ex.Message);
         }
 
     }
@@ -744,37 +781,45 @@ public sealed partial class PremiosPage : Page
     }
     private async void GuardarYRefrescarLista()
     {
-        var utimoSeleccionado = selectedItem;
-        if (utimoSeleccionado != null)
+        try
         {
-            var pruebaNodo = treePremios.SelectedNode.Parent.Content;
-            var ultimoNodo = treePremios.NodeFromContainer(treePremios.ContainerFromItem(selectedItem));
-
-            await ViewModel.GuardarPremios(editada);
-            await ViewModel.CargarPremios();
-
-            if (utimoSeleccionado is Premio)
+            var utimoSeleccionado = selectedItem;
+            if (utimoSeleccionado != null)
             {
-                Premio ultimoPremio = utimoSeleccionado as Premio;
-                Premio selected = ViewModel.premios.FirstOrDefault(p => string.Equals(p.nombre, ultimoPremio.nombre));
-                treePremios.SelectedItem = selected;
-            }
-            if (utimoSeleccionado is Nominado)
-            {
-                if (ultimoNodo.Parent != null)
+                var pruebaNodo = treePremios.SelectedNode.Parent.Content;
+                var ultimoNodo = treePremios.NodeFromContainer(treePremios.ContainerFromItem(selectedItem));
+
+                await ViewModel.GuardarPremios(editada);
+                await ViewModel.CargarPremios();
+
+                if (utimoSeleccionado is Premio)
                 {
-                    Premio parent = ultimoNodo.Parent.Content as Premio;
-                    Premio selected = ViewModel.premios.FirstOrDefault(p => string.Equals(p.nombre, parent.nombre));
+                    Premio ultimoPremio = utimoSeleccionado as Premio;
+                    Premio selected = ViewModel.premios.FirstOrDefault(p => string.Equals(p.nombre, ultimoPremio.nombre));
                     treePremios.SelectedItem = selected;
-                    treePremios.SelectedNode.IsExpanded = true;
                 }
-            }
+                if (utimoSeleccionado is Nominado)
+                {
+                    if (ultimoNodo.Parent != null)
+                    {
+                        Premio parent = ultimoNodo.Parent.Content as Premio;
+                        Premio selected = ViewModel.premios.FirstOrDefault(p => string.Equals(p.nombre, parent.nombre));
+                        treePremios.SelectedItem = selected;
+                        treePremios.SelectedNode.IsExpanded = true;
+                    }
+                }
 
-            Tip.Target = btnGuardar;
-            Tip.Title = "Guardado con éxito";
-            AbrirTip();
+                Tip.Target = btnGuardar;
+                Tip.Title = "Guardado con éxito";
+                AbrirTip();
+            }
+        }
+        catch (Exception ex)
+        {
+            ShowDialog("Error no manejado", ex.Message);
         }
     }
+
 
     //BOTONES DISPONIBLES
     private void CategoriaCheckBox_Checked(object sender, RoutedEventArgs e)
@@ -1146,4 +1191,6 @@ public sealed partial class PremiosPage : Page
             }
         }
     }
+
+
 }

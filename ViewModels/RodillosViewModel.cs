@@ -58,6 +58,12 @@ public partial class RodillosViewModel : ObservableRecipient
         return Task.CompletedTask;
     }
 
+    [RelayCommand]
+    public Task GuardarRodillo(Rodillo editado)
+    {
+        //Acciones de guardado
+        return Task.CompletedTask;
+    }
 
     //OPCIONES PARA OBTENER TIPOS
     [RelayCommand]

@@ -13,7 +13,7 @@
     </Page.DataContext>
 
     <Page.Resources>
-        
+
     </Page.Resources>
 
     <Grid x:Name="ContentArea">
@@ -26,7 +26,8 @@
         <TreeView x:Name="treeRodillo" Margin="0,0,0,15"
                   AllowDrop="True"
                   DragOver="treeRodillo_DragOver"
-                  RightTapped="treeRodillo_RightTapped">
+                  RightTapped="treeRodillo_RightTapped"
+                  SelectionChanged="treeRodillo_SelectionChanged">
             <TreeView.Resources>
                 <!-- Template para los nodos Cargo -->
                 <DataTemplate x:Key="CargoTemplate" x:DataType="Models:Cargo">
@@ -54,13 +55,13 @@
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.3*"/>
+                    <RowDefinition Height="0.5*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <TextBlock  Grid.Row="0" Style="{ThemeResource BaseTextBlockStyle}">Filtrar por...</TextBlock>
-                <TextBox x:Name="FiltradoPorCargo"  Grid.Row="1" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Cargo" TextChanged="FiltradoPorCargo_TextChanged"/>
-                <TextBox x:Name="FiltradoPorPersona"  Grid.Row="2" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Persona" TextChanged="FiltradoPorPersona_TextChanged"/>
+                <ToggleSwitch x:Name="tggFiltrado" Grid.Row="0" OffContent="Filtrado Off" OnContent="Filtrado On" IsOn="False" Toggled="tggFiltrado_Toggled"/>
+                <TextBox x:Name="FiltradoPorCargo"  Grid.Row="1" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Cargo" TextChanged="FiltradoPorCargo_TextChanged" Visibility="Collapsed"/>
+                <TextBox x:Name="FiltradoPorPersona"  Grid.Row="2" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Persona" TextChanged="FiltradoPorPersona_TextChanged" Visibility="Collapsed"/>
             </Grid>
             <Grid Grid.Row="1" Margin="0,10,0,0">
                 <Grid.RowDefinitions>
@@ -134,6 +135,31 @@
                     </Button.Content>
                 </Button>
             </Grid>
+        </Grid>
+
+        <Grid x:Name="gridEdicion" Grid.Column="2" Margin="30,10,0,20" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="0.5*"/>
+                <RowDefinition Height="5*"/>
+            </Grid.RowDefinitions>
+            <TextBox x:Name="txtNombreCat" Header="Categoría" HorizontalAlignment="Stretch" MaxHeight="57" VerticalAlignment="Top" />
+            <TextBox Grid.Row="2" x:Name="txtNombrePer" Header="Nombre" HorizontalAlignment="Stretch" MaxHeight="57" VerticalAlignment="Top"/>
+
+            <StackPanel x:Name="stckBotoneraEdicion" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <Button  x:Name="btnEliminarEdicion" Click="btnEliminarEdicion_Click">
+                    <SymbolIcon Symbol="Delete"/>
+                </Button>
+                <Button  x:Name="btnModificarEdicion" Margin="10,0,0,0" Click="btnModificarEdicion_Click">
+                    <SymbolIcon Symbol="Edit"/>
+                </Button>
+                <Button  x:Name="btnAddEdicion" Margin="10,0,0,0" Click="btnAddEdicion_Click">
+                    <SymbolIcon Symbol="Add"/>
+                </Button>
+            </StackPanel>
+
         </Grid>
 
         <SplitView x:Name="SplitView"

@@ -77,51 +77,6 @@ public sealed partial class RotulosPage : Page
         }
     }
 
-
-    private void AdaptarColoresTipo()
-    {
-        foreach (var item in LVRotulos.Items)
-        {
-            // Obtiene el contenedor visual (ListViewItem) del item
-            var container = LVRotulos.ContainerFromItem(item) as ListViewItem;
-
-            if (container != null)
-            {
-                // Busca el Ellipse dentro del template visual del ListViewItem
-                var ellipse = FindVisualChildByName<Ellipse>(container, "Ellipse");
-
-                if (ellipse != null && item is Rotulo rotulo)
-                {
-                    // Aplica el color según alguna propiedad del rotulo
-
-                    switch (ViewModel.Tipos.IndexOf(rotulo.tipo))
-                    {
-                        case 0:
-                            ellipse.Fill = new SolidColorBrush(Colors.DarkGreen);
-                            break;
-                        case 1:
-                            ellipse.Fill = new SolidColorBrush(Colors.DarkBlue);
-                            break;
-                        case 2:
-                            ellipse.Fill = new SolidColorBrush(Colors.DarkGoldenrod);
-                            break;
-                        case 3:
-                            ellipse.Fill = new SolidColorBrush(Colors.DarkMagenta);
-                            break;
-                        case 4:
-                            ellipse.Fill = new SolidColorBrush(Colors.DarkRed);
-                            break;
-                        case 5:
-                            ellipse.Fill = new SolidColorBrush(Colors.DarkViolet);
-                            break;
-                        default:
-                            ellipse.Fill = new SolidColorBrush(Colors.Gray);
-                            break;
-                    }
-                }
-            }
-        }
-    }
     private T FindVisualChildByName<T>(DependencyObject parent, string name) where T : FrameworkElement
     {
         int childrenCount = VisualTreeHelper.GetChildrenCount(parent);

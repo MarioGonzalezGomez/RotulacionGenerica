@@ -101,13 +101,31 @@ public partial class App : Application
         }).
         Build();
 
+        string path = "C:\\TrabajoIPF\\Logs\\error.log";
+        Directory.CreateDirectory(Path.GetDirectoryName(path));
+
         UnhandledException += App_UnhandledException;
+        AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+        File.AppendAllText(path, $"{DateTime.Now} - {(e.ExceptionObject as Exception)?.ToString()}\n\n");
+
+        TaskScheduler.UnobservedTaskException += (s, e) =>
+        {
+            File.AppendAllText(path, $"{DateTime.Now} - {e.Exception?.ToString()}\n\n");
+            e.SetObserved();
+        };
     }
 
     private void App_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
     {
-        File.WriteAllText($"C:\\TrabajoIPF\\Logs\\error{e.Exception.TargetSite}.log", $"Excepción no controlada: {e.Exception.Message}\n{e.Exception.StackTrace}");
         e.Handled = true;
+
+        try
+        {
+            string path = "C:\\TrabajoIPF\\Logs\\error.log";
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            File.AppendAllText(path, $"{DateTime.Now} - {e.Exception?.ToString()}\n\n");
+        }
+        catch { }
     }
 
     protected async override void OnLaunched(LaunchActivatedEventArgs args)

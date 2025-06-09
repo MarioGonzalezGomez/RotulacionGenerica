@@ -13,7 +13,7 @@
     </Page.DataContext>
 
     <Page.Resources>
-
+       
     </Page.Resources>
 
     <Grid x:Name="ContentArea">
@@ -57,20 +57,20 @@
         <Grid Grid.Column="1" Margin="10,10,0,20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="0.7*"/>
                 <RowDefinition Height="0.8*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.3*"/>
+                    <RowDefinition Height="0.7*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <TextBlock  Grid.Row="0" Style="{ThemeResource BaseTextBlockStyle}">Filtrar por...</TextBlock>
-                <TextBox x:Name="FiltradoPorPremio"  Grid.Row="1" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Premio/Categoría" TextChanged="FiltradoPorPremio_TextChanged"/>
-                <TextBox x:Name="FiltradoPorPersona"  Grid.Row="2" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Nominado/a" TextChanged="FiltradoPorPersona_TextChanged"/>
-                <TextBox x:Name="FiltradoPorPelicula"  Grid.Row="3" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Información complementaria" TextChanged="FiltradoPorPelicula_TextChanged"/>
+                <ToggleSwitch x:Name="tggFiltrado" Grid.Row="0" OffContent="Filtrado Off" OnContent="Filtrado On" IsOn="False" Toggled="tggFiltrado_Toggled"/>
+                <TextBox x:Name="FiltradoPorPremio"  Grid.Row="1" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Premio/Categoría" Visibility="Collapsed" TextChanged="FiltradoPorPremio_TextChanged"/>
+                <TextBox x:Name="FiltradoPorPersona"  Grid.Row="2" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Nominado/a" Visibility="Collapsed" TextChanged="FiltradoPorPersona_TextChanged"/>
+                <TextBox x:Name="FiltradoPorPelicula"  Grid.Row="3" Margin="0,5,0,0"  HorizontalAlignment="Stretch" Header="Información complementaria" Visibility="Collapsed" TextChanged="FiltradoPorPelicula_TextChanged"/>
             </Grid>
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
@@ -79,7 +79,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <!-- Header + Contenido de Entrega -->
-                <StackPanel Grid.Row="0" Margin="0,15,0,0">
+                <StackPanel Grid.Row="0" Margin="0,15,0,0" HorizontalAlignment="Center">
                     <TextBlock x:Name="headerInfo" FontWeight="Bold" FontSize="14" Margin="0,0,0,5"/>
                     <StackPanel x:Name="stkInfo" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="20,0,0,0"  Visibility="Visible">
                         <TextBlock x:Name="txtInfo1" Visibility="Collapsed"/>
@@ -164,7 +164,7 @@
                     <ToggleButton x:Name="btnNominados" Content="LISTA NOMINADOS" HorizontalAlignment="Stretch" Click="btnNominados_Click" Margin="0,20,0,0"/>
                     <ToggleButton x:Name="btnGafas" Content="NOMIDADOS EN GAFAS" HorizontalAlignment="Stretch" Click="btnGafas_Click" Margin="0,20,0,0"/>
                     <ToggleButton x:Name="btnEntregadores" Content="ENTREGADORES" HorizontalAlignment="Stretch" Click="btnEntregadores_Click" Margin="0,20,0,0"/>
-                    <ToggleButton x:Name="btnGanador" Content="ENTRA" HorizontalAlignment="Stretch" Click="btnGanador_Click" Margin="0,20,0,0"/>
+                    <ToggleButton x:Name="btnGanador" Content="GANADOR" HorizontalAlignment="Stretch" Click="btnGanador_Click" Margin="0,20,0,0"/>
                     <TextBlock x:Name="txtGanadorBotonera" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,15,0,0"/>
 
                     <TextBox x:Name="boxNombre" Header="Nombre Categoría" HorizontalAlignment="Stretch" LostFocus="boxNombre_LostFocus" Visibility="Collapsed"/>
@@ -191,7 +191,7 @@
                     </StackPanel>
                 </StackPanel>
             </Grid>
-            <TextBox Grid.Row="1" Header="Línea adicional" VerticalAlignment="Bottom" Margin="0,0,0,30"></TextBox>
+            <!-- <TextBox Grid.Row="1" Header="Línea adicional" VerticalAlignment="Bottom" Margin="0,0,0,30"/> -->
             <Grid x:Name="gridBotonesDisponibles"  Grid.Row="2" Visibility="Collapsed" Margin="0,0,0,23">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>

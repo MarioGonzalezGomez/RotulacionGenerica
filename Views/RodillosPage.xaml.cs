@@ -23,6 +23,11 @@ public sealed partial class RodillosPage : Page
         get;
     }
 
+    private object? selectedItem;
+    private Cargo selectedCargo;
+    private Persona selectedPersona;
+    private Rodillo editado;
+
     public RodillosPage()
     {
         ViewModel = App.GetService<RodillosViewModel>();
@@ -36,6 +41,8 @@ public sealed partial class RodillosPage : Page
     {
         ViewModel.CargarRodillos();
         ViewModel.CargarTipos();
+        editado = new Rodillo();
+        editado.cargos.AddRange(ViewModel.cargos);
         txtRuta.Text = config.RotulacionSettings.RutaRodillo;
         treeRodillo.ItemsSource = ViewModel.cargos;
         cmbTipos.ItemsSource = ViewModel.Tipos;
@@ -47,6 +54,33 @@ public sealed partial class RodillosPage : Page
     }
 
     //TREE VIEW
+    private void treeRodillo_SelectionChanged(TreeView sender, TreeViewSelectionChangedEventArgs args)
+    {
+        selectedItem = args.AddedItems.FirstOrDefault();
+        if (selectedItem != null)
+        {
+            if (selectedItem is Cargo)
+            {
+                selectedCargo = selectedItem as Cargo;
+                txtNombreCat.Text = selectedCargo.nombre;
+                txtNombrePer.Header = "Añadir persona";
+                txtNombrePer.Text = "";
+                btnEliminarEdicion.Visibility = Visibility.Collapsed;
+                btnAddEdicion.Visibility = Visibility.Collapsed;
+            }
+            if (selectedItem is Persona)
+            {
+                selectedPersona = selectedItem as Persona;
+                selectedCargo = treeRodillo.SelectedNode.Parent.Content as Cargo;
+                txtNombreCat.Text = selectedCargo.nombre;
+                txtNombrePer.Header = "Editar persona";
+                txtNombrePer.Text = selectedPersona.nombre;
+                btnEliminarEdicion.Visibility = Visibility.Collapsed;
+                btnAddEdicion.Visibility = Visibility.Visible;
+            }
+        }
+    }
+
     private void treeRodillo_DragOver(object sender, DragEventArgs e)
     {
         // Evita el reordenamiento de elementos dentro del TreeView
@@ -105,6 +139,20 @@ public sealed partial class RodillosPage : Page
     }
 
     //FILTRADO
+
+    private void tggFiltrado_Toggled(object sender, RoutedEventArgs e)
+    {
+        if (tggFiltrado.IsOn)
+        {
+            FiltradoPorCargo.Visibility = Visibility.Visible;
+            FiltradoPorPersona.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            FiltradoPorCargo.Visibility = Visibility.Collapsed;
+            FiltradoPorPersona.Visibility = Visibility.Collapsed;
+        }
+    }
     private void FiltradoPorPersona_TextChanged(object sender, TextChangedEventArgs e)
     {
         var filtrada = ViewModel.allCargos
@@ -121,7 +169,7 @@ public sealed partial class RodillosPage : Page
         ViewModel.RecuperarLista(filtrada);
     }
 
-    //EDICIÓN
+    //EDICIÓN GENERAL
     private void tggEditor_Toggled(object sender, RoutedEventArgs e)
     {
         if (tggEditor.IsOn)
@@ -136,6 +184,7 @@ public sealed partial class RodillosPage : Page
                 Tipo seleccionado = (Tipo)cmbTipos.SelectedValue;
                 stckHorizontal.Visibility = seleccionado.descripcion.Equals("Horizontal") ? Visibility.Visible : Visibility.Collapsed;
             }
+            gridEdicion.Visibility = Visibility.Visible;
         }
         else
         {
@@ -145,6 +194,7 @@ public sealed partial class RodillosPage : Page
             stckVelocidad.Visibility = Visibility.Collapsed;
             stckBotonera.Visibility = Visibility.Collapsed;
             stckHorizontal.Visibility = Visibility.Collapsed;
+            gridEdicion.Visibility = Visibility.Collapsed;
         }
     }
 
@@ -255,6 +305,13 @@ public sealed partial class RodillosPage : Page
 
     private void btnGuardar_Click(object sender, RoutedEventArgs e)
     {
+        GuardarTipo();
+        Tip.Target = btnGuardar;
+        Tip.Title = "Guardado con éxito";
+        AbrirTip();
+    }
+    private void GuardarTipo()
+    {
         if (cmbTipos.SelectedItem != null)
         {
             Tipo seleccionado = (Tipo)cmbTipos.SelectedValue;
@@ -267,13 +324,33 @@ public sealed partial class RodillosPage : Page
             }
         }
         config.RotulacionSettings.VelocidadRodillo = int.Parse(boxVelocidad.Text);
-
-
         Config.Config.SaveConfig(config);
+    }
 
-        Tip.Target = btnGuardar;
-        Tip.Title = "Guardado con éxito";
-        AbrirTip();
+    //EDICION POR CARGO Y PERSONA
+    private void btnEliminarEdicion_Click(object sender, RoutedEventArgs e)
+    {
+        if (!string.IsNullOrEmpty(txtNombrePer.Text))
+        {
+            //Cargo cEditado = editado.cargos.FirstOrDefault(c => c.nombre.Equals(selectedCargo.nombre, StringComparison.OrdinalIgnoreCase));
+            //Persona pEditado = cEditado.personas.FirstOrDefault(p => p.nombre.Equals(cmbPersona.SelectedValue.ToString(), StringComparison.OrdinalIgnoreCase));
+            //cEditado.personas.Remove(pEditado);
+
+        }
+        if (selectedCargo != null && selectedPersona != null)
+        {
+            selectedCargo.personas.Remove(selectedPersona);
+        }
+    }
+
+    private void btnModificarEdicion_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void btnAddEdicion_Click(object sender, RoutedEventArgs e)
+    {
+
     }
 
     //PANEL DESPLEGABLE AJUSTES EXTRA
@@ -395,5 +472,4 @@ public sealed partial class RodillosPage : Page
     {
         ViewModel.Sale();
     }
-
 }

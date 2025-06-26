@@ -32,7 +32,24 @@ public sealed partial class VariosPage : Page
         ViewModel = App.GetService<VariosViewModel>();
         config = Config.Config.GetInstance();
         InitializeComponent();
+        OcultarElementos();
         ValoresPorDefecto();
+    }
+    private void OcultarElementos()
+    {
+       if (config.PestanasActivas.Tiempos) {
+           ContentArea.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Star);
+       } else {
+           ContentArea.ColumnDefinitions[0].Width = new GridLength(0, GridUnitType.Star);
+       }
+       if (config.PestanasActivas.Directos)
+       {
+           ContentArea.ColumnDefinitions[1].Width = new GridLength(1, GridUnitType.Star);
+       }
+       else
+       {
+           ContentArea.ColumnDefinitions[1].Width = new GridLength(0, GridUnitType.Star);
+       }
     }
 
     private void ValoresPorDefecto()

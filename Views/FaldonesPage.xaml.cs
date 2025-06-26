@@ -86,6 +86,22 @@ public sealed partial class FaldonesPage : Page
     }
 
     //OPCIONES DE FILTRADO
+    private void tggFiltrado_Toggled(object sender, RoutedEventArgs e)
+    {
+        if (tggFiltrado.IsOn)
+        {
+            FiltradoPorNombre.Visibility = Visibility.Visible;
+            FiltradoPorPosicion.Visibility = Visibility.Visible;
+            FiltradoPorCargo.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            FiltradoPorNombre.Visibility = Visibility.Collapsed;
+            FiltradoPorPosicion.Visibility = Visibility.Collapsed;
+            FiltradoPorCargo.Visibility = Visibility.Collapsed;
+        }
+    }
+
     private void FiltradoPorNombre_TextChanged(object sender, TextChangedEventArgs e)
     {
         var filtrada = ViewModel.allFaldones
@@ -118,19 +134,20 @@ public sealed partial class FaldonesPage : Page
     }
 
     //ACCIONES EN EDICIÓN
-    private void BtnAddFaldon_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-    {
-        if (!tggEditor.IsOn) { tggEditor.IsOn = true; }
-        if (ViewModel.Faldones.Count > 0)
-        {
-            var maxPosicion = ViewModel.Faldones.Max(r => r.posicion);
-            txtorden.Text = $"{maxPosicion + 1}";
-        }
-        else
-        {
-            txtorden.Text = "1";
-        }
-    }
+
+    //  private void BtnAddFaldon_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    //  {
+    //      if (!tggEditor.IsOn) { tggEditor.IsOn = true; }
+    //      if (ViewModel.Faldones.Count > 0)
+    //      {
+    //          var maxPosicion = ViewModel.Faldones.Max(r => r.posicion);
+    //          txtorden.Text = $"{maxPosicion + 1}";
+    //      }
+    //      else
+    //      {
+    //          txtorden.Text = "1";
+    //      }
+    //  }
 
     private void tggEditor_Toggled(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
@@ -155,9 +172,20 @@ public sealed partial class FaldonesPage : Page
         if (cmbTiposEditor.SelectedIndex != -1)
         {
             Tipo seleccionado = (Tipo)cmbTiposEditor.SelectedValue;
+            switch (seleccionado.numLineas)
+            {
+                case 1:
+                    txtTitulo.Visibility = Visibility.Collapsed;
+                    txtCuerpo.Visibility = Visibility.Visible;
+                    break;
+                case 2:
+                    txtTitulo.Visibility = Visibility.Visible;
+                    txtCuerpo.Visibility = Visibility.Visible;
+                    break;
+                default: break;
+            }
         }
     }
-
 
     private void btnEliminarFaldon_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
@@ -229,10 +257,13 @@ public sealed partial class FaldonesPage : Page
             nuevoFaldon.tipo.seAplicaA = (cmbTiposEditor.SelectedValue as Tipo).seAplicaA;
             nuevoFaldon.tipo.descripcion = (cmbTiposEditor.SelectedValue as Tipo).descripcion;
 
-            Linea titulo = new Linea();
-            titulo.id = 0;
-            titulo.texto = txtTitulo.Text;
-            nuevoFaldon.titulo = titulo;
+            if (txtTitulo.Visibility == Visibility.Visible && !string.IsNullOrEmpty(txtTitulo.Text))
+            {
+                Linea titulo = new Linea();
+                titulo.id = 0;
+                titulo.texto = txtTitulo.Text;
+                nuevoFaldon.titulo = titulo;
+            }
 
             Linea cuerpo = new Linea();
             cuerpo.id = 0;
@@ -424,4 +455,6 @@ public sealed partial class FaldonesPage : Page
             faldonIn = false;
         }
     }
+
+
 }

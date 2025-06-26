@@ -33,6 +33,8 @@ public sealed partial class SettingsPage : Page
         SubtituladoCheckBox.IsChecked = config.PestanasActivas.Subtitulado;
         GafasCheckBox.IsChecked = config.PestanasActivas.Gafas;
         VariosCheckBox.IsChecked = config.PestanasActivas.Varios;
+        TiemposCheckBox.IsChecked = config.PestanasActivas.Tiempos;
+        DirectosCheckBox.IsChecked = config.PestanasActivas.Directos;
         ResetCheckBox.IsChecked = config.PestanasActivas.Reset;
         LogoCheckBox.IsChecked = config.PestanasActivas.Mosca;
 
@@ -136,13 +138,49 @@ public sealed partial class SettingsPage : Page
     private void VariosCheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
         ShellPage.instance.UpdateWindows(7, true);
+        TiemposCheckBox.IsChecked = true;
+        DirectosCheckBox.IsChecked = true;
         config.PestanasActivas.Varios = true;
         Config.Config.SaveConfig(config);
     }
     private void VariosCheckBox_Unchecked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
         ShellPage.instance.UpdateWindows(7, false);
+        TiemposCheckBox.IsChecked = false;
+        DirectosCheckBox.IsChecked = false;
         config.PestanasActivas.Varios = false;
+        Config.Config.SaveConfig(config);
+    }
+
+    private void TiemposCheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        config.PestanasActivas.Tiempos = true;
+        Config.Config.SaveConfig(config);
+    }
+    private void TiemposCheckBox_Unchecked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        if (DirectosCheckBox.IsChecked == false)
+        {
+            VariosCheckBox.IsChecked = false;
+            config.PestanasActivas.Varios = false;
+        }
+        config.PestanasActivas.Tiempos = false;
+        Config.Config.SaveConfig(config);
+    }
+
+    private void DirectosCheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        config.PestanasActivas.Directos = true;
+        Config.Config.SaveConfig(config);
+    }
+    private void DirectosCheckBox_Unchecked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        if (TiemposCheckBox.IsChecked == false)
+        {
+            VariosCheckBox.IsChecked = false;
+            config.PestanasActivas.Varios = false;
+        }
+        config.PestanasActivas.Directos = false;
         Config.Config.SaveConfig(config);
     }
 
@@ -211,6 +249,4 @@ public sealed partial class SettingsPage : Page
             await errorDialog.ShowAsync();
         }
     }
-
-
 }

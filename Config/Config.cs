@@ -150,6 +150,14 @@ public class PestanasActivas
     {
         get; set;
     }
+    public bool Tiempos
+    {
+        get; set;
+    }
+    public bool Directos
+    {
+        get; set;
+    }
     public bool Reset
     {
         get; set;
@@ -279,6 +287,8 @@ public class Config
                 Subtitulado = true,
                 Gafas = true,
                 Varios = true,
+                Tiempos = true,
+                Directos = true,
                 Reset = true,
                 Mosca = true
             }

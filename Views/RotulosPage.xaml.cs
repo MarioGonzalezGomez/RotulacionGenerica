@@ -274,6 +274,7 @@ public sealed partial class RotulosPage : Page
         Tip.Target = btnEliminarRotulo;
         Tip.Title = "Rótulo eliminado";
         await ViewModel.EliminarRotulo(aEliminar);
+        ViewModel.ActualizarPosiciones(ViewModel.allRotulos);
         AbrirTip();
     }
 
@@ -345,7 +346,7 @@ public sealed partial class RotulosPage : Page
 
             for (int i = 0; i < textLineas.Length; i++)
             {
-                if (!string.IsNullOrEmpty(textLineas[i].Text))
+                if (textLineas[i].Visibility == Visibility.Visible && !string.IsNullOrEmpty(textLineas[i].Text))
                 {
                     Linea linea = new Linea();
                     linea.id = 0;

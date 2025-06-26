@@ -62,22 +62,19 @@ public sealed partial class RodillosPage : Page
             if (selectedItem is Cargo)
             {
                 selectedCargo = selectedItem as Cargo;
-                txtNombreCat.Text = selectedCargo.nombre;
-                txtNombrePer.Header = "Añadir persona";
-                txtNombrePer.Text = "";
-                btnEliminarEdicion.Visibility = Visibility.Collapsed;
-                btnAddEdicion.Visibility = Visibility.Collapsed;
             }
             if (selectedItem is Persona)
             {
-                selectedPersona = selectedItem as Persona;
                 selectedCargo = treeRodillo.SelectedNode.Parent.Content as Cargo;
-                txtNombreCat.Text = selectedCargo.nombre;
-                txtNombrePer.Header = "Editar persona";
-                txtNombrePer.Text = selectedPersona.nombre;
-                btnEliminarEdicion.Visibility = Visibility.Collapsed;
-                btnAddEdicion.Visibility = Visibility.Visible;
+
             }
+            txtNombreCat.Text = selectedCargo.nombre;
+            string personas = "";
+            foreach (Persona per in selectedCargo.personas)
+            {
+                personas += per.nombre + "\n";
+            }
+            txtPersonas.Text = personas.TrimEnd('\n');
         }
     }
 
@@ -330,24 +327,12 @@ public sealed partial class RodillosPage : Page
     //EDICION POR CARGO Y PERSONA
     private void btnEliminarEdicion_Click(object sender, RoutedEventArgs e)
     {
-        if (!string.IsNullOrEmpty(txtNombrePer.Text))
-        {
-            //Cargo cEditado = editado.cargos.FirstOrDefault(c => c.nombre.Equals(selectedCargo.nombre, StringComparison.OrdinalIgnoreCase));
-            //Persona pEditado = cEditado.personas.FirstOrDefault(p => p.nombre.Equals(cmbPersona.SelectedValue.ToString(), StringComparison.OrdinalIgnoreCase));
-            //cEditado.personas.Remove(pEditado);
 
-        }
-        if (selectedCargo != null && selectedPersona != null)
-        {
-            selectedCargo.personas.Remove(selectedPersona);
-        }
     }
-
     private void btnModificarEdicion_Click(object sender, RoutedEventArgs e)
     {
 
     }
-
     private void btnAddEdicion_Click(object sender, RoutedEventArgs e)
     {
 

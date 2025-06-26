@@ -15,4 +15,6 @@ public class Persona
     {
         get; set;
     }
+
+    public override string? ToString() => base.ToString();
 }

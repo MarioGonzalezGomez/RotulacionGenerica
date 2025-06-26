@@ -39,6 +39,8 @@
     "Subtitulado": true,
     "Gafas": true,
     "Varios": true,
+    "Tiempos": true,
+    "Directos": true,
     "Reset": true,
     "Mosca": true
   }

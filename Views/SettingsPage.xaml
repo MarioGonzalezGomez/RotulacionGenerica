@@ -63,14 +63,16 @@
             <StackPanel Grid.Column="1" Grid.RowSpan="3" HorizontalAlignment="Stretch">
                 <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}">Pestañas activas</TextBlock>
                 <StackPanel Margin="0,10,0,0">
-                    <CheckBox x:Name="RotulosCheckBox" Content="Rótulos"  Checked="RotulosCheckBox_Checked"  Unchecked="RotulosCheckBox_Unchecked"/>
+                    <CheckBox x:Name="RotulosCheckBox" Content="Rótulos" Checked="RotulosCheckBox_Checked"  Unchecked="RotulosCheckBox_Unchecked"/>
                     <CheckBox x:Name="CrawlsCheckBox" Content="Crawls"  Checked="CrawlsCheckBox_Checked"  Unchecked="CrawlsCheckBox_Unchecked"/>
                     <CheckBox x:Name="CreditosCheckBox" Content="Créditos"  Checked="CreditosCheckBox_Checked"  Unchecked="CreditosCheckBox_Unchecked"/>
                     <CheckBox x:Name="FaldonesCheckBox" Content="Faldones"  Checked="FaldonesCheckBox_Checked"  Unchecked="FaldonesCheckBox_Unchecked"/>
                     <CheckBox x:Name="PremiosCheckBox" Content="Premios"  Checked="PremiosCheckBox_Checked"  Unchecked="PremiosCheckBox_Unchecked"/>
                     <CheckBox x:Name="SubtituladoCheckBox" Content="Subtitulado"  Checked="SubtituladoCheckBox_Checked"  Unchecked="SubtituladoCheckBox_Unchecked"/>
                     <CheckBox x:Name="GafasCheckBox" Content="Gafas" Checked="GafasCheckBox_Checked" Unchecked="GafasCheckBox_Unchecked"/>
-                    <CheckBox x:Name="VariosCheckBox" Content="Varios"  Checked="VariosCheckBox_Checked"  Unchecked="VariosCheckBox_Unchecked"/>
+                    <CheckBox x:Name="VariosCheckBox" Content="Varios" Checked="VariosCheckBox_Checked" Unchecked="VariosCheckBox_Unchecked"/>
+                    <CheckBox x:Name="TiemposCheckBox" Content="Tiempos" Margin="24,0,0,0" Checked="TiemposCheckBox_Checked"  Unchecked="TiemposCheckBox_Unchecked"/>
+                    <CheckBox x:Name="DirectosCheckBox" Content="Directos" Margin="24,0,0,0" Checked="DirectosCheckBox_Checked"  Unchecked="DirectosCheckBox_Unchecked"/>
                 </StackPanel>
                 <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,30,0,0">Botones adicionales</TextBlock>
                 <StackPanel Margin="0,10,0,0">

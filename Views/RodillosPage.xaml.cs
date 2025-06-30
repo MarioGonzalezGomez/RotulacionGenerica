@@ -327,15 +327,91 @@ public sealed partial class RodillosPage : Page
     //EDICION POR CARGO Y PERSONA
     private void btnEliminarEdicion_Click(object sender, RoutedEventArgs e)
     {
-
+        if (selectedCargo != null)
+        {
+            Cargo CEditado = editado.cargos.FirstOrDefault(c => c.nombre.Equals(selectedCargo.nombre, StringComparison.OrdinalIgnoreCase));
+            editado.cargos.Remove(CEditado);
+            ViewModel.GuardarRodillo(editado);
+            ViewModel.CargarRodillos();
+            Tip.Target = btnEliminarEdicion;
+            Tip.Title = "Eliminado con éxito";
+            AbrirTip();
+            txtNombreCat.Text = "";
+            txtPersonas.Text = "";
+            selectedCargo = null;
+        }
+        else
+        {
+            ShowDialog("Seleccionar cargo", "No se ha seleccionado ningún cargo para ser eliminado");
+        }
     }
     private void btnModificarEdicion_Click(object sender, RoutedEventArgs e)
     {
+        if (selectedCargo != null)
+        {
+            Cargo CModel = ViewModel.cargos.FirstOrDefault(c => c.nombre.Equals(selectedCargo.nombre, StringComparison.OrdinalIgnoreCase));
+            Cargo CEditado = editado.cargos.FirstOrDefault(c => c.nombre.Equals(selectedCargo.nombre, StringComparison.OrdinalIgnoreCase));
+            CModel.nombre = txtNombreCat.Text;
+            List<string> personas = txtPersonas.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            CModel.personas.Clear();
+            foreach (string p in personas)
+            {
+                Persona persona = new Persona { nombre = p.Trim() };
+                persona.orden = personas.IndexOf(p);
+                CModel.personas.Add(persona);
+            }
 
+            CEditado.nombre = CModel.nombre;
+            CEditado.personas = CModel.personas;
+            ViewModel.GuardarRodillo(editado);
+            ViewModel.CargarRodillos();
+            Tip.Target = btnModificarEdicion;
+            Tip.Title = "Editado con éxito";
+            AbrirTip();
+            SeleccionarElemento();
+        }
+        else
+        {
+            ShowDialog("Seleccionar cargo", "No se ha seleccionado ningún cargo para ser eliminado");
+        }
     }
     private void btnAddEdicion_Click(object sender, RoutedEventArgs e)
     {
+        if (!string.IsNullOrEmpty(txtNombreCat.Text))
+        {
+            Cargo nuevo = new Cargo();
+            nuevo.orden = editado.cargos.Count;
+            nuevo.nombre = txtNombreCat.Text;
+            List<string> personas = txtPersonas.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
+            foreach (string p in personas)
+            {
+                Persona persona = new Persona { nombre = p.Trim() };
+                persona.orden = personas.IndexOf(p);
+                nuevo.personas.Add(persona);
+            }
+            editado.cargos.Add(nuevo);
+            ViewModel.GuardarRodillo(editado);
+            ViewModel.CargarRodillos();
+            Tip.Target = btnAddEdicion;
+            Tip.Title = "Añadido con éxito";
+            AbrirTip();
+            SeleccionarElemento();
+        }
+        else
+        {
+            ShowDialog("Rellenar nombre", "Debe al menos especificar un nombre para la nueva categoría");
+        }
+    }
+
+    private void SeleccionarElemento()
+    {
+        Cargo seleccionado = ViewModel.cargos.FirstOrDefault(c => c.nombre.Equals(txtNombreCat.Text));
+        if (seleccionado != null)
+        {
+            treeRodillo.SelectedItem = seleccionado;
+            selectedCargo = seleccionado;
+        }
     }
 
     //PANEL DESPLEGABLE AJUSTES EXTRA

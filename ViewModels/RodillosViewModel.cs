@@ -62,6 +62,7 @@ public partial class RodillosViewModel : ObservableRecipient
     public Task GuardarRodillo(Rodillo editado)
     {
         //Acciones de guardado
+        dataController.SaveRodillo(config.RotulacionSettings.RutaRodillo, editado);
         return Task.CompletedTask;
     }
 

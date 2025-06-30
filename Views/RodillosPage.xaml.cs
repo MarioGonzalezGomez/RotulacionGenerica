@@ -329,7 +329,8 @@ public sealed partial class RodillosPage : Page
     {
         if (selectedCargo != null)
         {
-            Cargo CEditado = editado.cargos.FirstOrDefault(c => c.nombre.Equals(selectedCargo.nombre, StringComparison.OrdinalIgnoreCase));
+            // Cargo CEditado = editado.cargos.FirstOrDefault(c => c.nombre.Equals(selectedCargo.nombre, StringComparison.OrdinalIgnoreCase));
+            Cargo CEditado = editado.cargos[selectedCargo.orden - 1];
             editado.cargos.Remove(CEditado);
             ViewModel.GuardarRodillo(editado);
             ViewModel.CargarRodillos();
@@ -349,8 +350,8 @@ public sealed partial class RodillosPage : Page
     {
         if (selectedCargo != null)
         {
-            Cargo CModel = ViewModel.cargos.FirstOrDefault(c => c.nombre.Equals(selectedCargo.nombre, StringComparison.OrdinalIgnoreCase));
-            Cargo CEditado = editado.cargos.FirstOrDefault(c => c.nombre.Equals(selectedCargo.nombre, StringComparison.OrdinalIgnoreCase));
+            Cargo CModel = ViewModel.cargos[selectedCargo.orden - 1];
+            Cargo CEditado = editado.cargos[selectedCargo.orden - 1];
             CModel.nombre = txtNombreCat.Text;
             List<string> personas = txtPersonas.Text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).ToList();
             CModel.personas.Clear();
@@ -396,7 +397,7 @@ public sealed partial class RodillosPage : Page
             Tip.Target = btnAddEdicion;
             Tip.Title = "Añadido con éxito";
             AbrirTip();
-            SeleccionarElemento();
+            SeleccionarElemento(true);
         }
         else
         {
@@ -404,9 +405,10 @@ public sealed partial class RodillosPage : Page
         }
     }
 
-    private void SeleccionarElemento()
+    private void SeleccionarElemento(bool add = false)
     {
-        Cargo seleccionado = ViewModel.cargos.FirstOrDefault(c => c.nombre.Equals(txtNombreCat.Text));
+
+        Cargo seleccionado = add ? ViewModel.cargos[ViewModel.cargos.Count - 1] : ViewModel.cargos.FirstOrDefault(c => c.nombre.Equals(txtNombreCat.Text));
         if (seleccionado != null)
         {
             treeRodillo.SelectedItem = seleccionado;

@@ -276,6 +276,12 @@ public sealed partial class RotulosPage : Page
         await ViewModel.EliminarRotulo(aEliminar);
         ViewModel.ActualizarPosiciones(ViewModel.allRotulos);
         AbrirTip();
+        var textLineas = new[] { txtLinea1, txtLinea2, txtLinea3, txtLinea4 };
+        foreach (var item in textLineas)
+        {
+            item.Text = "";
+        }
+        seleccionado = null;
     }
 
     private void btnModificarRotulo_Click(object sender, RoutedEventArgs e)
@@ -318,7 +324,8 @@ public sealed partial class RotulosPage : Page
                 modificado.id = 0;
                 GuardarRotuloNuevo(modificado);
             }
-
+            seleccionado = ViewModel.allRotulos.FirstOrDefault(rot => rot.lineas[0].id == modificado.lineas[0].id);
+            LVRotulos.SelectedItem = seleccionado;
         }
     }
     private async void ModificarRotulo(Rotulo modificado)
@@ -356,6 +363,8 @@ public sealed partial class RotulosPage : Page
             }
             nuevoRotulo.lineas = lineas;
             GuardarRotuloNuevo(nuevoRotulo);
+            seleccionado = ViewModel.allRotulos[ViewModel.allRotulos.Count - 1];
+            LVRotulos.SelectedItem = seleccionado;
         }
     }
     private async void GuardarRotuloNuevo(Rotulo nuevo)

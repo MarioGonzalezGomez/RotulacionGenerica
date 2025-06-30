@@ -32,9 +32,9 @@ public sealed partial class SettingsPage : Page
         PremiosCheckBox.IsChecked = config.PestanasActivas.Premios;
         SubtituladoCheckBox.IsChecked = config.PestanasActivas.Subtitulado;
         GafasCheckBox.IsChecked = config.PestanasActivas.Gafas;
-        VariosCheckBox.IsChecked = config.PestanasActivas.Varios;
         TiemposCheckBox.IsChecked = config.PestanasActivas.Tiempos;
         DirectosCheckBox.IsChecked = config.PestanasActivas.Directos;
+        VariosCheckBox.IsChecked = config.PestanasActivas.Varios;
         ResetCheckBox.IsChecked = config.PestanasActivas.Reset;
         LogoCheckBox.IsChecked = config.PestanasActivas.Mosca;
 
@@ -138,10 +138,14 @@ public sealed partial class SettingsPage : Page
     private void VariosCheckBox_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
         ShellPage.instance.UpdateWindows(7, true);
-        TiemposCheckBox.IsChecked = true;
-        DirectosCheckBox.IsChecked = true;
         config.PestanasActivas.Varios = true;
         Config.Config.SaveConfig(config);
+        if (!TiemposCheckBox.IsChecked.Value && !DirectosCheckBox.IsChecked.Value)
+        {
+            TiemposCheckBox.IsChecked = true;
+            DirectosCheckBox.IsChecked = true;
+        }
+        
     }
     private void VariosCheckBox_Unchecked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {

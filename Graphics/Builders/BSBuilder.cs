@@ -247,7 +247,7 @@ public class BSBuilder
     public string CategoriaEntra(Premio premio)
     {
         string mensaje = "";
-        mensaje += CambiaTexto($"Rotulo/Txt/Txt01", premio.nombre);
+        mensaje += CambiaTexto($"Rotulo/Txt01", premio.nombre);
         mensaje += EventRunBuild($"Rotulo/numLineas/01");
         mensaje += Entra("Rotulo");
 
@@ -261,9 +261,9 @@ public class BSBuilder
     public string NominadoEntra(Premio premio, Nominado nominado)
     {
         string mensaje = "";
-        mensaje += CambiaTexto($"Rotulo/Txt/Txt01", premio.nombre);
-        mensaje += CambiaTexto($"Rotulo/Txt/Txt02", nominado.nombre);
-        mensaje += CambiaTexto($"Rotulo/Txt/Txt03", nominado.trabajo);
+        mensaje += CambiaTexto($"Rotulo/Txt01", premio.nombre);
+        mensaje += CambiaTexto($"Rotulo/Txt02", nominado.nombre);
+        mensaje += CambiaTexto($"Rotulo/Txt03", nominado.trabajo);
         mensaje += EventRunBuild($"Rotulo/numLineas/03");
         mensaje += Entra("Rotulo");
 
@@ -277,13 +277,13 @@ public class BSBuilder
     public string EntregadoresEntra(Premio premio)
     {
         string mensaje = "";
-        mensaje += CambiaTexto($"Rotulo/Txt/Txt01", premio.nombre);
+        mensaje += CambiaTexto($"Rotulo/Txt01", premio.nombre);
         string entregadores = "";
         foreach (string entregador in premio.entregadores)
         {
             entregadores += $"{entregador}\n";
         }
-        mensaje += CambiaTexto($"Rotulo/Txt/Txt02", entregadores);
+        mensaje += CambiaTexto($"Rotulo/Txt02", entregadores);
         mensaje += EventRunBuild($"Rotulo/numLineas/02");
         mensaje += Entra("Rotulo");
 
@@ -367,6 +367,7 @@ public class BSBuilder
         return Sale("Crono");
     }
 
+    //LOCALIZADORES
     public string LocalizacionEntra(Localizacion local)
     {
         string signal = "";

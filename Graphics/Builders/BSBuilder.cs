@@ -71,7 +71,6 @@ public class BSBuilder
         }
         mensaje += CambiaTexto($"Faldon/Txt", faldon.texto.texto);
         mensaje += Entra("Faldon");
-
         return mensaje;
     }
     public string FaldonEncadena(Faldon faldon)
@@ -301,31 +300,7 @@ public class BSBuilder
         mensaje += CambiaTexto($"Rotulo/Txt01", premio.nombre) + "\n";
         mensaje += CambiaTexto($"Rotulo/Txt02", nominado.nombre) + "\n";
         mensaje += CambiaTexto($"Rotulo/Txt03", nominado.trabajo) + "\n";
-
-        if (premio.nombre.Length < 30 && nominado.nombre.Length < 22 && string.IsNullOrEmpty(nominado.trabajo))
-        {
-            mensaje += EventRunBuild($"Rotulo/numLineas/01") + "\n";
-        }
-        else if (premio.nombre.Length < 36 && nominado.nombre.Length < 30 && nominado.trabajo.Length < 91)
-        {
-            mensaje += EventRunBuild($"Rotulo/numLineas/02") + "\n";
-        }
-        else if (premio.nombre.Length < 57 && nominado.nombre.Length < 37 && nominado.trabajo.Length < 121)
-        {
-            mensaje += EventRunBuild($"Rotulo/numLineas/03") + "\n";
-        }
-        else
-        {
-            mensaje += EventRunBuild($"Rotulo/numLineas/04") + "\n";
-        }
-
-        if (string.IsNullOrEmpty(nominado.trabajo))
-        {
-            mensaje += EventRunBuild($"Rotulo/numLineas/excepcion01") + "\n";
-        }
-
-
-
+        mensaje += EventRunBuild($"Rotulo/Tipos/Premio") + "\n";
         mensaje += EventRunBuild("Rotulo/Entra");
         return mensaje;
     }
@@ -392,12 +367,12 @@ public class BSBuilder
         return Sale("Crono");
     }
 
-    //Adaptar para auqellos que tengan texto
     public string LocalizacionEntra(Localizacion local)
     {
         string signal = "";
         signal += CambiaTexto("Localizador/Txt01", local.principal) + "\n";
         signal += CambiaTexto("Localizador/Txt02", local.secundario) + "\n";
+        signal += EventBuild("pastillaLocalizador", "MEDIAIN_PATH", $"'{local.rutaVideo}'", 1) + "\n";
         signal += Entra("Localizador");
         return signal;
     }

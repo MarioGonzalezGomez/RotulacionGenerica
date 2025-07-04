@@ -23,4 +23,12 @@ public class Localizacion
     {
         get; set;
     }
+    public string rutaVideo
+    {
+        get; set;
+    }
+    public bool conReloj
+    {
+        get; set;
+    }
 }

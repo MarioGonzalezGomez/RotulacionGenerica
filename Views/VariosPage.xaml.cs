@@ -37,19 +37,22 @@ public sealed partial class VariosPage : Page
     }
     private void OcultarElementos()
     {
-       if (config.PestanasActivas.Tiempos) {
-           ContentArea.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Star);
-       } else {
-           ContentArea.ColumnDefinitions[0].Width = new GridLength(0, GridUnitType.Star);
-       }
-       if (config.PestanasActivas.Directos)
-       {
-           ContentArea.ColumnDefinitions[1].Width = new GridLength(1, GridUnitType.Star);
-       }
-       else
-       {
-           ContentArea.ColumnDefinitions[1].Width = new GridLength(0, GridUnitType.Star);
-       }
+        if (config.PestanasActivas.Tiempos)
+        {
+            ContentArea.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Star);
+        }
+        else
+        {
+            ContentArea.ColumnDefinitions[0].Width = new GridLength(0, GridUnitType.Star);
+        }
+        if (config.PestanasActivas.Directos)
+        {
+            ContentArea.ColumnDefinitions[1].Width = new GridLength(1, GridUnitType.Star);
+        }
+        else
+        {
+            ContentArea.ColumnDefinitions[1].Width = new GridLength(0, GridUnitType.Star);
+        }
     }
 
     private void ValoresPorDefecto()
@@ -250,7 +253,6 @@ public sealed partial class VariosPage : Page
         }
     }
 
-
     //LOCALIZACIONES
     private void tggEditorLocalizaciones_Toggled(object sender, RoutedEventArgs e)
     {
@@ -273,6 +275,9 @@ public sealed partial class VariosPage : Page
             localizacionSeleccionada = listLocalizaciones.SelectedItem as Localizacion;
             boxPrincipalLocalizacion.Text = localizacionSeleccionada.principal;
             boxSecundariolLocalizacion.Text = localizacionSeleccionada.secundario;
+            txtRuta.Visibility = string.IsNullOrEmpty(localizacionSeleccionada.rutaVideo) ? Visibility.Collapsed : Visibility.Visible;
+            txtRuta.Text = string.IsNullOrEmpty(localizacionSeleccionada.rutaVideo) ? "" : System.IO.Path.GetFileName(localizacionSeleccionada.rutaVideo);
+            btnAddReloj.IsChecked = localizacionSeleccionada.conReloj;
         }
     }
     private void listLocalizaciones_RightTapped(object sender, Microsoft.UI.Xaml.Input.RightTappedRoutedEventArgs e)
@@ -292,6 +297,67 @@ public sealed partial class VariosPage : Page
         }
     }
 
+    private async void btnAddVideo_Click(object sender, RoutedEventArgs e)
+    {
+        if (localizacionSeleccionada != null)
+        {
+
+            var senderButton = sender as Button;
+            senderButton.IsEnabled = false;
+
+            var openPicker = new FileOpenPicker();
+
+            var window = App.MainWindow;
+            var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(window);
+            WinRT.Interop.InitializeWithWindow.Initialize(openPicker, hWnd);
+
+            // Set options for your file picker
+            openPicker.ViewMode = PickerViewMode.Thumbnail;
+            openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+            openPicker.FileTypeFilter.Add(".mp4");
+            openPicker.FileTypeFilter.Add(".mov");
+            openPicker.FileTypeFilter.Add(".avi");
+            openPicker.FileTypeFilter.Add(".webm");
+            openPicker.FileTypeFilter.Add(".wmv");
+
+            var file = await abrirFilePicker(openPicker);
+            if (file != null)
+            {
+                localizacionSeleccionada.rutaVideo = file.Path;
+                txtRuta.Text = $"File: {file.Name}";
+                txtRuta.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                txtRuta.Text = System.IO.Path.GetFileName(localizacionSeleccionada.rutaVideo);
+            }
+
+            senderButton.IsEnabled = true;
+        }
+        else
+        {
+            ShowDialog("Seleccionar localización", "Debe seleccionar una localización antes de añadir un vídeo.");
+        }
+    }
+    private async Task<Windows.Storage.StorageFile> abrirFilePicker(FileOpenPicker openPicker)
+    {
+        var file = await openPicker.PickSingleFileAsync();
+        return file;
+    }
+
+    private void btnAddReloj_Click(object sender, RoutedEventArgs e)
+    {
+        if (localizacionSeleccionada != null)
+        {
+            localizacionSeleccionada.conReloj = btnAddReloj.IsChecked.Value;
+        }
+        else
+        {
+            ShowDialog("Seleccionar localización", "Debe seleccionar una localización antes de añadir un reloj.");
+            btnAddReloj.IsChecked = false;
+        }
+    }
+
     private void MenuFlyoutBorrar_Click(object sender, RoutedEventArgs e)
     {
         if (listLocalizaciones.SelectedItem != null)
@@ -307,6 +373,10 @@ public sealed partial class VariosPage : Page
         {
             Localizacion selected = listLocalizaciones.SelectedItem as Localizacion;
             EliminarLocalizacion(selected);
+            boxPrincipalLocalizacion.Text = "";
+            boxSecundariolLocalizacion.Text = "";
+            txtRuta.Text = "";
+            txtRuta.Visibility = Visibility.Collapsed;
         }
     }
     private async void EliminarLocalizacion(Localizacion localizacion)
@@ -327,7 +397,17 @@ public sealed partial class VariosPage : Page
             modificada.posicion = actual.posicion;
             modificada.principal = boxPrincipalLocalizacion.Text;
             modificada.secundario = boxSecundariolLocalizacion.Text;
+            if (localizacionSeleccionada != null)
+            {
+                modificada.rutaVideo = localizacionSeleccionada.rutaVideo;
+                modificada.conReloj = localizacionSeleccionada.conReloj;
+            }
+            else
+            {
+                modificada.rutaVideo = "";
+            }
             EditarLocalizacion(modificada);
+            listLocalizaciones.SelectedIndex = modificada.posicion - 1;
         }
     }
     private async void EditarLocalizacion(Localizacion localizacion)
@@ -347,7 +427,17 @@ public sealed partial class VariosPage : Page
             nueva.posicion = ViewModel.Localizaciones.Count > 0 ? ViewModel.Localizaciones.Max(l => l.posicion) : 0;
             nueva.principal = boxPrincipalLocalizacion.Text.Trim();
             nueva.secundario = boxSecundariolLocalizacion.Text.Trim();
+            if (localizacionSeleccionada != null)
+            {
+                nueva.rutaVideo = localizacionSeleccionada.rutaVideo;
+                nueva.conReloj = localizacionSeleccionada.conReloj;
+            }
+            else
+            {
+                nueva.rutaVideo = "";
+            }
             GuardarLocalizacion(nueva);
+            listLocalizaciones.SelectedIndex = ViewModel.Localizaciones.Count - 1;
         }
     }
     private async void GuardarLocalizacion(Localizacion localizacion)
@@ -377,5 +467,4 @@ public sealed partial class VariosPage : Page
     {
         ViewModel.SaleLocalizacion();
     }
-
 }

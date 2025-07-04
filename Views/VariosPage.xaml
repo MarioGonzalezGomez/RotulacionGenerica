@@ -205,8 +205,27 @@
                     RightTapped="listLocalizaciones_RightTapped"/>
                 <ToggleSwitch x:Name="tggEditorLocalizaciones" Grid.ColumnSpan="2" Grid.Row="0" HorizontalAlignment="Left" Margin="0,15,0,0" OffContent="Editar Off" OnContent="Editar On" IsOn="True" Toggled="tggEditorLocalizaciones_Toggled"/>
                 <StackPanel x:Name="stckEdicionLocalizaciones" Grid.Column="1" Grid.Row="1" Orientation="Vertical" Margin="15,15,0,0">
-                    <TextBox x:Name="boxPrincipalLocalizacion" Header="Texto principal" HorizontalAlignment="Stretch"/>
-                    <TextBox x:Name="boxSecundariolLocalizacion" Header="Secundario" HorizontalAlignment="Stretch"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="0.25*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="0.5*"/>
+                        </Grid.RowDefinitions>
+                        <TextBox Grid.Column="0" Grid.Row="0"  x:Name="boxPrincipalLocalizacion" Header="Texto principal" />
+                        <Button Grid.Column="1" Grid.Row="0" Width="45" HorizontalAlignment="Left" VerticalAlignment="Bottom" x:Name="btnAddVideo" Margin="10,0,0,0" Click="btnAddVideo_Click">
+                            <SymbolIcon Symbol="Video"/>
+                        </Button>
+                        <TextBox Grid.Column="0" Grid.Row="1"  x:Name="boxSecundariolLocalizacion" Header="Secundario" HorizontalAlignment="Stretch" Margin="0,15,0,0"/>
+                        <ToggleButton Grid.Column="1" Grid.Row="1"  Width="45" HorizontalAlignment="Left" VerticalAlignment="Bottom" x:Name="btnAddReloj" Margin="10,0,0,0" Click="btnAddReloj_Click">
+                            <SymbolIcon Symbol="Clock"/>
+                        </ToggleButton>
+                        <TextBlock Grid.ColumnSpan="2" Grid.Row="2" x:Name="txtRuta" Margin="0,15,0,0" Visibility="Collapsed"></TextBlock>
+                    </Grid>
+
                     <StackPanel x:Name="stckBotoneraEdicionLocalizaciones" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,30,0,0">
                         <Button  x:Name="btnDeleteLocalizacion" Click="btnDeleteLocalizacion_Click">
                             <SymbolIcon Symbol="Delete"/>
@@ -239,6 +258,7 @@
                 </Grid>
             </Grid>
         </Border>
+
         <muxc:TeachingTip x:Name="Tip"
                Title="Añadido con éxito"
                CloseButtonContent="Salir"

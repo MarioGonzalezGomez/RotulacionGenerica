@@ -179,7 +179,7 @@ public sealed partial class RodillosPage : Page
             if (cmbTipos.SelectedItem != null)
             {
                 Tipo seleccionado = (Tipo)cmbTipos.SelectedValue;
-                stckHorizontal.Visibility = seleccionado.descripcion.Equals("Horizontal") ? Visibility.Visible : Visibility.Collapsed;
+                stckHorizontal.Visibility = seleccionado.descripcion.Equals("Horizontal") || seleccionado.descripcion.Equals("Paginado") ? Visibility.Visible : Visibility.Collapsed;
             }
             gridEdicion.Visibility = Visibility.Visible;
         }
@@ -261,7 +261,9 @@ public sealed partial class RodillosPage : Page
             Tipo seleccionado = (Tipo)cmbTipos.SelectedValue;
             config.RotulacionSettings.TipoRodillo = seleccionado.descripcion;
             if (tggEditor.IsOn)
-                stckHorizontal.Visibility = seleccionado.descripcion.Equals("Horizontal") ? Visibility.Visible : Visibility.Collapsed;
+            {
+                stckHorizontal.Visibility = seleccionado.descripcion.Equals("Horizontal") || seleccionado.descripcion.Equals("Paginado") ? Visibility.Visible : Visibility.Collapsed;
+            }
         }
     }
 
@@ -314,7 +316,7 @@ public sealed partial class RodillosPage : Page
             Tipo seleccionado = (Tipo)cmbTipos.SelectedValue;
             config.RotulacionSettings.TipoRodillo = seleccionado.descripcion;
 
-            if (seleccionado.descripcion.Equals("Horizontal"))
+            if (seleccionado.descripcion.Equals("Horizontal") || seleccionado.descripcion.Equals("Paginado"))
             {
                 config.RotulacionSettings.ColumnasRodillo = int.Parse(boxColumnas.SelectedValue.ToString());
                 config.RotulacionSettings.LineasPorBloque = string.IsNullOrEmpty(boxLineas.Text) ? config.RotulacionSettings.LineasPorBloque : int.Parse(boxLineas.Text);

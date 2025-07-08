@@ -65,11 +65,11 @@ public class BSBuilder
     public string FaldonEntra(Faldon faldon)
     {
         string mensaje = "";
-        if (!string.IsNullOrEmpty(faldon.titulo.texto))
+        if (faldon.titulo != null && !string.IsNullOrEmpty(faldon.titulo.texto))
         {
             mensaje += CambiaTexto("Faldon/Titular", faldon.titulo.texto);
         }
-        mensaje += CambiaTexto($"Faldon/Txt", faldon.texto.texto);
+        mensaje += CambiaTexto($"Faldon/Txt", faldon.texto.texto.Replace("\r", "\\\\n"));
         mensaje += Entra("Faldon");
         return mensaje;
     }
@@ -231,11 +231,80 @@ public class BSBuilder
 
         return señales;
     }
-
-    //TODO
-    public string RodilloEntraPaginado(Rodillo rodillo)
+    public List<string> RodilloEntraPaginado(Rodillo rodillo, int maxLinesPerBloque = 4)
     {
-        return "";
+        List<string> señales = new List<string>();
+        bool entra = true;
+        bool alterna = false;
+
+        int indexCargo = 0;
+        while (indexCargo < rodillo.cargos.Count)
+        {
+            string bloque = "";
+            int lineasUsadas = 0;
+
+            // Acumulamos cargos completos hasta llenar el bloque
+            while (indexCargo < rodillo.cargos.Count)
+            {
+                Cargo cargo = rodillo.cargos[indexCargo];
+                List<string> subLineas = new List<string>();
+
+                int pesoCargo = 1; // título del cargo
+                subLineas.Add($"\\\\f<TituloRodillo>{cargo.nombre.Replace("#", "")}\\\\f\\\\n");
+                if (cargo.nombre.Contains("#"))
+                {
+                    subLineas.Add(""); // línea extra si nombre largo
+                    pesoCargo++;
+                }
+
+                foreach (Persona p in cargo.personas)
+                {
+                    string nombre = p.nombre.Replace("#", "");
+                    subLineas.Add($"\\\\f<CuerpoRodillo>{nombre}\\\\f\\\\n");
+                    pesoCargo++;
+                    if (p.nombre.Contains("#"))
+                    {
+                        subLineas.Add(""); // línea extra si nombre largo
+                        pesoCargo++;
+                    }
+                }
+                subLineas.Add("\\\\n");
+                pesoCargo++;
+
+                if (lineasUsadas + pesoCargo <= maxLinesPerBloque)
+                {
+                    // Este cargo cabe entero
+                    bloque += string.Join("", subLineas);
+                    lineasUsadas += pesoCargo;
+                    indexCargo++;
+                }
+                else
+                {
+                    // No cabe: pasamos este cargo al siguiente bloque
+                    break;
+                }
+            }
+
+            // Construimos la señal para este bloque
+            int bloqueId = alterna ? 4 : 3;
+            string señal = $"\n{CambiaTexto($"Rodillo/Txt0{bloqueId}", bloque)}\n";
+
+            if (entra)
+            {
+                señal += $"\n{Entra("Rodillo")}";
+                entra = false;
+            }
+            else
+            {
+                string evento = alterna ? "Rodillo/Encadena/02" : "Rodillo/Encadena/01";
+                señal += $"\n{EventRunBuild(evento, 0)}";
+            }
+
+            señales.Add(señal);
+            alterna = !alterna;
+        }
+
+        return señales;
     }
 
     public string RodilloSale()

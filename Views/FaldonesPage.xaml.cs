@@ -51,7 +51,10 @@ public sealed partial class FaldonesPage : Page
             Tipo tipo = ViewModel.Tipos.FirstOrDefault(t => t.id == seleccionado.tipo.id);
             cmbTiposEditor.SelectedIndex = ViewModel.Tipos.IndexOf(tipo);
 
-            txtTitulo.Text = seleccionado.titulo.texto;
+            if (seleccionado.titulo != null)
+            {
+                txtTitulo.Text = seleccionado.titulo.texto;
+            }
             txtCuerpo.Text = seleccionado.texto.texto;
             txtorden.Text = seleccionado.posicion.ToString();
 
@@ -218,7 +221,10 @@ public sealed partial class FaldonesPage : Page
             modificado.tipo.numLineas = (cmbTiposEditor.SelectedValue as Tipo).numLineas;
 
             modificado.titulo = actual.titulo;
-            modificado.titulo.texto = txtTitulo.Text;
+            if (modificado.titulo != null)
+            {
+                modificado.titulo.texto = txtTitulo.Text;
+            }
             modificado.texto = actual.texto;
             modificado.texto.texto = txtCuerpo.Text;
 

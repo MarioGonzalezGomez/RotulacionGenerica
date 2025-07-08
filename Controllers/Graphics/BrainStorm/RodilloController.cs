@@ -43,22 +43,37 @@ public class RodilloController
                 conexion.EnviarMensaje(builder.RodilloEntraDestacadoNombre(rodillo));
                 break;
             case "Horizontal":
-                EnviarRodilloAsync(rodillo);
+                EnviarRodilloHorizontalAsync(rodillo);
                 break;
             case "Paginado":
-                conexion.EnviarMensaje(builder.RodilloEntraPaginado(rodillo));
+                EnviarRodilloPaginadoAsync(rodillo);
                 break;
             default:
                 break;
         }
     }
 
-    public async Task EnviarRodilloAsync(Rodillo rodillo)
+    public async Task EnviarRodilloHorizontalAsync(Rodillo rodillo)
     {
         double tiempoTotal = config.RotulacionSettings.VelocidadRodillo;
         int columnas = config.RotulacionSettings.ColumnasRodillo;
         int maxLinesPerBloque = config.RotulacionSettings.LineasPorBloque;
         var señales = builder.RodilloEntraHorizontal(rodillo, columnas, maxLinesPerBloque);
+        int cantidad = señales.Count;
+        double delay = cantidad > 1 ? tiempoTotal / (cantidad - 1) : 0;
+
+        foreach (var señal in señales)
+        {
+            conexion.EnviarMensaje(señal);
+            await Task.Delay((int)(delay * 1000));
+        }
+    }
+
+    public async Task EnviarRodilloPaginadoAsync(Rodillo rodillo)
+    {
+        double tiempoTotal = config.RotulacionSettings.VelocidadRodillo;
+        int maxLinesPerBloque = config.RotulacionSettings.LineasPorBloque;
+        var señales = builder.RodilloEntraPaginado(rodillo, maxLinesPerBloque);
         int cantidad = señales.Count;
         double delay = cantidad > 1 ? tiempoTotal / (cantidad - 1) : 0;
 

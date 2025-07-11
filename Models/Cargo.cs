@@ -36,10 +36,10 @@ public class Cargo
     }
     public string ToStringDestacadoNombre()
     {
-        string result = nombre;
+        string result = $"\\\\f<TitularRodillo>{nombre}\\\\f";
         foreach (var persona in personas)
         {
-            result += $"\\n\\\\f<Titular>{persona.nombre}\\\\f";
+            result += $"\\n\\\\f<CuerpoRodillo>{persona.nombre}\\\\f";
         }
         return result;
     }

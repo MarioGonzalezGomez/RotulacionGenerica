@@ -66,9 +66,10 @@ public class PremioController
                         var nominado = new Nominado
                         {
                             nombre = partes.ElementAtOrDefault(0)?.Trim(),
-                            trabajo = partes.ElementAtOrDefault(1)?.Trim().Replace("..", "\r"),
+                            trabajo = partes.ElementAtOrDefault(1)?.Trim().Replace("//", "\r"),
                             recoge = partes.ElementAtOrDefault(2)?.Trim()
                         };
+                        if (nominado.trabajo == null) { nominado.trabajo = ""; }
                         if (esGanador)
                         {
                             currentPremio.ganador = nominado;

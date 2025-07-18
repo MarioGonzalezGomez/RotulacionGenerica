@@ -144,7 +144,6 @@ public partial class FaldonesViewModel : ObservableRecipient
                     Faldones.Insert(item.posicion - 1, item);
                 }
                 catch (ArgumentOutOfRangeException) { }
-
             }
         }
     }

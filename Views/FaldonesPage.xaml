@@ -122,8 +122,8 @@
                 <ComboBox x:Name="cmbTiposEditor" Grid.Row="1" Width="245" SelectionChanged="cmbTiposEditor_SelectionChanged" Header="Tipo de rótulo"/>
             </StackPanel>
             <StackPanel x:Name="stckEditior2" Grid.Row="2" Margin="0,15,0,0" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Center" Visibility="Collapsed">
-                <TextBox x:Name="txtTitulo" PlaceholderText="Titulo"/>
-                <TextBox x:Name="txtCuerpo" Margin="0,5,0,0" PlaceholderText="Cuerpo del faldón" TextWrapping="Wrap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" AcceptsReturn="True"/>
+                <TextBox x:Name="txtTitulo" PlaceholderText="Titulo" Visibility="Collapsed"/>
+                <TextBox x:Name="txtCuerpo" Margin="0,5,0,0" PlaceholderText="Cuerpo del faldón" TextWrapping="Wrap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" AcceptsReturn="True" Visibility="Collapsed"/>
             </StackPanel>
             <StackPanel x:Name="stckEditior3" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="Collapsed">
                 <Button  x:Name="btnEliminarFaldon" Click="btnEliminarFaldon_Click">

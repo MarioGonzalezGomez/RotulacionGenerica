@@ -76,12 +76,15 @@ public class BSBuilder
     public string FaldonEncadena(Faldon faldon)
     {
         string mensaje = "";
-        mensaje += Encadena("Faldon") + "\n";
-        if (!string.IsNullOrEmpty(faldon.titulo.texto))
+        if (faldon.titulo != null && !string.IsNullOrEmpty(faldon.titulo.texto))
         {
             mensaje += CambiaTextoDelay("Faldon/Titular", faldon.titulo.texto, 0.45);
         }
-        mensaje += CambiaTextoDelay($"Faldon/Txt", faldon.texto.texto, 0.45);
+        if (faldon.texto != null && !string.IsNullOrEmpty(faldon.texto.texto))
+        {
+            mensaje += CambiaTextoDelay($"Faldon/Txt", faldon.texto.texto, 0.45);
+        }
+        mensaje += Encadena("Faldon") + "\n";
         return mensaje;
     }
     public string FaldonSale()

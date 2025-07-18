@@ -137,21 +137,6 @@ public sealed partial class FaldonesPage : Page
     }
 
     //ACCIONES EN EDICIÓN
-
-    //  private void BtnAddFaldon_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-    //  {
-    //      if (!tggEditor.IsOn) { tggEditor.IsOn = true; }
-    //      if (ViewModel.Faldones.Count > 0)
-    //      {
-    //          var maxPosicion = ViewModel.Faldones.Max(r => r.posicion);
-    //          txtorden.Text = $"{maxPosicion + 1}";
-    //      }
-    //      else
-    //      {
-    //          txtorden.Text = "1";
-    //      }
-    //  }
-
     private void tggEditor_Toggled(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
         if (tggEditor.IsOn)
